@@ -1,0 +1,118 @@
+#
+# Language-File created by:		P4ND4_1100010 (JaverPanda)
+#
+  
+  
+  
+Plugin:
+  
+  plugin-start: "[P]&a El plugin ha sido habilitado con exito."
+  plugin-link: "[P]&a Exito al enlazar con&6 %Link%&a!"
+  plugin-update: "[P]&a El plugin tiene una nueva versión:&6 %NewVersion%&a!\n[P]&a Estás usando una versión desactulizada:&6 %Version%&a!\n[P]&a Descarga la última versión:\n[P]&6 %Path%"
+  plugin-stop: "[P]&a El plugin ha sido deshabilitado con exito."
+  plugin-prefix: "&7[&6GMusic&7]"
+  
+  
+  
+Messages:
+  
+  command-config-reload: "[P]&a La configuración fue recargada con exito."
+  command-permission-error: "[P]&c No tienes permisos para ejecutar este comando!"
+  command-consol-error: "[P]&c Este comando es solo para jugadores!"
+  command-gmusic-play-use-error: "[P]&c Comando: /music play <ID>"
+  command-gmusic-play-id-error: "[P]&c La canción con id&6 %ID%&c no existe!"
+  command-gmusic-playing-none: "[P]&a Actualmente no hay música sonando."
+  command-gmusic-playing: "[P]&a Sonando:&6 %Title%"
+  command-gmusic-toggle-on: "[P]&a Ahora puedes escuchar música de jukeboxes."
+  command-gmusic-toggle-off: "[P]&a Ahora ya no escucharás música de jukeboxes."
+  command-gmusic-error: "[P]&c Eso no funciona en este modo de música!"
+  command-agmusic-use-error: "[P]&c Comando: /amusic help"
+  command-agmusic-download-use-error: "[P]&c Comando: /amusic download <Type> <Name> <Path>"
+  command-agmusic-download-folder-error: "[P]&c La carpeta&6 %Folder%&c no existe!"
+  command-agmusic-download-name-error: "[P]&c El archivo&6 %Name%&c ya existe!"
+  command-agmusic-download-error: "[P]&c Error descargando el archivo:&6 %Error%"
+  command-agmusic-download: "[P]&a Archivo descargado correctamente."
+  command-agmusic-jukebox-use-error: "[P]&c Comando: /amusic jukebox <Player> [<Amount>]"
+  command-agmusic-jukebox-online-error: "[P]&c El jugador&6 %Player%&c no está en línea!"
+  command-agmusic-jukebox-amount-error: "[P]&c La cantidad&b %Amount%&c no es válida!"
+  command-agmusic-jukebox: "[P]&a Le has dado&6 %Player%&b %Amount% x&a JukeBox."
+  command-agmusic-disc-use-error: "[P]&c Comando: /amusic disc <Player> <ID> [<Amount>]"
+  command-agmusic-disc-online-error: "[P]&c El jugador&6 %Player%&c no está en línea!"
+  command-agmusic-disc-id-error: "[P]&c El id de la canción&6 %ID%&c no existe!"
+  command-agmusic-disc-amount-error: "[P]&c La cantidad&b %Amount%&c no es válida!"
+  command-agmusic-disc: "[P]&a Le diste&6 %Player%&b %Amount% x&a Disco(s)."
+  command-agmusic-play-use-error: "[P]&c Comando: /amusic play <Player> <ID>"
+  command-agmusic-play-online-error: "[P]&c El jugador&6 %Player%&c no está en línea!"
+  command-agmusic-play-id-error: "[P]&c El id de la canción&6 %ID%&c no existe!"
+  command-agmusic-stop-use-error: "[P]&c Comando: /amusic stop <Player>"
+  command-agmusic-stop-online-error: "[P]&c El jugador&6 %Player%&c no está en línea!"
+  command-agmusic-radioplay-use-error: "[P]&c Comando: /amusic radioplay <ID>"
+  command-agmusic-radioplay-id-error: "[P]&c El id de la canción&6 %ID%&c no existe!"
+  command-agmusic-edit-use-error: "[P]&c Comando: /amusic edit <Option> <Value>"
+  command-agmusic-edit-id-error: "[P]&c El id de la canción&6 %ID%&c no existe!"
+  command-agmusic-edit-get-title: "[P]&a El título de la música con id&6 %ID%&a es:&6 %Title%"
+  command-agmusic-edit-title: "[P]&a El título de la música con id&6 %ID%&a ha sido asignado a:&6 %Title%"
+  command-agmusic-edit-get-author: "[P]&a El autor de la música con id&6 %ID%&a es:&6 %Author%"
+  command-agmusic-edit-author: "[P]&a El autor de la música con id&6 %ID%&a ha sido asignado a:&6 %Author%"
+  command-agmusic-edit-get-oauthor: "[P]&a El autor original de la música con id&6 %ID%&a es:&6 %OAuthor%"
+  command-agmusic-edit-oauthor: "[P]&a El autor original de la música con id&6 %ID%&a ha sido asignado a:&6 %OAuthor%"
+  command-agmusic-edit-get-description: "[P]&a La descripción de la música con id&6 %ID%&a es:&6 %Description%"
+  command-agmusic-edit-description: "[P]&a La descripción de la música con id&6 %ID%&a ha sido asignada a:&6 %Description%"
+  actionbar-play: "&aSonando:&b %Title%&7 -&6 %OAuthor%"
+  actionbar-stop: "&aMúsica finalizada"
+  actionbar-pause: "&aMúsica pausada"
+  actionbar-resume: "&aMúsica resumida"
+  actionbar-now-playing: "&aSonando:&b %Title%&7 -&6 %OAuthor%"
+  
+  
+  
+MusicGUI:
+  
+  title: "&cJukebox"
+  
+  music-pause: "&6Pausa"
+  music-resume: "&6Resumir"
+  music-stop: "&6Detener"
+  music-random: "&6Canción aleatoria"
+  music-back: "&6Atrás"
+  
+  music-playlist: "&cLista de reproducción"
+  music-playlist-skip: "&6Saltar canción"
+  music-playlist-type-default: "&aModo:&6 Defecto"
+  music-playlist-type-favorites: "&aModo:&6 Favoritos"
+  music-playlist-type-radio: "&aModo:&6 Radio"
+  
+  music-options: "&cOpciones"
+  music-options-volume: "&aVolumen:&b %Volume%%"
+  music-options-join: "&aMúsica de bienvenida:&6 %Join%"
+  music-options-playmode-once: "&aModo:&6 Una vez"
+  music-options-playmode-shuffle: "&aModo:&6 Aleatorio"
+  music-options-playmode-repeat: "&aModo:&6 Repetir"
+  music-options-particle: "&aPartículas:&6 %Particle%"
+  music-options-reverse: "&aAl revés:&6 %Reverse%"
+  music-options-range: "&aRango:&b %Range%"
+  
+  music-options-true: "Sí"
+  music-options-false: "No"
+  
+  music-search-none: "&cBuscar"
+  music-search: "&cBuscar:&6 %Search%"
+  music-search-menu-title: "&cBuscar una canción"
+  music-search-menu-field: "Buscar"
+  
+  last-page: "&6Página anterior"
+  next-page: "&6Siguiente página"
+  
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"
+  disc-empty-author: "Desconocido"
+  disc-empty-oauthor: "Desconocido"
+  disc-favorite: "&cFavorito"
+  
+  
+  
+Items:
+  
+  jukebox-title: "&cJukeBox"
+  jukebox-description: "&aJukeBox, que permite\n&areproducir música especial!"
+  
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"

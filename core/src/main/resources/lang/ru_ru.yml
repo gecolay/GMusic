@@ -1,0 +1,118 @@
+#
+# Language-File created by:		ddddddnikita_(mani123)
+#
+  
+  
+  
+Plugin:
+  
+  plugin-start: "[P]&a Плагин был успешно включен."
+  plugin-link: "[P]&a &6Связанно с %Link%&a успешно!"
+  plugin-update: "[P]&a У этого плагина есть новая версия:&6 %NewVersion%&a!\n[P]&a Вы используете устаревшую версию:&6 %Version%&a!\n[P]&aЗагрузите последнюю версию :\n[P]&6 %Path%"
+  plugin-stop: "[P]&a Плагин был успешно отключен."
+  plugin-prefix: "&7[&6GMusic&7]"
+  
+  
+  
+Messages:
+  
+  command-config-reload: "[P]&a Настройки были успешно перезагружены."
+  command-permission-error: "[P]&c У вас нет разрешений на использование этой команды!"
+  command-consol-error: "[P]&c Эта команда предназначена только для игроков!"
+  command-gmusic-play-use-error: "[P]&c Команда: /music play <ID>"
+  command-gmusic-play-id-error: "[P]&c ID(&6 %ID%)&c с такой песней не существует!"
+  command-gmusic-playing-none: "[P]&a Музыка в данный момент не воспроизводится."
+  command-gmusic-playing: "[P]&a Сейчас играет:&6 %Title%"
+  command-gmusic-toggle-on: "[P]&a Теперь вы слышите музыку из музыкальных блоков."
+  command-gmusic-toggle-off: "[P]&a Теперь вы не слышите музыку из музыкальных блоков."
+  command-gmusic-error: "[P]&c Это не работает в этом музыкальном режиме!"
+  command-agmusic-use-error: "[P]&c Команда: /amusic help"
+  command-agmusic-download-use-error: "[P]&c Команда: /amusic download <Тип> <Название> <Path>"
+  command-agmusic-download-folder-error: "[P]&c Эта папка&6 %Folder%&c не существует!"
+  command-agmusic-download-name-error: "[P]&c Это имя файла&6 %Name%&c не существует!"
+  command-agmusic-download-error: "[P]&c Ошибка при загрузке файла:&6 %Error%"
+  command-agmusic-download: "[P]&a Файл загружен успешно."
+  command-agmusic-jukebox-use-error: "[P]&c Команда: /amusic jukebox <Player> [<Amount>]"
+  command-agmusic-jukebox-online-error: "[P]&c Игрок&6 %Player%&c не в сети!"
+  command-agmusic-jukebox-amount-error: "[P]&c Количество&b %Amount%&c неправильное!"
+  command-agmusic-jukebox: "[P]&a Ты дал&6 %Player%&b %Amount% x&a музыкальный(х) блок(ов)."
+  command-agmusic-disc-use-error: "[P]&c Команда: /amusic disc <Player> <ID> [<Amount>]"
+  command-agmusic-disc-online-error: "[P]&c Игрок&6 %Player%&c не в сети!"
+  command-agmusic-disc-id-error: "[P]&c ID(&6 %ID%)&c с такой песней не существует!"
+  command-agmusic-disc-amount-error: "[P]&c Количество&b %Amount%&c неправильное!"
+  command-agmusic-disc: "[P]&a Ты дал&6 %Player%&b %Amount% x&a диск(ов)."
+  command-agmusic-play-use-error: "[P]&c Команда: /amusic play <Player> <ID>"
+  command-agmusic-play-online-error: "[P]&c Игрок&6 %Player%&c не в сети!"
+  command-agmusic-play-id-error: "[P]&c ID(&6 %ID%)&c с такой песней не существует!"
+  command-agmusic-stop-use-error: "[P]&c Команда: /amusic stop <Player>"
+  command-agmusic-stop-online-error: "[P]&c Игрок&6 %Player%&c не в сети!"
+  command-agmusic-radioplay-use-error: "[P]&c Команда: /amusic radioplay <ID>"
+  command-agmusic-radioplay-id-error: "[P]&c ID(&6 %ID%)&c с такой песней не существует!"
+  command-agmusic-edit-use-error: "[P]&c Команда: /amusic edit <Вариант> <Стоимость>"
+  command-agmusic-edit-id-error: "[P]&c ID(&6 %ID%)&c с такой песней не существует!"
+  command-agmusic-edit-get-title: "[P]&a The Title of the Song-ID&6 %ID%&a is:&6 %Title%"
+  command-agmusic-edit-title: "[P]&a The Title of the Song-ID&6 %ID%&a set to:&6 %Title%"
+  command-agmusic-edit-get-author: "[P]&a The Author of the Song-ID&6 %ID%&a is:&6 %Author%"
+  command-agmusic-edit-author: "[P]&a The Author of the Song-ID&6 %ID%&a set to:&6 %Author%"
+  command-agmusic-edit-get-oauthor: "[P]&a The Originalauthor of the Song-ID&6 %ID%&a is:&6 %OAuthor%"
+  command-agmusic-edit-oauthor: "[P]&a The Originalauthor of the Song-ID&6 %ID%&a set to:&6 %OAuthor%"
+  command-agmusic-edit-get-description: "[P]&a The Description of the Song-ID&6 %ID%&a is:&6 %Description%"
+  command-agmusic-edit-description: "[P]&a The Description of the Song-ID&6 %ID%&a set to:&6 %Description%"
+  actionbar-play: "&aИграет музыка:&b %Title%&7 -&6 %OAuthor%"
+  actionbar-stop: "&aМузыка закончилась"
+  actionbar-pause: "&aМузыка на паузе"
+  actionbar-resume: "&aМузыка возобновлена"
+  actionbar-now-playing: "&aСейчас играет:&b %Title%&7 -&6 %OAuthor%"
+  
+  
+  
+MusicGUI:
+  
+  title: "&cJukebox"
+  
+  music-pause: "&6Пауза"
+  music-resume: "&6Продолжить"
+  music-stop: "&6Стоп"
+  music-random: "&6Случайная песня"
+  music-back: "&6Назад"
+  
+  music-playlist: "&cПлейлист"
+  music-playlist-skip: "&6Пропустить песню"
+  music-playlist-type-default: "&aРежим:&6 По умолчанию"
+  music-playlist-type-favorites: "&aРежим:&6 Избранное"
+  music-playlist-type-radio: "&aРежим:&6 Радио"
+  
+  music-options: "&cНастройки"
+  music-options-volume: "&aГромкость:&b %Volume%%"
+  music-options-join: "&aМузыка при входе:&6 %Join%"
+  music-options-playmode-once: "&aРежим:&6 некогда"
+  music-options-playmode-shuffle: "&aРежим:&6 Перемешать"
+  music-options-playmode-repeat: "&aРежим:&6 повторение"
+  music-options-particle: "&aЧастицы:&6 %Particle%"
+  music-options-reverse: "&aМузыка наоборот:&6 %Reverse%"
+  music-options-range: "&aАссортимент:&b %Range%"
+  
+  music-options-true: "Да"
+  music-options-false: "Нет"
+  
+  music-search-none: "&cПоиск"
+  music-search: "&cПоиск:&6 %Search%"
+  music-search-menu-title: "&cПоиск песни"
+  music-search-menu-field: "Поиск"
+  
+  last-page: "&6Предыдущая страница"
+  next-page: "&6Следующая Страница"
+  
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"
+  disc-empty-author: "Неизвестно"
+  disc-empty-oauthor: "Неизвестно"
+  disc-favorite: "&cЛюбимый"
+  
+  
+  
+Items:
+  
+  jukebox-title: "&cJukeBox"
+  jukebox-description: "&aМузыкальный блок, который разрешает\n&aпроигрывать специальную музыку!"
+  
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"

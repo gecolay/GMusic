@@ -1,0 +1,74 @@
+Lang:
+  
+  # Defines the Plugin-Language
+  lang: en_en
+  
+  
+  
+Options:
+  
+  # Checks if a new Update got released
+  check-for-update: true
+  
+  # Defines the range a Player can hear the Sound of a JukeBox
+  jukebox-range: 50
+  
+  # Defines the max range of a JukeBox
+  jukebox-max-range: 500
+  
+  # Defines the Actionbar
+  ActionBar:
+    
+    # Defines whether Messages should send as Actionbar Messages
+    show-messages: true
+    
+    # Defines whether the currently playing Song should always be displayed in the Actionbar
+    show-always-while-playing: true
+    
+  # Defines the Server Radio
+  Radio:
+    
+    # Defines whether the Radio should be active
+    active: true
+    
+    # Defines whether the Radio should play automatically when a Player joined the Server
+    play-on-join: false
+    
+  # Defines whether the Plugin should remove Vanilla-Sounds while a Song is playing (Currently not supported!)
+  prevent-from-vanilla-music: true
+  
+  # Defines whether a Player should get a special Sound-Effects in an certain environment (For example Underwater)
+  use-environment-effect: true
+  
+  # Defines the Worlds in which a Player cannot hear music
+  WorldBlacklist: []
+  
+  # Defines the Play Settings
+  PlayerSettings:
+    
+    # Defines the Wait Time until a Song shuffles to the next
+    wait-time-until-shuffle: 1000
+    
+    # Defines the Wait Time until a Song repeats
+    wait-time-until-repeat: 1000
+    
+    # Defines if the Play Settings should be saved if a Player leaves the Server
+    save-on-quit: true
+    
+    # Defines the Default Play Settings
+    Default:
+      
+      playlist: 0
+      volume: 70
+      join: false
+      playmode: 0
+      particles: false
+      reverse: false
+      
+  # Defines the GUI Settings
+  GUI:
+    
+    disable-random-song: false
+    disable-playlist: false
+    disable-options: false
+    disable-search: false

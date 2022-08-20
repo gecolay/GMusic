@@ -1,0 +1,118 @@
+#
+# Language-File created by:		Gecolay
+#
+  
+  
+  
+Plugin:
+  
+  plugin-start: "[P]&a Das Plugin wurde erfolgreich aktiviert."
+  plugin-link: "[P]&a Verknüpfung mit&6 %Link%&a erfolgreich!"
+  plugin-update: "[P]&6 %Name%&a hat ein Update:&6 %NewVersion%&a!\n[P]&a Aktuelle Version:&6 %Version%&a!\n[P]&a Neueste Version herunterladen:\n[P]&6 %Path%"
+  plugin-stop: "[P]&a Das Plugin wurde erfolgreich deaktiviert."
+  plugin-prefix: "&7[&6GMusic&7]"
+  
+  
+  
+Messages:
+  
+  command-config-reload: "[P]&a Die Einstellungen wurden erfolgreich reloaded."
+  command-permission-error: "[P]&c Du hast keine Rechte auf diesen Befehl!"
+  command-consol-error: "[P]&c Dieser Befehl ist nur für Spieler!"
+  command-gmusic-play-use-error: "[P]&c Befehl: /music play <ID>"
+  command-gmusic-play-id-error: "[P]&c Die Song-ID&6 %ID%&c existiert nicht!"
+  command-gmusic-playing-none: "[P]&a Derzeit spielt keine Musik."
+  command-gmusic-playing: "[P]&a Derzeit spielt:&6 %Title%"
+  command-gmusic-toggle-on: "[P]&a Du hörst nun Musik von Musikboxen."
+  command-gmusic-toggle-off: "[P]&a Du hörst nun keine Musik von Musikboxen."
+  command-gmusic-error: "[P]&c Das geht in diesem Musikmodus nicht!"
+  command-agmusic-use-error: "[P]&c Befehl: /amusic help"
+  command-agmusic-download-use-error: "[P]&c Befehl: /amusic download <Typ> <Name> <Pfad>"
+  command-agmusic-download-folder-error: "[P]&c Der Ordner&6 %Folder%&c existiert nicht!"
+  command-agmusic-download-name-error: "[P]&c Der Dateiname&6 %Name%&c existiert bereits!"
+  command-agmusic-download-error: "[P]&c Fehler beim herunterladen der Datei:&6 %Error%"
+  command-agmusic-download: "[P]&a Datei erfolgreich heruntergeladen."
+  command-agmusic-jukebox-use-error: "[P]&c Befehl: /amusic jukebox <Spieler> [<Anzahl>]"
+  command-agmusic-jukebox-online-error: "[P]&c Der Spieler&6 %Player%&c ist nicht Online!"
+  command-agmusic-jukebox-amount-error: "[P]&c Die Anzahl&b %Amount%&c ist ungültig!"
+  command-agmusic-jukebox: "[P]&a Du hast&6 %Player%&b %Amount% x&a Musikbox gegeben."
+  command-agmusic-disc-use-error: "[P]&c Befehl: /amusic disc <Spieler> <ID> [<Anzahl>]"
+  command-agmusic-disc-online-error: "[P]&c Der Spieler&6 %Player%&c ist nicht Online!"
+  command-agmusic-disc-id-error: "[P]&c Die Song-ID&6 %ID%&c existiert nicht!"
+  command-agmusic-disc-amount-error: "[P]&c Die Anzahl&b %Amount%&c ist ungültig!"
+  command-agmusic-disc: "[P]&a Du hast&6 %Player%&b %Amount% x&a Disc gegeben."
+  command-agmusic-play-use-error: "[P]&c Befehl: /amusic play <Spieler> <ID>"
+  command-agmusic-play-online-error: "[P]&c Der Spieler&6 %Player%&c ist nicht Online!"
+  command-agmusic-play-id-error: "[P]&c Die Song-ID&6 %ID%&c existiert nicht!"
+  command-agmusic-stop-use-error: "[P]&c Befehl: /amusic stop <Spieler>"
+  command-agmusic-stop-online-error: "[P]&c Der Spieler&6 %Player%&c ist nicht Online!"
+  command-agmusic-radioplay-use-error: "[P]&c Befehl: /amusic radioplay <ID>"
+  command-agmusic-radioplay-id-error: "[P]&c Die Song-ID&6 %ID%&c existiert nicht!"
+  command-agmusic-edit-use-error: "[P]&c Befehl: /amusic edit <Option> <Wert>"
+  command-agmusic-edit-id-error: "[P]&c Die Song-ID&6 %ID%&c existiert nicht!"
+  command-agmusic-edit-get-title: "[P]&a Der Titel der Song-ID&6 %ID%&a ist:&6 %Title%"
+  command-agmusic-edit-title: "[P]&a Der Titel der Song-ID&6 %ID%&a wurde gesetzt:&6 %Title%"
+  command-agmusic-edit-get-author: "[P]&a Der Autor der Song-ID&6 %ID%&a ist:&6 %Author%"
+  command-agmusic-edit-author: "[P]&a Der Autor der Song-ID&6 %ID%&a wurde gesetzt:&6 %Author%"
+  command-agmusic-edit-get-oauthor: "[P]&a Der Originalautor der Song-ID&6 %ID%&a ist:&6 %OAuthor%"
+  command-agmusic-edit-oauthor: "[P]&a Der Originalautor der Song-ID&6 %ID%&a wurde gesetzt:&6 %OAuthor%"
+  command-agmusic-edit-get-description: "[P]&a Die Beschreibung der Song-ID&6 %ID%&a ist:&6 %Description%"
+  command-agmusic-edit-description: "[P]&a Die Beschreibung der Song-ID&6 %ID%&a wurde gesetzt:&6 %Description%"
+  actionbar-play: "&aMusik spielt:&b %Title%&7 -&6 %OAuthor%"
+  actionbar-stop: "&aMusik beendet"
+  actionbar-pause: "&aMusik pausiert"
+  actionbar-resume: "&aMusik fortsetzen"
+  actionbar-now-playing: "&aGerade spielt:&b %Title%&7 -&6 %OAuthor%"
+  
+  
+  
+MusicGUI:
+  
+  title: "&cMusikbox"
+  
+  music-pause: "&6Pausieren"
+  music-resume: "&6Fortsetzen"
+  music-stop: "&6Stoppen"
+  music-random: "&6Zufälliger Song"
+  music-back: "&6Zurück"
+  
+  music-playlist: "&cWiedergabeliste"
+  music-playlist-skip: "&6Song überspringen"
+  music-playlist-type-default: "&aModus:&6 Standard"
+  music-playlist-type-favorites: "&aModus:&6 Favoriten"
+  music-playlist-type-radio: "&aModus:&6 Radio"
+  
+  music-options: "&cOptionen"
+  music-options-volume: "&aLautstärke:&b %Volume%%"
+  music-options-join: "&aWillkommensmusik:&6 %Join%"
+  music-options-playmode-once: "&aModus:&6 Einmalig"
+  music-options-playmode-shuffle: "&aModus:&6 Mischen"
+  music-options-playmode-repeat: "&aModus:&6 Wiederholen"
+  music-options-particle: "&aPartikel:&6 %Particle%"
+  music-options-reverse: "&aUmkehren:&6 %Reverse%"
+  music-options-range: "&aReichweite:&b %Range%"
+  
+  music-options-true: "Ja"
+  music-options-false: "Nein"
+  
+  music-search-none: "&cSuche"
+  music-search: "&cSuche:&6 %Search%"
+  music-search-menu-title: "&cSuche einen Song"
+  music-search-menu-field: "Suche"
+  
+  last-page: "&6Vorherige Seite"
+  next-page: "&6Nächste Seite"
+  
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"
+  disc-empty-author: "Unbekannt"
+  disc-empty-oauthor: "Unbekannt"
+  disc-favorite: "&cFavorit"
+  
+  
+  
+Items:
+  
+  jukebox-title: "&cMusikbox"
+  jukebox-description: "&aPlattenspieler, der erlaubt\n&abesondere Musik abzuspielen!"
+  
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"

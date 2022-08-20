@@ -1,0 +1,189 @@
+name: GMusic
+version: 1.0.0
+description: Hear your favorite Music with Note Block Sounds in Minecraft!
+author: Gecolay
+website: https://www.spigotmc.org/resources/84004
+main: dev.geco.gmusic.main.GMusicMain
+api-version: 1.13
+softdepend: [PlaceholderAPI]
+  
+commands:
+  
+  gmusic:
+    
+    usage: /<command>
+    aliases: [music, gjukebox, jukebox]
+    description: Music-Command
+    permission: GMusic.Music
+    
+  agmusic:
+    
+    usage: /<command>
+    aliases: [amusic]
+    description: AMusic-Command
+    permission: GMusic.AMusic
+    
+  gmusicreload:
+    
+    usage: /<command>
+    aliases: [gmusicrl]
+    description: GMusic-Config-Reload
+    permission: GMusic.GMusicReload
+  
+  
+  
+permissions:
+  
+  GMusic.*:
+    default: op
+    description: OP-Permission for all Commands and Functions for GMusic
+    children:
+      GMusic.Music.*: true
+      GMusic.AMusic.*: true
+      GMusic.Update: true
+      GMusic.GMusicReload: true
+      
+  GMusic.Music.*:
+    default: op
+    description: OP Music | Permission
+    children:
+      GMusic.Music: true
+      GMusic.Music.GUI: true
+      GMusic.Music.Play: true
+      GMusic.Music.Playing: true
+      GMusic.Music.Random: true
+      GMusic.Music.Stop: true
+      GMusic.Music.Pause: true
+      GMusic.Music.Resume: true
+      GMusic.Music.Skip: true
+      GMusic.Music.Toggle: true
+      
+  GMusic.Music:
+    default: true
+    description: Music | Permission
+    
+  GMusic.Music.GUI:
+    default: true
+    description: Music GUI | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Play:
+    default: true
+    description: Music Play | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Playing:
+    default: true
+    description: Music Playing | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Random:
+    default: true
+    description: Music Random | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Stop:
+    default: true
+    description: Music Stop | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Pause:
+    default: true
+    description: Music Pause | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Resume:
+    default: true
+    description: Music Resume | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Skip:
+    default: true
+    description: Music Skip | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.Music.Toggle:
+    default: true
+    description: Music Toggle | Permission
+    children:
+      GMusic.Music: true
+      
+  GMusic.AMusic.*:
+    default: op
+    description: AMusic | Permission
+    children:
+      GMusic.AMusic: true
+      GMusic.AMusic.Download: true
+      GMusic.AMusic.JukeBox: true
+      GMusic.AMusic.Disc: true
+      GMusic.AMusic.UseJukeBox: true
+      GMusic.AMusic.Play: true
+      GMusic.AMusic.Stop: true
+      GMusic.AMusic.RadioPlay: true
+      GMusic.AMusic.Edit: true
+      
+  GMusic.AMusic:
+    default: op
+    description: AMusic | Permission
+    
+  GMusic.AMusic.Download:
+    default: op
+    description: OP AMusic | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.AMusic.JukeBox:
+    default: op
+    description: AMusic JukeBox | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.AMusic.Disc:
+    default: op
+    description: AMusic Disc | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.AMusic.UseJukeBox:
+    default: op
+    description: AMusic UseJukeBox | Permission
+    
+  GMusic.AMusic.Play:
+    default: op
+    description: AMusic Play | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.AMusic.Stop:
+    default: op
+    description: AMusic Stop | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.AMusic.RadioPlay:
+    default: op
+    description: AMusic RadioPlay | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.AMusic.Edit:
+    default: op
+    description: AMusic Edit | Permission
+    children:
+      GMusic.AMusic: true
+      
+  GMusic.Update:
+    default: op
+    description: Get-Update-Notification | Permission
+    
+  GMusic.GMusicReload:
+    default: op
+    description: Config-Reload-Command | Permission

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>dev.geco</groupId>
+    <artifactId>GMusic</artifactId>
+    <name>GMusic</name>
+    <version>1.0.0</version>
+    <description>Hear your favorite Music with Note Block Sounds in Minecraft!</description>
+    <url>https://www.spigotmc.org/resources/84004</url>
+    <inceptionYear>2022</inceptionYear>
+    <packaging>pom</packaging>
+
+    <licenses>
+        <license>
+            <name>GNU General Public License v3.0</name>
+        </license>
+    </licenses>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/Gecolay/GMusic/issues</url>
+    </issueManagement>
+
+    <modules>
+        <module>core</module>
+        <module>dist</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <build>
+        <defaultGoal>clean install</defaultGoal>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.10.1</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>
