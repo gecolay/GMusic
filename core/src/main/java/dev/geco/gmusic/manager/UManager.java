@@ -4,107 +4,118 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-import org.bukkit.plugin.*;
+import org.bukkit.*;
+import org.bukkit.entity.*;
+
+import dev.geco.gmusic.GMusicMain;
 
 public class UManager {
 
-	private final Plugin plugin;
+    private final GMusicMain GPM;
 
-	private final String resource;
+    private String spigotVersion = null;
 
-	private String spigotVersion = null;
+    private boolean latestVersion = true;
 
-	private boolean latestVersion = true;
+    public UManager(GMusicMain GPluginMain) { GPM = GPluginMain; }
 
-	public UManager(Plugin Plugin, String Resource) {
+    public void checkForUpdates() {
 
-		plugin = Plugin;
-		resource = Resource;
-	}
+        if(GPM.getCManager().CHECK_FOR_UPDATE) {
 
-	private String requestSpigotVersion() {
+            checkVersion();
 
-		String vs = null;
+            if(!latestVersion) {
 
-		try(Closer c = Closer.create()) {
+                for(Player player : Bukkit.getOnlinePlayers()) if(GPM.getPManager().hasPermission(player, "Update")) GPM.getMManager().sendMessage(player, "Plugin.plugin-update", "%Name%", GPM.NAME, "%NewVersion%", spigotVersion, "%Version%", GPM.getDescription().getVersion(), "%Path%", GPM.getDescription().getWebsite());
 
-			HttpURLConnection con = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=" + resource).openConnection();
+                GPM.getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-update", "%Name%", GPM.NAME, "%NewVersion%", spigotVersion, "%Version%", GPM.getDescription().getVersion(), "%Path%", GPM.getDescription().getWebsite());
+            }
+        }
+    }
 
-			con.setDoOutput(true);
-			con.setRequestMethod("GET");
-			con.setConnectTimeout(1000);
+    public void loginCheckForUpdates(Player Player) {
 
-			vs = c.register(new BufferedReader(c.register(new InputStreamReader(con.getInputStream())))).readLine();
-		} catch (Exception ignored) { }
+        if(GPM.getCManager().CHECK_FOR_UPDATE && !latestVersion) {
 
-		return vs;
-	}
+            if(GPM.getPManager().hasPermission(Player, "Update")) GPM.getMManager().sendMessage(Player, "Plugin.plugin-update", "%Name%", GPM.NAME, "%NewVersion%", spigotVersion, "%Version%", GPM.getDescription().getVersion(), "%Path%", GPM.getDescription().getWebsite());
+        }
+    }
 
-	public String getPluginVersion() { return plugin.getDescription().getVersion(); }
+    private String getSpigotVersion() {
 
-	public String getLatestVersion() { return spigotVersion; }
+        String version = null;
 
-	public boolean checkVersion() {
+        try(Closer closer = Closer.create()) {
 
-		try {
+            HttpURLConnection urlConnection = (HttpURLConnection) new URL("https://api.spigotmc.org/legacy/update.php?resource=" + GPM.RESOURCE).openConnection();
 
-			spigotVersion = requestSpigotVersion();
+            urlConnection.setDoOutput(true);
+            urlConnection.setRequestMethod("GET");
+            urlConnection.setConnectTimeout(1000);
 
-			String cv = getPluginVersion();
+            version = closer.register(new BufferedReader(closer.register(new InputStreamReader(urlConnection.getInputStream())))).readLine();
+        } catch (Exception ignored) { }
 
-			if(spigotVersion == null || cv == null) return true;
+        return version;
+    }
 
-			List<Integer> pl = new ArrayList<>(), vl = new ArrayList<>();
+    private void checkVersion() {
 
-			for(String i : shortVersion(cv).split("\\.")) pl.add(Integer.parseInt(i));
+        try {
 
-			for(String i : shortVersion(spigotVersion).split("\\.")) vl.add(Integer.parseInt(i));
+            spigotVersion = getSpigotVersion();
 
-			if(pl.size() > vl.size()) {
+            String pluginVersion = GPM.getDescription().getVersion();
 
-				latestVersion = true;
+            if(spigotVersion == null) return;
 
-				return true;
-			}
+            List<Integer> versionString = new ArrayList<>(), vl = new ArrayList<>();
 
-			for(int i = 0; i < pl.size(); i++) {
+            for(String i : shortVersion(pluginVersion).split("\\.")) versionString.add(Integer.parseInt(i));
 
-				latestVersion = true;
+            for(String i : shortVersion(spigotVersion).split("\\.")) vl.add(Integer.parseInt(i));
 
-				if(pl.get(i) > vl.get(i)) return true;
-				else if(pl.get(i) < vl.get(i)) {
+            if(versionString.size() > vl.size()) {
 
-					latestVersion = false;
+                latestVersion = true;
 
-					return false;
-				}
-			}
-		} catch (Exception | Error e) { latestVersion = true; }
+                return;
+            }
 
-		return latestVersion;
-	}
+            for(int i = 0; i < versionString.size(); i++) {
 
-	public boolean isLatestVersion() { return latestVersion; }
+                latestVersion = true;
 
-	private String shortVersion(String V) { return V.replace(" ", "").replace("[", "").replace("]", ""); }
+                if(versionString.get(i) > vl.get(i)) return;
+                else if(versionString.get(i) < vl.get(i)) {
 
-	private static class Closer implements Closeable {
+                    latestVersion = false;
+                    return;
+                }
+            }
+        } catch (Throwable e) { latestVersion = true; }
+    }
 
-		private final List<Closeable> l = new ArrayList<>();
+    private String shortVersion(String V) { return V.replace(" ", "").replace("[", "").replace("]", ""); }
 
-		public static Closer create() { return new Closer(); }
+    private static class Closer implements Closeable {
 
-		public <C extends Closeable> C register(C c) {
+        private final List<Closeable> l = new ArrayList<>();
 
-			l.add(c);
+        public static Closer create() { return new Closer(); }
 
-			return c;
-		}
+        public <C extends Closeable> C register(C c) {
 
-		@Override
-		public void close() { for(Closeable c : l) closeQuietly(c); }
+            l.add(c);
 
-		public void closeQuietly(Closeable c) { try { c.close(); } catch (Exception ignored) { } }
-	}
+            return c;
+        }
+
+        @Override
+        public void close() { for(Closeable c : l) closeQuietly(c); }
+
+        public void closeQuietly(Closeable c) { try { c.close(); } catch (Exception ignored) { } }
+    }
 
 }

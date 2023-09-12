@@ -1,29 +1,37 @@
 package dev.geco.gmusic.cmd;
 
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
+import org.jetbrains.annotations.*;
 
-import dev.geco.gmusic.main.GMusicMain;
+import org.bukkit.command.*;
+import org.bukkit.entity.*;
+
+import dev.geco.gmusic.GMusicMain;
 
 public class GMusicReloadCommand implements CommandExecutor {
-	
-	private final GMusicMain GPM;
-	
+
+    private final GMusicMain GPM;
+
     public GMusicReloadCommand(GMusicMain GPluginMain) { GPM = GPluginMain; }
-	
-	@Override
-	public boolean onCommand(CommandSender s, Command c, String l, String[] a) {
-		if(s instanceof Player) {
-			Player p = (Player) s;
-			if(p.hasPermission(GPM.NAME + "." + GPM.NAME + "Reload") || p.hasPermission(GPM.NAME + ".*")) {
-				GPM.reload(s);
-				GPM.getMManager().sendMessage(p, "Messages.command-config-reload");
-			} else GPM.getMManager().sendMessage(p, "Messages.command-permission-error");
-		} else {
-			GPM.reload(s);
-			GPM.getMManager().sendMessage(s, "Messages.command-config-reload");
-		}
-		return true;
-	}
-	
+
+    @Override
+    public boolean onCommand(@NotNull CommandSender Sender, @NotNull Command Command, @NotNull String Label, String[] Args) {
+
+        if(!(Sender instanceof Player || Sender instanceof ConsoleCommandSender || Sender instanceof RemoteConsoleCommandSender)) {
+
+            GPM.getMManager().sendMessage(Sender, "Messages.command-sender-error");
+            return true;
+        }
+
+        if(!GPM.getPManager().hasPermission(Sender, "Reload")) {
+
+            GPM.getMManager().sendMessage(Sender, "Messages.command-permission-error");
+            return true;
+        }
+
+        GPM.reload(Sender);
+
+        GPM.getMManager().sendMessage(Sender, "Plugin.plugin-reload");
+        return true;
+    }
+
 }

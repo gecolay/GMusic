@@ -1,7 +1,7 @@
 package dev.geco.gmusic.objects;
 
 public enum NoteInstrument {
-	
+
 	INST_0(0, "block.note_block.harp"),
 	INST_1(1, "block.note_block.bass"),
 	INST_2(2, "block.note_block.basedrum"),
@@ -18,18 +18,20 @@ public enum NoteInstrument {
 	INST_13(13, "block.note_block.bit"),
 	INST_14(14, "block.note_block.banjo"),
 	INST_15(15, "block.note_block.pling");
-	
-	private int i;
-	private String ppo;
-	
-	NoteInstrument(int Instrument, String InstPost) {
-		i = Instrument;
-		ppo = InstPost;
+
+	private final int instrument;
+
+	private final String sound;
+
+	NoteInstrument(int Instrument, String Sound) {
+
+		instrument = Instrument;
+		sound = Sound;
 	}
-	
+
 	public static String getInstrument(int Instrument) {
-		for(NoteInstrument ni : values()) if(ni.i == Instrument) return ni.ppo;
+		for(NoteInstrument noteInstrument : values()) if(noteInstrument.instrument == Instrument) return noteInstrument.sound;
 		return null;
 	}
-	
+
 }

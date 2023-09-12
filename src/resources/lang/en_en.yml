@@ -1,0 +1,35 @@
+#
+# Language-File created by:		Gecolay
+#
+
+
+
+Plugin:
+
+  plugin-enabled: "[P]&a The plugin was successfully enabled."
+  plugin-link: "[P]&a Link with&6 %Link%&a successful!"
+  plugin-update: "[P]&a New version available:&6 %NewVersion%&a!\n[P]&a You are currently running version:&6 %Version%&a!\n[P]&a Download the latest version at:\n[P]&6 %Path%"
+  plugin-data: "[P]&c A connection to the data storage could not be established. Please check the server console!"
+  plugin-version: "[P]&c The plugin can't be used with this server version! (&b%Version%&c)"
+  plugin-reload: "[P]&a The plugin was successfully reloaded."
+  plugin-disabled: "[P]&a The plugin was successfully disabled."
+  plugin-prefix: "&7[&6GMusic&7]"
+
+
+
+Messages:
+
+  command-permission-error: "[P]&c You don't have permission to use this command!"
+  command-sender-error: "[P]&c You can't run this command!"
+  command-version-error: "[P]&c Outdated server version! (&b%Version%&c)\n[P]&c Update this server to use this feature!"
+
+  command-gmusic-use-error: "[P]&c /music play|playing|random|stop|pause|resume|skip|toggle"
+  command-gmusic-song-error: "[P]&c The song&6 %Song%&c does not exist!"
+  command-gmusic-no-song-error: "[P]&c There are no songs!"
+  command-gmusic-play: "[P]&a Now playing:&6 %SongTitle%&7 (&6%Song%&7)"
+  command-gmusic-playing-error: "[P]&c There is currently no song playing!"
+  command-gmusic-playing: "[P]&a Now playing:&6 %SongTitle%&7 (&6%Song%&7)"
+  command-gmusic-stop: "[P]&a Song stopped."
+  command-gmusic-paused-error: "[P]&c There is currently no paused song!"
+  command-gmusic-pause: "[P]&a Song paused."
+  command-gmusic-resume: "[P]&a Song resumed."

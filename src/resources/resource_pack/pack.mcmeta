@@ -1,0 +1,10 @@
+{
+	"pack": {
+		"pack_format": 15,
+		"description": "Minecraft Note Block\nExtended octave range",
+		"supported_formats": {
+			"min_inclusive": 1,
+			"max_inclusive": 100
+		}
+	}
+}

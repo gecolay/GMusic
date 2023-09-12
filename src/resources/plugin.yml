@@ -1,0 +1,60 @@
+name: ${project.parent.name}
+version: ${project.parent.version}
+description: ${project.description}
+authors: [Gecolay]
+website: https://www.spigotmc.org/resources/84004
+main: ${project.parent.groupId}.${project.parent.artifactId}Main
+api-version: 1.17
+folia-supported: true
+
+commands:
+
+  gmusic:
+
+    usage: /<command> play|playing|random|stop|pause|resume|skip|toggle
+    aliases: [music, gsong, song]
+    description: Music command
+    permission: GMusic.Music
+
+  gamusic:
+
+    usage: /<command>
+    aliases: [amusic]
+    description: AMusic command
+    permission: GMusic.AMusic
+
+  gmusicreload:
+
+    usage: /<command>
+    aliases: [gmusicrl]
+    description: Plugin reload command
+    permission: GMusic.Reload
+
+
+
+permissions:
+
+  GMusic.*:
+    default: op
+    description: GMusic | Permissions
+    children:
+      GMusic.Music: true
+      GMusic.AMusic: true
+      GMusic.Update: true
+      GMusic.Reload: true
+
+  GMusic.Music:
+    default: true
+    description: Music command | Permission
+
+  GMusic.AMusic:
+    default: op
+    description: AMusic command | Permission
+
+  GMusic.Update:
+    default: op
+    description: Update notification | Permission
+
+  GMusic.Reload:
+    default: op
+    description: Plugin reload command | Permission

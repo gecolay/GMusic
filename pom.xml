@@ -4,13 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>dev.geco</groupId>
+    <groupId>dev.geco.gmusic</groupId>
     <artifactId>GMusic</artifactId>
     <name>GMusic</name>
-    <version>1.0.0</version>
-    <description>Hear your favorite Music with Note Block Sounds in Minecraft!</description>
+    <version>2.0.0</version>
+    <description>Hear your favorite music with note block sounds in Minecraft!</description>
     <url>https://www.spigotmc.org/resources/84004</url>
-    <inceptionYear>2022</inceptionYear>
+    <inceptionYear>2020</inceptionYear>
     <packaging>pom</packaging>
 
     <licenses>
@@ -26,6 +26,24 @@
 
     <modules>
         <module>core</module>
+        <module>mcv1_17_R1</module>
+        <module>mcv1_17_R1_2</module>
+        <module>mcv1_18_R1</module>
+        <module>mcv1_18_R2</module>
+        <module>mcv1_19_R1</module>
+        <module>mcv1_19_R1_2</module>
+        <module>mcv1_19_R2</module>
+        <module>mcv1_19_R3</module>
+        <module>mcv1_20_R1</module>
+        <module>v1_17_R1</module>
+        <module>v1_17_R1_2</module>
+        <module>v1_18_R1</module>
+        <module>v1_18_R2</module>
+        <module>v1_19_R1</module>
+        <module>v1_19_R1_2</module>
+        <module>v1_19_R2</module>
+        <module>v1_19_R3</module>
+        <module>v1_20_R1</module>
         <module>dist</module>
     </modules>
 
@@ -37,17 +55,41 @@
 
     <build>
         <defaultGoal>clean install</defaultGoal>
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.10.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.4.1</version>
+                <configuration>
+                    <minimizeJar>true</minimizeJar>
+                    <createDependencyReducedPom>false</createDependencyReducedPom>
+                    <shadedArtifactAttached>false</shadedArtifactAttached>
+                    <outputDirectory>./target</outputDirectory>
+                    <filters>
+                        <filter>
+                            <artifact>*:*</artifact>
+                            <excludes>
+                                <exclude>META-INF/license/**</exclude>
+                                <exclude>META-INF/*</exclude>
+                                <exclude>META-INF/maven/**</exclude>
+                                <exclude>build.properties</exclude>
+                            </excludes>
+                        </filter>
+                    </filters>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
