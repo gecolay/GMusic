@@ -48,7 +48,7 @@ public class NotePart {
 				int noteKey = Integer.parseInt(parts[2].replace(KEYFLOAT, ""));
 				pitch = getPitch(noteKey);
 				originalPitch = getOriginalPitch(noteKey);
-				if(GMusicMain.getInstance().getCManager().EXTENDED_RANGE) {
+				if(GMusicMain.getInstance().getCManager().S_EXTENDED_RANGE) {
 					if(originalPitch > 24) {
 						sound += "_1";
 					} else if(originalPitch < 0) {
@@ -65,7 +65,7 @@ public class NotePart {
 	}
 
 	private float getPitch(int Note) {
-		if(!GMusicMain.getInstance().getCManager().EXTENDED_RANGE) {
+		if(!GMusicMain.getInstance().getCManager().S_EXTENDED_RANGE) {
 			if(Note < 0) return 0.5f;
 			if(Note > 24) return 2f;
 			return (float) Math.pow(2, ((float) (Note - 12) / 12));
@@ -81,7 +81,7 @@ public class NotePart {
 	}
 
 	private int getOriginalPitch(int Note) {
-		if(!GMusicMain.getInstance().getCManager().EXTENDED_RANGE) {
+		if(!GMusicMain.getInstance().getCManager().S_EXTENDED_RANGE) {
 			if(Note < 0) return 0;
 			return Math.min(Note, 24);
 		}

@@ -14,7 +14,11 @@ public class CManager {
 
     public boolean CHECK_FOR_UPDATE;
 
-    public boolean EXTENDED_RANGE;
+
+    public boolean S_EXTENDED_RANGE;
+
+    public boolean S_FORCE_RESOURCES;
+
 
     public int JUKEBOX_RANGE;
 
@@ -100,7 +104,8 @@ public class CManager {
         L_LANG = GPM.getConfig().getString("Lang.lang", "en_en").toLowerCase();
 
         CHECK_FOR_UPDATE = GPM.getConfig().getBoolean("Options.check-for-update", true);
-        EXTENDED_RANGE = GPM.getConfig().getBoolean("Options.extened-range", true);
+        S_EXTENDED_RANGE = GPM.getConfig().getBoolean("Options.Sound.extened-range", true);
+        S_FORCE_RESOURCES = GPM.getConfig().getBoolean("Options.Sound.force-resources", true);
         JUKEBOX_RANGE = GPM.getConfig().getInt("Options.jukebox-range", 50);
         MAX_JUKEBOX_RANGE = GPM.getConfig().getInt("Options.max-jukebox-range", 500);
 

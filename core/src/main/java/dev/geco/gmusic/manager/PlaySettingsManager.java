@@ -26,7 +26,7 @@ public class PlaySettingsManager {
 
 		List<Song> favorites = new ArrayList<>();
 
-		PlaySettings playSettings = genDefaultPlaySettings(UUID);
+		PlaySettings playSettings = null;
 
 		try {
 
@@ -45,6 +45,8 @@ public class PlaySettingsManager {
 			}
 
 		} catch(Throwable e) { e.printStackTrace(); }
+
+		if(playSettings == null) playSettings = genDefaultPlaySettings(UUID);
 
 		playSettings.setFavorites(favorites);
 

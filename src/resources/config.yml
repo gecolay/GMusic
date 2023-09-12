@@ -10,8 +10,15 @@ Options:
   # Defines whether the plugin should notify when a new version is available
   check-for-update: true
 
-  # D
-  extened-range: true
+  Sound:
+
+    # Defines whether the extened note range should be used for sounds (requires resource pack for players)
+    extened-range: true
+
+    # Defines whether the resource pack should be automatically downloaded and applied to the user
+    force-resources: true
+
+
 
   # Defines the range a player can hear the sound of a jukebox
   jukebox-range: 50

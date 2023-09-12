@@ -13,7 +13,15 @@ public class PlayerEvents implements Listener {
     public PlayerEvents(GMusicMain GPluginMain) { GPM = GPluginMain; }
 
     @EventHandler
-    public void PJoiE(PlayerJoinEvent Event) { GPM.getUManager().loginCheckForUpdates(Event.getPlayer()); }
+    public void PJoiE(PlayerJoinEvent Event) {
+
+        GPM.getUManager().loginCheckForUpdates(Event.getPlayer());
+
+        if(GPM.getCManager().S_EXTENDED_RANGE && GPM.getCManager().S_FORCE_RESOURCES) {
+
+            Event.getPlayer().setResourcePack("https://github.com/Gecolay/GMusic/raw/main/src/resources/resource_pack/note_block_extended_octave_range.zip", "null", true);
+        }
+    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void PQuiE(PlayerQuitEvent Event) {

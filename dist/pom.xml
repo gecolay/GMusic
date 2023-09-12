@@ -20,6 +20,9 @@
                 <targetPath>.</targetPath>
                 <directory>../src/resources</directory>
                 <filtering>true</filtering>
+                <excludes>
+                    <exclude>**/resource_pack/**</exclude>
+                </excludes>
             </resource>
         </resources>
         <plugins>
