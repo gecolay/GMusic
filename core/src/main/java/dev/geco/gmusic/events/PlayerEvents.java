@@ -19,7 +19,7 @@ public class PlayerEvents implements Listener {
 
         if(GPM.getCManager().S_EXTENDED_RANGE && GPM.getCManager().S_FORCE_RESOURCES) {
 
-            Event.getPlayer().setResourcePack("https://github.com/Gecolay/GMusic/raw/main/src/resources/resource_pack/note_block_extended_octave_range.zip", "null", true);
+            Event.getPlayer().setResourcePack("https://github.com/Gecolay/GMusic/raw/main/src/resource_pack/note_block_extended_octave_range.zip", "null", true);
         }
     }
 

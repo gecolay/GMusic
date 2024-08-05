@@ -69,6 +69,6 @@ public class Note {
 
 	public List<Note> getReferences() { return references; }
 
-	public boolean isReference() { return references.size() > 0; }
+	public boolean isReference() { return !references.isEmpty(); }
 
 }

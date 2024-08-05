@@ -12,7 +12,12 @@ public class CManager {
 
     public String L_LANG;
 
+    public boolean L_CLIENT_LANG;
+
+
     public boolean CHECK_FOR_UPDATE;
+
+    public List<String> WORLDBLACKLIST = new ArrayList<>();
 
 
     public boolean S_EXTENDED_RANGE;
@@ -64,34 +69,29 @@ public class CManager {
     public boolean G_DISABLE_SEARCH;
 
 
-    public List<String> WORLDBLACKLIST = new ArrayList<>();
-
-
     private final GMusicMain GPM;
 
     public CManager(GMusicMain GPluginMain) {
 
         GPM = GPluginMain;
 
-        if(NMSManager.isNewerOrVersion(18, 2)) {
+        if(GPM.getSVManager().isNewerOrVersion(18, 2)) {
             try {
                 File configFile = new File(GPM.getDataFolder(), "config.yml");
                 FileConfiguration config = YamlConfiguration.loadConfiguration(configFile);
                 InputStream configSteam = GPM.getResource("config.yml");
                 if(configSteam != null) {
                     FileConfiguration configSteamConfig = YamlConfiguration.loadConfiguration(new InputStreamReader(configSteam, StandardCharsets.UTF_8));
-                    config.setDefaults(configSteamConfig);
-                    YamlConfigurationOptions options = (YamlConfigurationOptions) config.options();
-                    options.parseComments(true).copyDefaults(true).width(500);
-                    config.loadFromString(config.saveToString());
-                    for(String comments : config.getKeys(true)) {
-                        config.setComments(comments, configSteamConfig.getComments(comments));
+                    if(!config.getKeys(true).equals(configSteamConfig.getKeys(true))) {
+                        config.setDefaults(configSteamConfig);
+                        YamlConfigurationOptions options = (YamlConfigurationOptions) config.options();
+                        options.parseComments(true).copyDefaults(true).width(500);
+                        config.loadFromString(config.saveToString());
+                        for(String comments : config.getKeys(true)) config.setComments(comments, configSteamConfig.getComments(comments));
+                        config.save(configFile);
                     }
-                }
-                config.save(configFile);
-            } catch (Throwable e) {
-                GPM.saveDefaultConfig();
-            }
+                } else GPM.saveDefaultConfig();
+            } catch (Throwable e) { GPM.saveDefaultConfig(); }
         } else GPM.saveDefaultConfig();
 
         reload();
@@ -101,9 +101,12 @@ public class CManager {
 
         GPM.reloadConfig();
 
-        L_LANG = GPM.getConfig().getString("Lang.lang", "en_en").toLowerCase();
+        L_LANG = GPM.getConfig().getString("Lang.lang", "en_us").toLowerCase();
+        L_CLIENT_LANG = GPM.getConfig().getBoolean("Lang.client-lang", true);
 
         CHECK_FOR_UPDATE = GPM.getConfig().getBoolean("Options.check-for-update", true);
+        WORLDBLACKLIST = GPM.getConfig().getStringList("Options.WorldBlacklist");
+
         S_EXTENDED_RANGE = GPM.getConfig().getBoolean("Options.Sound.extened-range", true);
         S_FORCE_RESOURCES = GPM.getConfig().getBoolean("Options.Sound.force-resources", true);
         JUKEBOX_RANGE = GPM.getConfig().getInt("Options.jukebox-range", 50);
@@ -130,8 +133,6 @@ public class CManager {
         G_DISABLE_PLAYLIST = GPM.getConfig().getBoolean("Options.GUI.disable-playlist", false);
         G_DISABLE_OPTIONS = GPM.getConfig().getBoolean("Options.GUI.disable-options", false);
         G_DISABLE_SEARCH = GPM.getConfig().getBoolean("Options.GUI.disable-search", false);
-
-        WORLDBLACKLIST = GPM.getConfig().getStringList("Options.WorldBlacklist");
     }
 
 }

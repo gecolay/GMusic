@@ -9,12 +9,12 @@
     <parent>
         <groupId>dev.geco.gmusic</groupId>
         <artifactId>GMusic</artifactId>
-        <version>2.0.0</version>
+        <version>1.0.0</version>
     </parent>
 
     <properties>
-        <paper.version>1.20.1-R0.1-SNAPSHOT</paper.version>
-        <spigot.version>1.20.1-R0.1-SNAPSHOT</spigot.version>
+        <paper.version>1.21-R0.1-SNAPSHOT</paper.version>
+        <spigot.version>1.21-R0.1-SNAPSHOT</spigot.version>
     </properties>
 
     <repositories>

@@ -1,7 +1,7 @@
 package dev.geco.gmusic.manager;
 
 import java.io.*;
-import java.nio.file.Files;
+import java.nio.file.*;
 import java.util.*;
 
 import org.bukkit.configuration.file.*;
@@ -31,7 +31,7 @@ public class NBSManager {
 
 			short header = readShort(dataInput);
 			String title = readString(dataInput);
-			if(title.equals("")) title = NBSFile.getName().replaceFirst("[.][^.]+$", "");
+			if(title.isEmpty()) title = NBSFile.getName().replaceFirst("[.][^.]+$", "");
 			String author = readString(dataInput);
 			String originalAuthor = readString(dataInput);
 			String description = readString(dataInput);
@@ -60,7 +60,7 @@ public class NBSManager {
 				short jt = readShort(dataInput);
 				if(jt == 0) break;
 
-				StringBuilder content = new StringBuilder(((long) ((gnbsContent.size() == 0 ? jt - 1 : jt) * 1000 / sequence)) + "!");
+				StringBuilder content = new StringBuilder(((long) ((gnbsContent.isEmpty() ? jt - 1 : jt) * 1000 / sequence)) + "!");
 
 				while(true) {
 
@@ -84,7 +84,7 @@ public class NBSManager {
 				}
 
 				// minify gnbsContent
-				if(gnbsContent.size() > 0) {
+				if(!gnbsContent.isEmpty()) {
 
 					String[] tick = gnbsContent.get(gnbsContent.size() - 1).split(";");
 
@@ -92,7 +92,7 @@ public class NBSManager {
 
 						gnbsContent.remove(gnbsContent.size() - 1);
 
-						gnbsContent.add(content + ";" + ((tick.length == 1 || tick[1].equals("") ? 0 : Long.parseLong(tick[1])) + 1));
+						gnbsContent.add(content + ";" + ((tick.length == 1 || tick[1].isEmpty() ? 0 : Long.parseLong(tick[1])) + 1));
 
 					} else gnbsContent.add(content.toString());
 				} else gnbsContent.add(content.toString());
@@ -128,7 +128,7 @@ public class NBSManager {
 			gnbsStruct.set("Song.Title", title);
 			gnbsStruct.set("Song.OAuthor", originalAuthor);
 			gnbsStruct.set("Song.Author", author);
-			gnbsStruct.set("Song.Description", description.replace(" ", "").equals("") ? new ArrayList<>() : Arrays.asList(description.split("\n")));
+			gnbsStruct.set("Song.Description", description.replace(" ", "").isEmpty() ? new ArrayList<>() : Arrays.asList(description.split("\n")));
 			gnbsStruct.set("Song.Category", "RECORDS");
 
 			for(byte instrument = 0; instrument < 16; instrument++) if(gnbsInstruments.contains(instrument)) gnbsStruct.set("Song.Content.Instruments." + instrument, instrument);

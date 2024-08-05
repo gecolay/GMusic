@@ -68,8 +68,7 @@ public class SongManager {
 
             ItemStack itemStack = new ItemStack(song.getMaterial());
             ItemMeta itemMeta = itemStack.getItemMeta();
-            itemMeta.setDisplayName(GPM.getMManager().getMessage("Items.disc-title", "%Title%", song.getTitle(), "%Author%", song.getAuthor().equals("") ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(), "%OAuthor%", song.getOriginalAuthor().equals("") ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor()));
-            itemMeta.setLocalizedName(GPM.NAME + "_D_" + song.getId());
+            itemMeta.setDisplayName(GPM.getMManager().getMessage("Items.disc-title", "%Title%", song.getTitle(), "%Author%", song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(), "%OAuthor%", song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor()));
             itemMeta.setLore(description);
             itemMeta.addItemFlags(ItemFlag.values());
             itemStack.setItemMeta(itemMeta);

@@ -9,11 +9,11 @@ import org.bukkit.entity.*;
 
 import dev.geco.gmusic.GMusicMain;
 
-public class GAMusicTabComplete implements TabCompleter {
+public class AGMusicTabComplete implements TabCompleter {
 
     private final GMusicMain GPM;
 
-    public GAMusicTabComplete(GMusicMain GPluginMain) { GPM = GPluginMain; }
+    public AGMusicTabComplete(GMusicMain GPluginMain) { GPM = GPluginMain; }
 
     @Override
     public List<String> onTabComplete(@NotNull CommandSender Sender, @NotNull Command Command, @NotNull String Label, String[] Args) {

@@ -15,8 +15,10 @@ public class PlaySettingsManager {
 	private final HashMap<UUID, PlaySettings> play_settings_cache = new HashMap<>();
 
 	public void createTable() {
-		GPM.getDManager().execute("CREATE TABLE IF NOT EXISTS play_settings (uuid TEXT, playList INTEGER, volume INTEGER, playOnJoin INTEGER, playMode INTEGER, showParticles INTEGER, reverseMode INTEGER, toggleMode INTEGER, range INTEGER, currentSong TEXT);");
-		GPM.getDManager().execute("CREATE TABLE IF NOT EXISTS play_settings_favorites (uuid TEXT, songId TEXT);");
+		try {
+			GPM.getDManager().execute("CREATE TABLE IF NOT EXISTS play_settings (uuid TEXT, playList INTEGER, volume INTEGER, playOnJoin INTEGER, playMode INTEGER, showParticles INTEGER, reverseMode INTEGER, toggleMode INTEGER, range INTEGER, currentSong TEXT);");
+			GPM.getDManager().execute("CREATE TABLE IF NOT EXISTS play_settings_favorites (uuid TEXT, songId TEXT);");
+		} catch(Throwable e) { e.printStackTrace(); }
 		play_settings_cache.clear();
 	}
 
@@ -62,36 +64,39 @@ public class PlaySettingsManager {
 
 	public void setPlaySettings(UUID UUID, PlaySettings PlaySettings) {
 
-		GPM.getDManager().execute("DELETE FROM play_settings WHERE uuid = ?", UUID.toString());
-		GPM.getDManager().execute("DELETE FROM play_settings_favorites WHERE uuid = ?", UUID.toString());
+		try {
 
-		if(PlaySettings == null) {
+			GPM.getDManager().execute("DELETE FROM play_settings WHERE uuid = ?", UUID.toString());
+			GPM.getDManager().execute("DELETE FROM play_settings_favorites WHERE uuid = ?", UUID.toString());
 
-			play_settings_cache.remove(UUID);
-			return;
-		}
+			if(PlaySettings == null) {
 
-		play_settings_cache.put(UUID, PlaySettings);
+				play_settings_cache.remove(UUID);
+				return;
+			}
 
-		GPM.getDManager().execute("INSERT INTO play_settings (uuid, playList, volume, playOnJoin, playMode, showParticles, reverseMode, toggleMode, range, currentSong) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-				UUID.toString(),
-				PlaySettings.getPlayList(),
-				PlaySettings.getVolume(),
-				PlaySettings.isPlayOnJoin(),
-				PlaySettings.getPlayMode(),
-				PlaySettings.isShowingParticles(),
-				PlaySettings.isReverseMode(),
-				PlaySettings.isToggleMode(),
-				PlaySettings.getRange(),
-				PlaySettings.getCurrentSong()
-		);
+			play_settings_cache.put(UUID, PlaySettings);
 
-		if(PlaySettings.getFavorites().size() == 0) return;
+			GPM.getDManager().execute("INSERT INTO play_settings (uuid, playList, volume, playOnJoin, playMode, showParticles, reverseMode, toggleMode, range, currentSong) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+					UUID.toString(),
+					PlaySettings.getPlayList(),
+					PlaySettings.getVolume(),
+					PlaySettings.isPlayOnJoin(),
+					PlaySettings.getPlayMode(),
+					PlaySettings.isShowingParticles(),
+					PlaySettings.isReverseMode(),
+					PlaySettings.isToggleMode(),
+					PlaySettings.getRange(),
+					PlaySettings.getCurrentSong()
+			);
 
-		for(Song song : PlaySettings.getFavorites()) {
+			if(PlaySettings.getFavorites().size() == 0) return;
 
-			GPM.getDManager().execute("INSERT INTO play_settings_favorites (uuid, songId) VALUES (?, ?)", UUID.toString(), song.getId());
-		}
+			for(Song song : PlaySettings.getFavorites()) {
+
+				GPM.getDManager().execute("INSERT INTO play_settings_favorites (uuid, songId) VALUES (?, ?)", UUID.toString(), song.getId());
+			}
+		} catch(Throwable e) { e.printStackTrace(); }
 	}
 
 }

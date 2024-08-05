@@ -16,6 +16,9 @@ import dev.geco.gmusic.util.*;
 
 public class GMusicMain extends JavaPlugin {
 
+    private SVManager svManager;
+    public SVManager getSVManager() { return svManager; }
+
     private CManager cManager;
     public CManager getCManager() { return cManager; }
 
@@ -52,14 +55,11 @@ public class GMusicMain extends JavaPlugin {
     private MusicUtil musicUtil;
     public MusicUtil getMusicUtil() { return musicUtil; }
 
-    private boolean spigotBased = false;
-    public boolean isSpigotBased() { return spigotBased; }
+    private boolean supportsPaperFeature = false;
+    public boolean supportsPaperFeature() { return supportsPaperFeature; }
 
-    private boolean basicPaperBased = false;
-    public boolean isBasicPaperBased() { return basicPaperBased; }
-
-    private boolean paperBased = false;
-    public boolean isPaperBased() { return paperBased; }
+    private boolean supportsTaskFeature = false;
+    public boolean supportsTaskFeature() { return supportsTaskFeature; }
 
     public final String NAME = "GMusic";
 
@@ -89,6 +89,7 @@ public class GMusicMain extends JavaPlugin {
 
         GPM = this;
 
+        svManager = new SVManager(getInstance());
         cManager = new CManager(getInstance());
         dManager = new DManager(getInstance());
         uManager = new UManager(getInstance());
@@ -104,13 +105,14 @@ public class GMusicMain extends JavaPlugin {
 
         preloadPluginDependencies();
 
-        mManager = isBasicPaperBased() ? new PMManager(getInstance()) : new SMManager(getInstance());
+        mManager = supportsPaperFeature() && getSVManager().isNewerOrVersion(18, 2) ? new MPaperManager(getInstance()) : new MSpigotManager(getInstance());
     }
 
     public void onEnable() {
 
-        loadSettings(Bukkit.getConsoleSender());
         if(!versionCheck()) return;
+
+        loadSettings(Bukkit.getConsoleSender());
 
         setupCommands();
         setupEvents();
@@ -124,14 +126,18 @@ public class GMusicMain extends JavaPlugin {
 
     public void onDisable() {
 
+        unload();
+        getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-disabled");
+    }
+
+    private void unload() {
+
         for(Player player : Bukkit.getOnlinePlayers()) {
             getPlaySettingsManager().setPlaySettings(player.getUniqueId(), getPlaySettingsManager().getPlaySettings(player.getUniqueId()));
             getPlaySongManager().stopSong(player);
         }
 
         getDManager().close();
-
-        getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-disabled");
     }
 
     private void setupCommands() {
@@ -139,9 +145,9 @@ public class GMusicMain extends JavaPlugin {
         getCommand("gmusic").setExecutor(new GMusicCommand(getInstance()));
         getCommand("gmusic").setTabCompleter(new GMusicTabComplete(getInstance()));
         getCommand("gmusic").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
-        getCommand("gamusic").setExecutor(new GAMusicCommand(getInstance()));
-        getCommand("gamusic").setTabCompleter(new GAMusicTabComplete(getInstance()));
-        getCommand("gamusic").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
+        getCommand("agmusic").setExecutor(new GAMusicCommand(getInstance()));
+        getCommand("agmusic").setTabCompleter(new AGMusicTabComplete(getInstance()));
+        getCommand("agmusic").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
         getCommand("gmusicreload").setExecutor(new GMusicReloadCommand(getInstance()));
         getCommand("gmusicreload").setTabCompleter(new EmptyTabComplete());
         getCommand("gmusicreload").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
@@ -155,19 +161,14 @@ public class GMusicMain extends JavaPlugin {
     private void preloadPluginDependencies() {
 
         try {
-            Class.forName("org.spigotmc.event.entity.EntityDismountEvent");
-            spigotBased = true;
-        } catch (ClassNotFoundException ignored) { }
-
-        try {
             Class.forName("io.papermc.paper.event.entity.EntityMoveEvent");
-            basicPaperBased = true;
-        } catch (ClassNotFoundException ignored) { }
+            supportsPaperFeature = true;
+        } catch (ClassNotFoundException ignored) { supportsPaperFeature = false; }
 
         try {
             Class.forName("io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler");
-            paperBased = true;
-        } catch (ClassNotFoundException ignored) { }
+            supportsTaskFeature = true;
+        } catch (ClassNotFoundException ignored) { supportsTaskFeature = false; }
     }
 
     private void loadPluginDependencies(CommandSender Sender) { }
@@ -179,16 +180,11 @@ public class GMusicMain extends JavaPlugin {
         getCManager().reload();
         getMManager().loadMessages();
 
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            getPlaySettingsManager().setPlaySettings(player.getUniqueId(), getPlaySettingsManager().getPlaySettings(player.getUniqueId()));
-            getPlaySongManager().stopSong(player);
-        }
-
-        getDManager().close();
+        unload();
 
         loadSettings(Sender);
         loadPluginDependencies(Sender);
-        GPM.getUManager().checkForUpdates();
+        getUManager().checkForUpdates();
     }
 
     private boolean connectDatabase(CommandSender Sender) {
@@ -206,13 +202,11 @@ public class GMusicMain extends JavaPlugin {
 
     private boolean versionCheck() {
 
-        if(!NMSManager.isNewerOrVersion(17, 0)) {
+        if(!getSVManager().isNewerOrVersion(17, 0)) {
 
-            String version = Bukkit.getServer().getClass().getPackage().getName();
+            getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-version", "%Version%", getSVManager().getServerVersion());
 
-            getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-version", "%Version%", version.substring(version.lastIndexOf('.') + 1));
-
-            GPM.getUManager().checkForUpdates();
+            getUManager().checkForUpdates();
 
             Bukkit.getPluginManager().disablePlugin(getInstance());
 

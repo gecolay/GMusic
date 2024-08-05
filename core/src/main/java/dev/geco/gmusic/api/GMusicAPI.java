@@ -7,7 +7,7 @@ public class GMusicAPI {
     /**
      * Returns the Plugin-Instance for GMusic
      * @author Gecolay
-     * @since 2.0.0
+     * @since 1.0.0
      * @return Plugin-Instance
      */
     public static GMusicMain getInstance() { return GMusicMain.getInstance(); }

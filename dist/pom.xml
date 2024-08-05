@@ -9,7 +9,7 @@
     <parent>
         <groupId>dev.geco.gmusic</groupId>
         <artifactId>GMusic</artifactId>
-        <version>2.0.0</version>
+        <version>1.0.0</version>
     </parent>
 
     <build>
@@ -20,16 +20,13 @@
                 <targetPath>.</targetPath>
                 <directory>../src/resources</directory>
                 <filtering>true</filtering>
-                <excludes>
-                    <exclude>**/resource_pack/**</exclude>
-                </excludes>
             </resource>
         </resources>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.7.1</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -52,51 +49,6 @@
         <dependency>
             <groupId>dev.geco.gmusic</groupId>
             <artifactId>core</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_17_R1</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_17_R1_2</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_18_R1</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_18_R2</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_19_R1</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_19_R1_2</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_19_R2</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_19_R3</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>dev.geco.gmusic</groupId>
-            <artifactId>v1_20_R1</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
     </dependencies>

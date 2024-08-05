@@ -8,7 +8,7 @@ Plugin:
 
   plugin-enabled: "[P]&a Das Plugin wurde erfolgreich aktiviert."
   plugin-link: "[P]&a Verknüpfung mit&6 %Link%&a erfolgreich!"
-  plugin-update: "[P]&a Neue Version verfügbar:&6 %NewVersion%&a!\n[P]&a Aktuell verwendete Version:&6 %Version%&a!\n[P]&a Laden Sie die neuste Version von:\n[P]&6 %Path%"
+  plugin-update: "[P]&a Neue Version verfügbar:&6 %NewVersion%&a!\n[P]&a Aktuelle Version:&6 %Version%&a!\n[P]&a Lade die neuste Version:\n[P]&6 %Path%"
   plugin-data: "[P]&c Es konnte keine Verbindung zum Datenspeicher hergestellt werden. Bitte überprüfe die Serverkonsole!"
   plugin-version: "[P]&c Das Plugin kann mit dieser Server-Version nicht genutzt werden! (&b%Version%&c)"
   plugin-reload: "[P]&a Das Plugin wurde erfolgreich neu geladen."
@@ -21,8 +21,15 @@ Messages:
 
   command-permission-error: "[P]&c Du hast keine Berechtigung, diesen Befehl zu verwenden!"
   command-sender-error: "[P]&c Du kann diesen Befehl nicht ausführen!"
-  command-version-error: "[P]&c Veraltete Serverversion! (&b%Version%&c)\n[P]&c Aktualisiere den Server, um diese Funktion zu verwenden!"
+  command-version-error: "[P]&c Veraltete Serverversion! (&b%Version%&c)\n[P]&c Aktualisiere den Server, um dieses Feature zu verwenden!"
 
   command-gmusic-use-error: "[P]&c /music play|playing|random|stop|pause|resume|skip|toggle"
   command-gmusic-song-error: "[P]&c Der Song&6 %Song%&c existiert nicht!"
-  command-gmusic-play: "[P]&a Nun spielt:&6 %Song%"
+  command-gmusic-no-song-error: "[P]&c There are no songs!"
+  command-gmusic-play: "[P]&a Nun spielt:&6 %SongTitle%&7 (&6%Song%&7)"
+  command-gmusic-playing-error: "[P]&c Es spielt aktuell kein Song!"
+  command-gmusic-playing: "[P]&a Nun spielt:&6 %SongTitle%&7 (&6%Song%&7)"
+  command-gmusic-stop: "[P]&a Song gestoppt."
+  command-gmusic-paused-error: "[P]&c Es ist aktuell kein Song pausiert!"
+  command-gmusic-pause: "[P]&a Song pausiert."
+  command-gmusic-resume: "[P]&a Song fortgesetzt."

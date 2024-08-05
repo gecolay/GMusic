@@ -40,7 +40,7 @@ public class PlaySongManager {
 
 		playSettings.setCurrentSong(Song.getId());
 
-		//if(GPM.getCManager().A_SHOW_MESSAGES) Player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(GPM.getMManager().getMessage("Messages.actionbar-play", "%Title%", Song.getTitle(), "%Author%", Song.getAuthor().equals("") ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().equals("") ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor())));
+		if(GPM.getCManager().A_SHOW_MESSAGES) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-play", "%Title%", Song.getTitle(), "%Author%", Song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor());
 
 		playTimer(Player, Song, timer);
 	}
@@ -62,8 +62,6 @@ public class PlaySongManager {
 		UUID u = Player.getUniqueId();
 
 		SongSettings songSettings = song_settings.get(u);
-
-		//TextComponent anp = new TextComponent(GPM.getMManager().getMessage("Messages.actionbar-now-playing", "%Title%", S.getTitle(), "%Author%", S.getAuthor().equals("") ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : S.getAuthor(), "%OAuthor%", S.getOriginalAuthor().equals("") ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : S.getOriginalAuthor()));
 
 		PlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(Player.getUniqueId());
 
@@ -124,7 +122,7 @@ public class PlaySongManager {
 
 				songSettings.setPosition(playSettings.isReverseMode() ? position - 1 : position + 1);
 
-				//if(GPM.getCManager().A_SHOW_ALWAYS_WHILE_PLAYING) Player.spigot().sendMessage(ChatMessageType.ACTION_BAR, anp);
+				if(GPM.getCManager().A_SHOW_WHILE_PLAYING) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-now-playing", "%Title%", Song.getTitle(), "%Author%", Song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor());
 			}
 		}, 0, 1);
 	}
@@ -156,7 +154,7 @@ public class PlaySongManager {
 
 		playSettings.setCurrentSong(null);
 
-		//if(GPM.getCManager().A_SHOW_MESSAGES) Player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(GPM.getMManager().getMessage("Messages.actionbar-stop")));
+		if(GPM.getCManager().A_SHOW_MESSAGES) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-stop");
 	}
 
 	public void pauseSong(Player Player) {
@@ -169,7 +167,7 @@ public class PlaySongManager {
 
 		songSettings.setPaused(true);
 
-		//if(GPM.getCManager().A_SHOW_MESSAGES) P.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(GPM.getMManager().getMessage("Messages.actionbar-pause")));
+		if(GPM.getCManager().A_SHOW_MESSAGES) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-pause");
 	}
 
 	public void resumeSong(Player Player) {
@@ -182,7 +180,7 @@ public class PlaySongManager {
 
 		songSettings.setPaused(false);
 
-		//if(GPM.getCManager().A_SHOW_MESSAGES) P.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(GPM.getMManager().getMessage("Messages.actionbar-resume")));
+		if(GPM.getCManager().A_SHOW_MESSAGES) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-resume");
 
 		playTimer(Player, songSettings.getSong(), songSettings.getTimer());
 	}

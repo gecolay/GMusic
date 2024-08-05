@@ -36,9 +36,9 @@ public class Song {
 
 	private long length = 0;
 
-	private final List<Material> DICS = new ArrayList<>(Tag.ITEMS_MUSIC_DISCS.getValues());
+    public Song(File GNBSFile) {
 
-	public Song(File GNBSFile) {
+        List<Material> DISCS = Arrays.stream(Material.values()).filter(disc -> disc.name().contains("_DISC_")).toList();
 
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(GNBSFile);
 		filename = GNBSFile.getName();
@@ -52,7 +52,7 @@ public class Song {
 		if(songMaterial != null) {
 			try { material = Material.valueOf(songMaterial.toUpperCase()); } catch(IllegalArgumentException ignored) { }
 		}
-		if(material == null) material = id == null ? DICS.get(0) : DICS.get(id.length() <= DICS.size() - 1 ? id.length() : id.length() % (DICS.size() - 1));
+		if(material == null) material = id == null ? DISCS.get(0) : DISCS.get(id.length() <= DISCS.size() - 1 ? id.length() : id.length() % (DISCS.size() - 1));
 		try { soundCategory = SoundCategory.valueOf(config.getString("Song.Category", "").toUpperCase()); } catch(IllegalArgumentException e) { soundCategory = SoundCategory.RECORDS; }
 
 		List<String> songInstruments = new ArrayList<>();
