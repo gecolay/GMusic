@@ -40,6 +40,15 @@ public class GMusicMain extends JavaPlugin {
     private PlaySongManager playSongManager;
     public PlaySongManager getPlaySongManager() { return playSongManager; }
 
+    private BoxSongManager boxSongManager;
+    public BoxSongManager getBoxSongManager() { return boxSongManager; }
+
+    private JukeBoxManager jukeBoxManager;
+    public JukeBoxManager getJukeBoxManager() { return jukeBoxManager; }
+
+    private RadioManager radioManager;
+    public RadioManager getRadioManager() { return radioManager; }
+
     private UManager uManager;
     public UManager getUManager() { return uManager; }
 
@@ -76,6 +85,8 @@ public class GMusicMain extends JavaPlugin {
         getPlaySettingsManager().createTable();
 
         getSongManager().loadSongs();
+
+        if(getCManager().R_ACTIVE) getRadioManager().playRadio();
     }
 
     private void linkBStats() {
@@ -100,6 +111,9 @@ public class GMusicMain extends JavaPlugin {
         playSettingsManager = new PlaySettingsManager(getInstance());
         songManager = new SongManager(getInstance());
         playSongManager = new PlaySongManager(getInstance());
+        boxSongManager = new BoxSongManager(getInstance());
+        jukeBoxManager = new JukeBoxManager(getInstance());
+        radioManager = new RadioManager(getInstance());
 
         musicUtil = new MusicUtil();
 
@@ -132,6 +146,9 @@ public class GMusicMain extends JavaPlugin {
 
     private void unload() {
 
+        GPM.getRadioManager().stopRadio();
+        GPM.getPlaySettingsManager().clearPlaySettingsCache();
+
         for(Player player : Bukkit.getOnlinePlayers()) {
             getPlaySettingsManager().setPlaySettings(player.getUniqueId(), getPlaySettingsManager().getPlaySettings(player.getUniqueId()));
             getPlaySongManager().stopSong(player);
@@ -156,6 +173,7 @@ public class GMusicMain extends JavaPlugin {
     private void setupEvents() {
 
         getServer().getPluginManager().registerEvents(new PlayerEvents(getInstance()), getInstance());
+        getServer().getPluginManager().registerEvents(new JukeBoxEvents(getInstance()), getInstance());
     }
 
     private void preloadPluginDependencies() {

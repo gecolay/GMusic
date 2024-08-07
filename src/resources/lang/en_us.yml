@@ -33,3 +33,8 @@ Messages:
   command-gmusic-paused-error: "[P]&c There is currently no paused song!"
   command-gmusic-pause: "[P]&a Song paused."
   command-gmusic-resume: "[P]&a Song resumed."
+  actionbar-play: "&aNow playing:&6 %SongTitle%&7 (&6%Song%&7)"
+  actionbar-playing: "&aNow playing:&6 %SongTitle%&7 (&6%Song%&7)"
+  actionbar-stop: "&aSong stopped"
+  actionbar-pause: "&aSong paused"
+  actionbar-resume: "&aSong resumed"

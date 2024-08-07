@@ -28,7 +28,7 @@ public class PlaySongManager {
 
 		if(playSettings.getPlayList() == 2) return;
 
-		SongSettings oldSongSettings = song_settings.get(Player.getUniqueId());
+		SongSettings oldSongSettings = getSongSettings(Player.getUniqueId());
 
 		if(oldSongSettings != null) oldSongSettings.getTimer().cancel();
 
@@ -36,11 +36,11 @@ public class PlaySongManager {
 
 		SongSettings songSettings = new SongSettings(Song, timer, playSettings.isReverseMode() ? Song.getLength() + Delay : -Delay);
 
-		song_settings.put(Player.getUniqueId(), songSettings);
+		putSongSettings(Player.getUniqueId(), songSettings);
 
 		playSettings.setCurrentSong(Song.getId());
 
-		if(GPM.getCManager().A_SHOW_MESSAGES) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-play", "%Title%", Song.getTitle(), "%Author%", Song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor());
+		if(GPM.getCManager().A_SHOW_MESSAGES) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-play", "%Song%", Song.getId(), "%SongTitle%", Song.getTitle(), "%Author%", Song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor());
 
 		playTimer(Player, Song, timer);
 	}
@@ -48,20 +48,20 @@ public class PlaySongManager {
 	public Song getRandomSong(UUID UUID) {
 		PlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(UUID);
 		List<Song> songs = playSettings.getPlayList() == 1 ? playSettings.getFavorites() : GPM.getSongManager().getSongs();
-		return songs.size() > 0 ? songs.get(random.nextInt(songs.size())) : null;
+		return !songs.isEmpty() ? songs.get(random.nextInt(songs.size())) : null;
 	}
 
 	public Song getShuffleSong(UUID UUID, Song Song) {
 		PlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(UUID);
 		List<Song> s = playSettings.getPlayList() == 1 ? playSettings.getFavorites() : GPM.getSongManager().getSongs();
-		return s.size() > 0 ? s.indexOf(Song) + 1 == s.size() ? s.get(0) : s.get(s.indexOf(Song) + 1) : null;
+		return !s.isEmpty() ? s.indexOf(Song) + 1 == s.size() ? s.get(0) : s.get(s.indexOf(Song) + 1) : null;
 	}
 
 	private void playTimer(Player Player, Song Song, Timer Timer) {
 
 		UUID u = Player.getUniqueId();
 
-		SongSettings songSettings = song_settings.get(u);
+		SongSettings songSettings = getSongSettings(u);
 
 		PlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(Player.getUniqueId());
 
@@ -112,9 +112,9 @@ public class PlaySongManager {
 
 							song_settings.remove(u);
 
-							/*TODO: MusicGUI m = GPM.getValues().getMusicGUIs().get(u);
+							MusicGUI m = GPM.getSongManager().getMusicGUIs().get(u);
 
-							if(m != null) m.setPauseResumeBar();*/
+							if(m != null) m.setPauseResumeBar();
 						}
 					}
 					return;
@@ -122,27 +122,33 @@ public class PlaySongManager {
 
 				songSettings.setPosition(playSettings.isReverseMode() ? position - 1 : position + 1);
 
-				if(GPM.getCManager().A_SHOW_WHILE_PLAYING) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-now-playing", "%Title%", Song.getTitle(), "%Author%", Song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor());
+				if(GPM.getCManager().A_SHOW_WHILE_PLAYING) GPM.getMManager().sendActionBarMessage(Player, "Messages.actionbar-playing", "%Song%", Song.getId(), "%SongTitle%", Song.getTitle(), "%Author%", Song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : Song.getAuthor(), "%OAuthor%", Song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : Song.getOriginalAuthor());
 			}
 		}, 0, 1);
 	}
 
-	public boolean hasPlayingSong(UUID UUID) { return song_settings.get(UUID) != null; }
+	public SongSettings getSongSettings(UUID UUID) { return song_settings.get(UUID); }
 
-	public boolean hasPausedSong(UUID UUID) { return song_settings.get(UUID) != null && song_settings.get(UUID).isPaused(); }
+	public void removeSongSettings(UUID UUID) { song_settings.remove(UUID); }
 
-	public Song getPlayingSong(UUID UUID) { return song_settings.get(UUID).getSong(); }
+	public void putSongSettings(UUID UUID, SongSettings SongSettings) { song_settings.put(UUID, SongSettings); }
+
+	public boolean hasPlayingSong(UUID UUID) { return getSongSettings(UUID) != null; }
+
+	public boolean hasPausedSong(UUID UUID) { return getSongSettings(UUID) != null && getSongSettings(UUID).isPaused(); }
+
+	public Song getPlayingSong(UUID UUID) { return getSongSettings(UUID).getSong(); }
 
 	public Song getNextSong(Player Player) {
 
-		SongSettings songSettings = song_settings.get(Player.getUniqueId());
+		SongSettings songSettings = getSongSettings(Player.getUniqueId());
 
 		return songSettings != null ? getShuffleSong(Player.getUniqueId(), songSettings.getSong()) : getRandomSong(Player.getUniqueId());
 	}
 
 	public void stopSong(Player Player) {
 
-		SongSettings songSettings = song_settings.get(Player.getUniqueId());
+		SongSettings songSettings = getSongSettings(Player.getUniqueId());
 
 		if(songSettings == null) return;
 
@@ -159,7 +165,7 @@ public class PlaySongManager {
 
 	public void pauseSong(Player Player) {
 
-		SongSettings songSettings = song_settings.get(Player.getUniqueId());
+		SongSettings songSettings = getSongSettings(Player.getUniqueId());
 
 		if(songSettings == null) return;
 
@@ -172,7 +178,7 @@ public class PlaySongManager {
 
 	public void resumeSong(Player Player) {
 
-		SongSettings songSettings = song_settings.get(Player.getUniqueId());
+		SongSettings songSettings = getSongSettings(Player.getUniqueId());
 
 		if(songSettings == null) return;
 

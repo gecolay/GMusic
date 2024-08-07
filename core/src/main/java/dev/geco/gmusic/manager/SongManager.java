@@ -2,7 +2,6 @@ package dev.geco.gmusic.manager;
 
 import java.io.*;
 import java.util.*;
-import java.util.stream.*;
 
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
@@ -18,11 +17,13 @@ public class SongManager {
 
     private final List<Song> songs = new ArrayList<>();
 
+    private final HashMap<UUID, MusicGUI> musicGUIs = new HashMap<>();
+
+    public HashMap<UUID, MusicGUI> getMusicGUIs() { return musicGUIs; }
+
     public List<Song> getSongs() { return new ArrayList<>(songs); }
 
     public Song getSongById(String Song) { return songs.parallelStream().filter(song -> song.getId().equalsIgnoreCase(Song)).findFirst().orElse(null); }
-
-    public List<Song> getSongsBySearch(String Search) { return songs.parallelStream().filter(song -> song.getTitle().toLowerCase().contains(Search.toLowerCase())).collect(Collectors.toList()); }
 
     public void convertAllSongs() {
 
@@ -69,12 +70,22 @@ public class SongManager {
             ItemStack itemStack = new ItemStack(song.getMaterial());
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.setDisplayName(GPM.getMManager().getMessage("Items.disc-title", "%Title%", song.getTitle(), "%Author%", song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(), "%OAuthor%", song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor()));
+            itemMeta.setLocalizedName(GPM.NAME + "_D_" + song.getId());
             itemMeta.setLore(description);
             itemMeta.addItemFlags(ItemFlag.values());
             itemStack.setItemMeta(itemMeta);
 
             songs.add(song);
         });
+    }
+
+    public void putMusicGUI(UUID UUID, MusicGUI MusicGUI) { getMusicGUIs().put(UUID, MusicGUI); }
+
+    public MusicGUI getMusicGUI(UUID UUID, MusicGUI.MenuType MenuType) {
+
+        MusicGUI musicGUI = getMusicGUIs().get(UUID);
+
+        return musicGUI != null ? musicGUI : new MusicGUI(UUID, MenuType);
     }
 
 }

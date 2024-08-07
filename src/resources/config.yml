@@ -57,6 +57,9 @@ Options:
     # Defines the wait time until a song repeats
     time-until-repeat: 1000
 
+    # Defines whether the settings of a player should be saved on quit
+    save-on-quit: true
+
     Default:
 
       playlist: 0
@@ -71,4 +74,3 @@ Options:
     disable-random-song: false
     disable-playlist: false
     disable-options: false
-    disable-search: false

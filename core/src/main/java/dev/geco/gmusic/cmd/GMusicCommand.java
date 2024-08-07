@@ -33,7 +33,8 @@ public class GMusicCommand implements CommandExecutor {
 
         if(Args.length == 0) {
 
-            GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-use-error");
+            MusicGUI musicGUI = new MusicGUI(player.getUniqueId(), MusicGUI.MenuType.DEFAULT);
+            player.openInventory(musicGUI.getInventory());
             return true;
         }
 

@@ -47,9 +47,20 @@ permissions:
     default: true
     description: Music command | Permission
 
+  GMusic.AMusic.*:
+    default: op
+    description: AMusic | Permission
+    children:
+      GMusic.AMusic: true
+      GMusic.AMusic.UseJukeBox: true
+
   GMusic.AMusic:
     default: op
     description: AMusic command | Permission
+
+  GMusic.AMusic.UseJukeBox:
+    default: op
+    description: UseJukeBox | Permission
 
   GMusic.Update:
     default: op

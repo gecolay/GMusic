@@ -48,7 +48,7 @@ public class PlaySettingsManager {
 
 		} catch(Throwable e) { e.printStackTrace(); }
 
-		if(playSettings == null) playSettings = genDefaultPlaySettings(UUID);
+		if(playSettings == null) playSettings = generateDefaultPlaySettings(UUID);
 
 		playSettings.setFavorites(favorites);
 
@@ -57,7 +57,7 @@ public class PlaySettingsManager {
 		return playSettings;
 	}
 
-	public PlaySettings genDefaultPlaySettings(UUID UUID) {
+	private PlaySettings generateDefaultPlaySettings(UUID UUID) {
 
 		return new PlaySettings(UUID, GPM.getCManager().PS_D_PLAYLIST, GPM.getCManager().PS_D_VOLUME, GPM.getCManager().R_PLAY_ON_JOIN, GPM.getCManager().PS_D_PLAY_MODE, GPM.getCManager().PS_D_PARTICLES, GPM.getCManager().PS_D_REVERSE, false, 0, null, new ArrayList<>());
 	}
@@ -90,7 +90,7 @@ public class PlaySettingsManager {
 					PlaySettings.getCurrentSong()
 			);
 
-			if(PlaySettings.getFavorites().size() == 0) return;
+			if(PlaySettings.getFavorites().isEmpty()) return;
 
 			for(Song song : PlaySettings.getFavorites()) {
 
@@ -98,5 +98,9 @@ public class PlaySettingsManager {
 			}
 		} catch(Throwable e) { e.printStackTrace(); }
 	}
+
+	public void removePlaySettingsCache(UUID UUID) { play_settings_cache.remove(UUID); }
+
+	public void clearPlaySettingsCache() { play_settings_cache.clear(); }
 
 }

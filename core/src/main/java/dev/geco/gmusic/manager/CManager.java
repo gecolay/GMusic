@@ -47,6 +47,8 @@ public class CManager {
 
     public int PS_TIME_UNTIL_REPEAT;
 
+    public boolean PS_SAVE_ON_QUIT;
+
     public int PS_D_PLAYLIST;
 
     public int PS_D_VOLUME;
@@ -65,8 +67,6 @@ public class CManager {
     public boolean G_DISABLE_PLAYLIST;
 
     public boolean G_DISABLE_OPTIONS;
-
-    public boolean G_DISABLE_SEARCH;
 
 
     private final GMusicMain GPM;
@@ -122,6 +122,7 @@ public class CManager {
 
         PS_TIME_UNTIL_SHUFFLE = GPM.getConfig().getInt("Options.PlayerSettings.time-until-shuffle", 1000);
         PS_TIME_UNTIL_REPEAT = GPM.getConfig().getInt("Options.PlayerSettings.time-until-repeat", 1000);
+        PS_SAVE_ON_QUIT = GPM.getConfig().getBoolean("Options.PlayerSettings.save-on-quit", true);
         PS_D_PLAYLIST = GPM.getConfig().getInt("Options.PlayerSettings.Default.playlist", 0);
         PS_D_VOLUME = GPM.getConfig().getInt("Options.PlayerSettings.Default.volume", 70);
         PS_D_JOIN = GPM.getConfig().getBoolean("Options.PlayerSettings.Default.join", false);
@@ -132,7 +133,6 @@ public class CManager {
         G_DISABLE_RANDOM_SONG = GPM.getConfig().getBoolean("Options.GUI.disable-random-song", false);
         G_DISABLE_PLAYLIST = GPM.getConfig().getBoolean("Options.GUI.disable-playlist", false);
         G_DISABLE_OPTIONS = GPM.getConfig().getBoolean("Options.GUI.disable-options", false);
-        G_DISABLE_SEARCH = GPM.getConfig().getBoolean("Options.GUI.disable-search", false);
     }
 
 }
