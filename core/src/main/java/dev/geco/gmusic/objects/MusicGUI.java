@@ -63,10 +63,8 @@ public class MusicGUI {
 					ClickType click = Event.getClick();
 					if(GPM.getSVManager().getInventoryFromView(Event.getView(), "getTopInventory").equals(Event.getClickedInventory())) {
 						ItemStack itemStack = Event.getCurrentItem();
-						// if(itemStack != null && itemStack.hasItemMeta() && itemStack.getItemMeta().hasLocalizedName()) {
 						if(itemStack != null && !(itemStack.getPersistentDataContainer().isEmpty())) {
 
-							// String clickName = itemStack.getItemMeta().getLocalizedName();
 							String clickName = itemStack.getPersistentDataContainer().get(localizedNameKey, PersistentDataType.STRING);
 							if(clickName.startsWith("!")) setPage(Integer.parseInt(clickName.replace("!", "")));
 							else if(clickName.startsWith(".")) setOptionsBar();
@@ -296,9 +294,7 @@ public class MusicGUI {
 		if(playSettings.getPlayList() != 2) {
 			lp = new ItemStack(Material.BARRIER);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-stop"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-stop")));
-			// lpm.setLocalizedName("/s");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "/s");
 			lp.setItemMeta(lpm);
 			inventory.setItem(46, lp);
@@ -306,9 +302,7 @@ public class MusicGUI {
 			if(!GPM.getCManager().G_DISABLE_RANDOM_SONG) {
 				lp = new ItemStack(Material.ENDER_PEARL);
 				lpm = lp.getItemMeta();
-				// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-random"));
 				lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-random")));
-				// lpm.setLocalizedName("/q");
 				lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "/q");
 				lp.setItemMeta(lpm);
 				inventory.setItem(47, lp);
@@ -318,9 +312,7 @@ public class MusicGUI {
 		if(!GPM.getCManager().G_DISABLE_PLAYLIST) {
 			lp = new ItemStack(Material.ENDER_CHEST);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-playlist"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-playlist")));
-			// lpm.setLocalizedName(",");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, ",");
 			lp.setItemMeta(lpm);
 			inventory.setItem(49, lp);
@@ -329,9 +321,7 @@ public class MusicGUI {
 		if(!GPM.getCManager().G_DISABLE_OPTIONS) {
 			lp = new ItemStack(Material.HOPPER);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-options"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-options")));
-			// lpm.setLocalizedName(".");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, ".");
 			lp.setItemMeta(lpm);
 			inventory.setItem(50, lp);
@@ -350,14 +340,10 @@ public class MusicGUI {
 			ItemStack lp = new ItemStack(Material.END_CRYSTAL);
 			ItemMeta lpm = lp.getItemMeta();
 			if(songSettings.isPaused()) {
-				// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-resume"));
 				lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-resume")));
-				// lpm.setLocalizedName("/r");
 				lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "/r");
 			} else {
-				// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-pause"));
 				lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-pause")));
-				// lpm.setLocalizedName("/p");
 				lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "/p");
 			}
 			lp.setItemMeta(lpm);
@@ -373,25 +359,19 @@ public class MusicGUI {
 
 		ItemStack lp = new ItemStack(Material.CHEST);
 		ItemMeta lpm = lp.getItemMeta();
-		// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-back"));
 		lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-back")));
-		// lpm.setLocalizedName("-");
 		lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "-");
 		lp.setItemMeta(lpm);
 		inventory.setItem(45, lp);
 		lp = new ItemStack(Material.MAGMA_CREAM);
 		lpm = lp.getItemMeta();
-		// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + playSettings.getVolume()));
 		lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + playSettings.getVolume())));
-		// lpm.setLocalizedName("+v");
 		lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "+v");
 		lp.setItemMeta(lpm);
 		inventory.setItem(46, lp);
 		lp = new ItemStack(Material.FIREWORK_ROCKET);
 		lpm = lp.getItemMeta();
-		// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-options-particle", "%Particle%", GPM.getMManager().getMessage(playSettings.isShowingParticles() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
 		lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-options-particle", "%Particle%", GPM.getMManager().getMessage(playSettings.isShowingParticles() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false"))));
-		// lpm.setLocalizedName("+e");
 		lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "+e");
 		lp.setItemMeta(lpm);
 		inventory.setItem(47, lp);
@@ -399,25 +379,19 @@ public class MusicGUI {
 		if(playSettings.getPlayList() != 2) {
 			lp = new ItemStack(Material.DIAMOND);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-options-join", "%Join%", GPM.getMManager().getMessage(playSettings.isPlayOnJoin() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-options-join", "%Join%", GPM.getMManager().getMessage(playSettings.isPlayOnJoin() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false"))));
-			// lpm.setLocalizedName("+j");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "+j");
 			lp.setItemMeta(lpm);
 			inventory.setItem(48, lp);
 			lp = new ItemStack(Material.BLAZE_POWDER);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage(playSettings.getPlayMode() == 0 ? "MusicGUI.music-options-playmode-once" : playSettings.getPlayMode() == 1 ? "MusicGUI.music-options-playmode-shuffle" : "MusicGUI.music-options-playmode-repeat"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage(playSettings.getPlayMode() == 0 ? "MusicGUI.music-options-playmode-once" : playSettings.getPlayMode() == 1 ? "MusicGUI.music-options-playmode-shuffle" : "MusicGUI.music-options-playmode-repeat")));
-			// lpm.setLocalizedName("+s");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "+s");
 			lp.setItemMeta(lpm);
 			inventory.setItem(49, lp);
 			lp = new ItemStack(Material.TOTEM_OF_UNDYING);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-options-reverse", "%Reverse%", GPM.getMManager().getMessage(playSettings.isReverseMode() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-options-reverse", "%Reverse%", GPM.getMManager().getMessage(playSettings.isReverseMode() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false"))));
-			// lpm.setLocalizedName("+q");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "+q");
 			lp.setItemMeta(lpm);
 			inventory.setItem(50, lp);
@@ -426,9 +400,7 @@ public class MusicGUI {
 		if(type == MenuType.JUKEBOX || type == MenuType.FULLJUKEBOX) {
 			lp = new ItemStack(Material.REDSTONE);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-options-range", "%Range%", "" + playSettings.getRange()));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-options-range", "%Range%", "" + playSettings.getRange())));
-			// lpm.setLocalizedName("+r");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "+r");
 			lp.setItemMeta(lpm);
 			inventory.setItem(51, lp);
@@ -443,9 +415,7 @@ public class MusicGUI {
 
 		ItemStack lp = new ItemStack(Material.CHEST);
 		ItemMeta lpm = lp.getItemMeta();
-		// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-back"));
 		lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-back")));
-		// lpm.setLocalizedName("-");
 		lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "-");
 		lp.setItemMeta(lpm);
 		inventory.setItem(45, lp);
@@ -453,9 +423,7 @@ public class MusicGUI {
 		if(playSettings.getPlayList() != 2) {
 			lp = new ItemStack(Material.FEATHER);
 			lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.music-playlist-skip"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.music-playlist-skip")));
-			// lpm.setLocalizedName("/l");
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "/l");
 			lp.setItemMeta(lpm);
 			inventory.setItem(47, lp);
@@ -463,9 +431,7 @@ public class MusicGUI {
 
 		lp = new ItemStack(Material.NOTE_BLOCK);
 		lpm = lp.getItemMeta();
-		// lpm.setDisplayName(GPM.getMManager().getMessage(playSettings.getPlayList() == 0 ? "MusicGUI.music-playlist-type-default" : playSettings.getPlayList() == 1 ? "MusicGUI.music-playlist-type-favorites" : "MusicGUI.music-playlist-type-radio"));
 		lpm.displayName(Component.text(GPM.getMManager().getMessage(playSettings.getPlayList() == 0 ? "MusicGUI.music-playlist-type-default" : playSettings.getPlayList() == 1 ? "MusicGUI.music-playlist-type-favorites" : "MusicGUI.music-playlist-type-radio")));
-		// lpm.setLocalizedName("%");
 		lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "%");
 		lp.setItemMeta(lpm);
 		inventory.setItem(49, lp);
@@ -488,17 +454,11 @@ public class MusicGUI {
 				Song s1 = songs.get(z);
 				ItemStack is = new ItemStack(s1.getMaterial());
 				ItemMeta im = is.getItemMeta();
-				// im.setDisplayName(GPM.getMManager().getMessage("MusicGUI.disc-title", "%Title%", s1.getTitle(), "%Author%", s1.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : s1.getAuthor(), "%OAuthor%", s1.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : s1.getOriginalAuthor()));
 				im.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.disc-title", "%Title%", s1.getTitle(), "%Author%", s1.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : s1.getAuthor(), "%OAuthor%", s1.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : s1.getOriginalAuthor())));
-				// List<String> dl = new ArrayList<>();
 				ArrayList<Component> dl = new ArrayList<>();
-				// for(String d : s1.getDescription()) dl.add(GPM.getMManager().toFormattedMessage("&6" + d));
 				for(String d : s1.getDescription()) dl.add(Component.text(GPM.getMManager().toFormattedMessage("&6" + d)));
-				// if(playSettings.getFavorites().contains(s1)) dl.add(GPM.getMManager().getMessage("MusicGUI.disc-favorite"));
 				if(playSettings.getFavorites().contains(s1)) dl.add(Component.text(GPM.getMManager().getMessage("MusicGUI.disc-favorite")));
-				// im.setLore(dl);
 				im.lore(dl);
-				// im.setLocalizedName("=" + s1.getId());
 				im.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "=" + s1.getId());
 				im.addItemFlags(ItemFlag.values());
 				is.setItemMeta(im);
@@ -509,16 +469,13 @@ public class MusicGUI {
 		if(page > 1) {
 			ItemStack lp = new ItemStack(Material.ARROW);
 			ItemMeta lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.last-page"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.last-page")));
-			// lpm.setLocalizedName("!" + (page - 1));
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "!" + (page - 1));
 			lp.setItemMeta(lpm);
 			inventory.setItem(52, lp);
 		} else {
 			ItemStack lp = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta lpm = lp.getItemMeta();
-			// lpm.setDisplayName(" ");
 			lpm.displayName(Component.text(" "));
 			lp.setItemMeta(lpm);
 			inventory.setItem(52, lp);
@@ -527,16 +484,13 @@ public class MusicGUI {
 		if(page < getMaxPageSize(songs)) {
 			ItemStack lp = new ItemStack(Material.ARROW);
 			ItemMeta lpm = lp.getItemMeta();
-			// lpm.setDisplayName(GPM.getMManager().getMessage("MusicGUI.next-page"));
 			lpm.displayName(Component.text(GPM.getMManager().getMessage("MusicGUI.next-page")));
-			// lpm.setLocalizedName("!" + (page + 1));
 			lpm.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, "!" + (page + 1));
 			lp.setItemMeta(lpm);
 			inventory.setItem(53, lp);
 		} else {
 			ItemStack lp = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
 			ItemMeta lpm = lp.getItemMeta();
-			// lpm.setDisplayName(" ");
 			lpm.displayName(Component.text(" "));
 			lp.setItemMeta(lpm);
 			inventory.setItem(53, lp);
