@@ -86,6 +86,8 @@ public class SongManager {
 
             songs.add(song);
         });
+
+        songs.sort(Comparator.comparing(Song::getTitle));
     }
 
     public void putMusicGUI(UUID UUID, MusicGUI MusicGUI) { getMusicGUIs().put(UUID, MusicGUI); }
