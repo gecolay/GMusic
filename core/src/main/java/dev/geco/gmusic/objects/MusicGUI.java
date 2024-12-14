@@ -4,7 +4,6 @@ import java.util.*;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 import org.jetbrains.annotations.*;
 
 import org.bukkit.*;
@@ -33,8 +32,7 @@ public class MusicGUI {
 	private static final long RANGE_STEPS = 1;
 	private static final long SHIFT_RANGE_STEPS = 10;
 
-	Plugin plugin = Bukkit.getPluginManager().getPlugin(GPM.NAME);
-	NamespacedKey localizedNameKey = new NamespacedKey(plugin, "LocalizedName");
+	NamespacedKey localizedNameKey = new NamespacedKey(GPM, "LocalizedName");
 
 	public MusicGUI(UUID UUID, MenuType Type) {
 

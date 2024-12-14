@@ -2,9 +2,9 @@ package dev.geco.gmusic.manager;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.*;
 import org.bukkit.inventory.meta.*;
@@ -12,7 +12,6 @@ import org.bukkit.inventory.meta.*;
 import dev.geco.gmusic.GMusicMain;
 import dev.geco.gmusic.objects.*;
 import org.bukkit.persistence.PersistentDataType;
-import org.bukkit.plugin.Plugin;
 
 public class SongManager {
 
@@ -20,10 +19,7 @@ public class SongManager {
 
     public SongManager(GMusicMain GPluginMain) { GPM = GPluginMain; }
 
-    // TODO: Make this actually use GPM
-    Plugin plugin = Bukkit.getPluginManager().getPlugin("GMusic");
-
-    private final List<Song> songs = new ArrayList<>();
+    private List<Song> songs = new ArrayList<>();
 
     private final HashMap<UUID, MusicGUI> musicGUIs = new HashMap<>();
 
@@ -63,14 +59,14 @@ public class SongManager {
 
         File songsDir = new File(GPM.getDataFolder(), "songs");
 
-        Arrays.asList(Objects.requireNonNull(songsDir.listFiles())).parallelStream().forEach(file -> {
+        songs = Arrays.asList(Objects.requireNonNull(songsDir.listFiles())).parallelStream().map(file -> {
 
             int pos = file.getName().lastIndexOf(".");
-            if(pos <= 0 || !file.getName().substring(pos + 1).equalsIgnoreCase("gnbs")) return;
+            if(pos <= 0 || !file.getName().substring(pos + 1).equalsIgnoreCase("gnbs")) return null;
 
             Song song = new Song(file);
 
-            if(song.getNoteAmount() == 0) return;
+            if(song.getNoteAmount() == 0) return null;
 
             ArrayList<Component> description = new ArrayList<>();
             for(String descriptionRow : song.getDescription()) description.add(Component.text(GPM.getMManager().getMessage(descriptionRow)));
@@ -78,14 +74,14 @@ public class SongManager {
             ItemStack itemStack = new ItemStack(song.getMaterial());
             ItemMeta itemMeta = itemStack.getItemMeta();
             itemMeta.displayName(Component.text(GPM.getMManager().getMessage("Items.disc-title", "%Title%", song.getTitle(), "%Author%", song.getAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(), "%OAuthor%", song.getOriginalAuthor().isEmpty() ? GPM.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor())));
-            NamespacedKey localizedNameKey = new NamespacedKey(plugin, "LocalizedName");
+            NamespacedKey localizedNameKey = new NamespacedKey(GPM, "LocalizedName");
             itemMeta.getPersistentDataContainer().set(localizedNameKey, PersistentDataType.STRING, GPM.NAME + "_D_" + song.getId());
             itemMeta.lore(description);
             itemMeta.addItemFlags(ItemFlag.values());
             itemStack.setItemMeta(itemMeta);
 
-            songs.add(song);
-        });
+            return song;
+        }).collect(Collectors.toList());
 
         songs.sort(Comparator.comparing(Song::getTitle, String.CASE_INSENSITIVE_ORDER));
     }
