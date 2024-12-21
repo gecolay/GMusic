@@ -49,7 +49,7 @@ public class NotePart {
 				pitch = getPitch(noteKey);
 				originalPitch = getOriginalPitch(noteKey);
 				if(GMusicMain.getInstance().getCManager().S_EXTENDED_RANGE) {
-					if(originalPitch > 24) {
+					if(originalPitch >= 24) {
 						sound += "_1";
 					} else if(originalPitch < 0) {
 						sound += "_-1";
