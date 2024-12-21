@@ -70,13 +70,16 @@ public class NotePart {
 			if(Note > 24) return 2f;
 			return (float) Math.pow(2, ((float) (Note - 12) / 12));
 		}
-		if(Note < 0) {
-			if(Note < -24) Note = -24;
+
+		if (Note < -24) {
+			Note = 36 + Note;
+		} else if (Note < 0) {
 			Note = 24 + Note;
-			return (float) Math.pow(2, ((float) (Note - 12) / 12));
+		} else if (Note < 48) {
+			Note = Note % 24;
+		} else {
+			Note = 12 + (Note % 24);
 		}
-		if(Note > 48) Note = 48;
-		Note = Note % 24;
 		return (float) Math.pow(2, ((float) (Note - 12) / 12));
 	}
 
