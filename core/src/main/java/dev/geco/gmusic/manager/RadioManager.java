@@ -88,7 +88,7 @@ public class RadioManager {
 
 								PlaySettings ps1 = GPM.getPlaySettingsManager().getPlaySettings(P.getUniqueId());
 
-								float v = np.isVariableVolume() ? ps1.getFixedVolume() : np.getVolume();
+								float v = ps1.getFixedVolume() * np.getVolume();
 
 								Location L = np.getDistance() == 0 ? P.getLocation() : GPM.getMusicUtil().getSteroNoteUtil().convertToStero(P.getLocation(), np.getDistance());
 

@@ -69,14 +69,15 @@ public class NBSManager {
 					byte i = dataInput.readByte();
 					byte k = dataInput.readByte();
 					int p = 100;
+					int v = 1;
 
 					if(version >= 4) {
-						dataInput.readByte();
+						v = dataInput.readByte();
 						p = 200 - dataInput.readUnsignedByte();
 						readShort(dataInput);
 					}
 
-					String contentPart = i + "::#" + (k - 33) + (p == 100 ? "" : ":" + p);
+					String contentPart = i + ":" + v + ":#" + (k - 33) + (p == 100 ? "" : ":" + p);
 
 					content.append(content.toString().endsWith("!") ? contentPart : "_" + contentPart);
 

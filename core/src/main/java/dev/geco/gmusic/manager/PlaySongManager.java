@@ -82,7 +82,7 @@ public class PlaySongManager {
 
 						if(np.getSound() != null) {
 
-							float volume = np.isVariableVolume() ? playSettings.getFixedVolume() : np.getVolume();
+							float volume = playSettings.getFixedVolume() * np.getVolume();
 
 							Location location = np.getDistance() == 0 ? Player.getLocation() : GPM.getMusicUtil().getSteroNoteUtil().convertToStero(Player.getLocation(), np.getDistance());
 

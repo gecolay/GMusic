@@ -82,7 +82,9 @@ public class BoxSongManager {
 
 							if(np.getSound() != null) {
 
-								float v = np.isVariableVolume() ? (float) ((pl.get(P) - playSettings.getRange()) * playSettings.getFixedVolume() / (double) -playSettings.getRange()) : np.getVolume();
+								float v = 1f;
+								// TODO: FIX THIS
+								// float v = np.isVariableVolume() ? (float) ((pl.get(P) - playSettings.getRange()) * playSettings.getFixedVolume() / (double) -playSettings.getRange()) : np.getVolume();
 
 								Location location = np.getDistance() == 0 ? P.getLocation() : GPM.getMusicUtil().getSteroNoteUtil().convertToStero(P.getLocation(), np.getDistance());
 

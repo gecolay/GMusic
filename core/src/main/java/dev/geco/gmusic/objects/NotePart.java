@@ -18,8 +18,6 @@ public class NotePart {
 
 	private String stopSound;
 
-	private boolean variableVolume = false;
-
 	private float volume = 1f;
 
 	private float pitch = 1f;
@@ -38,9 +36,10 @@ public class NotePart {
 		else stopSound = note.getSong().getInstruments().get(parts[0].replace(STOP, ""));
 		if(sound == null || stopSound != null) return;
 
-		if(parts.length == 1 || parts[1].equals(VAR)) variableVolume = true;
-		else {
-			try { volume = Float.parseFloat(parts[1]); } catch(NumberFormatException ignored) { }
+		if(parts.length == 1 || parts[1].equals(VAR)) {
+			volume = 1f;
+		} else {
+			try { volume = Float.parseFloat(parts[1]) / 100f; } catch(NumberFormatException ignored) { }
 		}
 
 		if(parts.length > 2 && !parts[2].equals(VAR)) {
@@ -101,8 +100,6 @@ public class NotePart {
 	public String getSound() { return sound; }
 
 	public String getStopSound() { return stopSound; }
-
-	public boolean isVariableVolume() { return variableVolume; }
 
 	public float getVolume() { return volume; }
 
