@@ -69,7 +69,7 @@ public class NBSManager {
 					byte i = dataInput.readByte();
 					byte k = dataInput.readByte();
 					int p = 100;
-					int v = 1;
+					int v = 100;
 
 					if(version >= 4) {
 						v = dataInput.readByte();
