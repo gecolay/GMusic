@@ -55,6 +55,13 @@ public class NBSManager {
 			List<String> gnbsContent = new ArrayList<>();
 			List<Byte> gnbsInstruments = new ArrayList<>();
 
+			// Get the volume and direction of each layer in the song
+			List<Byte> layerVolumes = new ArrayList<>();
+			List<Integer> layerDirections = new ArrayList<>();
+			getLayerInfo(NBSFile, header, layerVolumes, layerDirections);
+
+			int layer = -1;
+
 			while(true) {
 
 				short jt = readShort(dataInput);
@@ -65,7 +72,11 @@ public class NBSManager {
 				while(true) {
 
 					short jl = readShort(dataInput);
-					if(jl == 0) break;
+					if(jl == 0) {
+						layer = -1;
+						break;
+					}
+					layer = layer + jl;
 					byte i = dataInput.readByte();
 					byte k = dataInput.readByte();
 					int p = 100;
@@ -75,6 +86,13 @@ public class NBSManager {
 						v = dataInput.readByte();
 						p = 200 - dataInput.readUnsignedByte();
 						readShort(dataInput);
+					}
+
+					// Combine the layer volume with the noteblock volume
+					// If the layer panning is not center, combine the layer & noteblock direction
+					v = (layerVolumes.get(layer) * v) / 100;
+					if (layerDirections.get(layer) != 100) {
+						p = (layerDirections.get(layer) + p) / 2;
 					}
 
 					String contentPart = i + ":" + v + ":#" + (k - 33) + (p == 100 ? "" : ":" + p);
@@ -164,6 +182,83 @@ public class NBSManager {
 			builder.append(c == (char) 0x0D ? ' ' : c);
 		}
 		return builder.toString();
+	}
+
+	private void getLayerInfo(File NBSFile, Short numLayers,
+							  List<Byte> layerVolumes, List<Integer> layerDirections) {
+		try {
+			DataInputStream dataInput = new DataInputStream(Files.newInputStream(NBSFile.toPath()));
+
+			// Skip through header section, we don't care about this
+			short type = readShort(dataInput);
+			int version = 0;
+			if(type == 0) {
+				version = dataInput.readByte();
+				dataInput.readByte();
+				if(version >= 3) readShort(dataInput);
+			}
+			readShort(dataInput);
+			readString(dataInput);
+			readString(dataInput);
+			readString(dataInput);
+			readString(dataInput);
+			readShort(dataInput);
+			dataInput.readBoolean();
+			dataInput.readByte();
+			dataInput.readByte();
+			readInt(dataInput);
+			readInt(dataInput);
+			readInt(dataInput);
+			readInt(dataInput);
+			readInt(dataInput);
+			readString(dataInput);
+			if(version >= 4) {
+				dataInput.readByte();
+				dataInput.readByte();
+				readShort(dataInput);
+			}
+
+			// Skip through note blocks section, we don't care about this either
+			while(true) {
+
+				short jt = readShort(dataInput);
+				if(jt == 0) break;
+
+				while(true) {
+
+					short jl = readShort(dataInput);
+					if(jl == 0) {
+						break;
+					}
+					dataInput.readByte();
+					dataInput.readByte();
+
+					if(version >= 4) {
+						dataInput.readByte();
+						dataInput.readUnsignedByte();
+						readShort(dataInput);
+					}
+				}
+			}
+
+			// Get volume and direction of each layer
+			// This is the bit we actually care about
+			for(int layer = 0; layer < numLayers; layer++) {
+				readString(dataInput);
+				if(version >= 4) dataInput.readByte();
+
+				byte layerVolume = dataInput.readByte();
+				layerVolumes.add(layerVolume);
+
+				int layerDirection = 100;
+				if(version >= 2) {
+					layerDirection = 200 - dataInput.readUnsignedByte();
+				}
+				layerDirections.add(layerDirection);
+			}
+
+		} catch (Throwable e) { e.printStackTrace(); }
+
 	}
 
 }
