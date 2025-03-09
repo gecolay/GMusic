@@ -6,7 +6,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.*;
 
 import dev.geco.gmusic.GMusicMain;
-import dev.geco.gmusic.objects.*;
+import dev.geco.gmusic.object.*;
 
 public class GMusicCommand implements CommandExecutor {
 
@@ -33,12 +33,12 @@ public class GMusicCommand implements CommandExecutor {
 
         if(Args.length == 0) {
 
-            MusicGUI musicGUI = new MusicGUI(player.getUniqueId(), MusicGUI.MenuType.DEFAULT);
+            GMusicGUI musicGUI = new GMusicGUI(player.getUniqueId(), GMusicGUI.MenuType.DEFAULT);
             player.openInventory(musicGUI.getInventory());
             return true;
         }
 
-        Song song;
+        GSong song;
 
         switch (Args[0].toLowerCase()) {
             case "play":
@@ -105,7 +105,7 @@ public class GMusicCommand implements CommandExecutor {
                 GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
                 break;
             case "toggle":
-                PlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(player.getUniqueId());
+                GPlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(player.getUniqueId());
                 playSettings.setToggleMode(!playSettings.isToggleMode());
                 break;
         }

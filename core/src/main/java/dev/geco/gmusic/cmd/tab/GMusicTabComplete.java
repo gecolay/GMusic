@@ -8,7 +8,7 @@ import org.bukkit.command.*;
 import org.bukkit.entity.*;
 
 import dev.geco.gmusic.GMusicMain;
-import dev.geco.gmusic.objects.*;
+import dev.geco.gmusic.object.*;
 
 public class GMusicTabComplete implements TabCompleter {
 
@@ -48,7 +48,7 @@ public class GMusicTabComplete implements TabCompleter {
                 if(GPM.getPManager().hasPermission(Sender, "Music")) {
 
                     if(Args[0].equalsIgnoreCase("play")) {
-                        for (Song song : GPM.getSongManager().getSongs()) complete.add(song.getId());
+                        for (GSong song : GPM.getSongManager().getSongs()) complete.add(song.getId());
                     }
                 }
 

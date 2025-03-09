@@ -16,7 +16,7 @@ commands:
     description: Music command
     permission: GMusic.Music
 
-  agmusic:
+  gamusic:
 
     usage: /<command>
     aliases: [amusic]

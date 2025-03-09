@@ -5,11 +5,13 @@ import dev.geco.gmusic.GMusicMain;
 public class GMusicAPI {
 
     /**
-     * Returns the Plugin-Instance for GMusic
+     * Returns the plugin instance for GMusic
      * @author Gecolay
      * @since 1.0.0
-     * @return Plugin-Instance
+     * @return Plugin instance
      */
-    public static GMusicMain getInstance() { return GMusicMain.getInstance(); }
+    public static GMusicMain getInstance() {
+        return GMusicMain.getInstance();
+    }
 
 }

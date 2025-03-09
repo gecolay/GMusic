@@ -1,237 +1,251 @@
 package dev.geco.gmusic;
 
-import org.bukkit.*;
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
-import org.bukkit.plugin.java.*;
+import dev.geco.gmusic.api.event.GMusicLoadedEvent;
+import dev.geco.gmusic.api.event.GMusicReloadEvent;
+import dev.geco.gmusic.cmd.GAMusicCommand;
+import dev.geco.gmusic.cmd.GMusicCommand;
+import dev.geco.gmusic.cmd.GMusicReloadCommand;
+import dev.geco.gmusic.cmd.tab.EmptyTabComplete;
+import dev.geco.gmusic.cmd.tab.GAMusicTabComplete;
+import dev.geco.gmusic.cmd.tab.GMusicTabComplete;
+import dev.geco.gmusic.event.JukeBoxEventHandler;
+import dev.geco.gmusic.event.PlayerEventHandler;
+import dev.geco.gmusic.metric.BStatsMetric;
+import dev.geco.gmusic.service.BoxSongService;
+import dev.geco.gmusic.service.ConfigService;
+import dev.geco.gmusic.service.DataService;
+import dev.geco.gmusic.service.JukeBoxService;
+import dev.geco.gmusic.service.MessageService;
+import dev.geco.gmusic.service.MidiService;
+import dev.geco.gmusic.service.NBSService;
+import dev.geco.gmusic.service.PermissionService;
+import dev.geco.gmusic.service.PlaySettingsService;
+import dev.geco.gmusic.service.PlaySongService;
+import dev.geco.gmusic.service.RadioService;
+import dev.geco.gmusic.service.SongService;
+import dev.geco.gmusic.service.TaskService;
+import dev.geco.gmusic.service.UpdateService;
+import dev.geco.gmusic.service.VersionService;
+import dev.geco.gmusic.service.message.PaperMessageService;
+import dev.geco.gmusic.service.message.SpigotMessageService;
+import dev.geco.gmusic.util.MusicUtil;
+import dev.geco.gmusic.util.SteroNoteUtil;
+import org.bukkit.Bukkit;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
-import dev.geco.gmusic.api.event.*;
-import dev.geco.gmusic.cmd.*;
-import dev.geco.gmusic.cmd.tab.*;
-import dev.geco.gmusic.events.*;
-import dev.geco.gmusic.link.*;
-import dev.geco.gmusic.manager.*;
-import dev.geco.gmusic.manager.mm.*;
-import dev.geco.gmusic.util.*;
+import java.util.Map;
 
 public class GMusicMain extends JavaPlugin {
 
-    private SVManager svManager;
-    public SVManager getSVManager() { return svManager; }
+    public static final String NAME = "GMusic";
+    public static final String RESOURCE_ID = "000000";
 
-    private CManager cManager;
-    public CManager getCManager() { return cManager; }
-
-    private DManager dManager;
-    public DManager getDManager() { return dManager; }
-
-    private MidiManager midiManager;
-    public MidiManager getMidiManager() { return midiManager; }
-
-    private NBSManager nbsManager;
-    public NBSManager getNBSManager() { return nbsManager; }
-
-    private PlaySettingsManager playSettingsManager;
-    public PlaySettingsManager getPlaySettingsManager() { return playSettingsManager; }
-
-    private SongManager songManager;
-    public SongManager getSongManager() { return songManager; }
-
-    private PlaySongManager playSongManager;
-    public PlaySongManager getPlaySongManager() { return playSongManager; }
-
-    private BoxSongManager boxSongManager;
-    public BoxSongManager getBoxSongManager() { return boxSongManager; }
-
-    private JukeBoxManager jukeBoxManager;
-    public JukeBoxManager getJukeBoxManager() { return jukeBoxManager; }
-
-    private RadioManager radioManager;
-    public RadioManager getRadioManager() { return radioManager; }
-
-    private UManager uManager;
-    public UManager getUManager() { return uManager; }
-
-    private PManager pManager;
-    public PManager getPManager() { return pManager; }
-
-    private TManager tManager;
-    public TManager getTManager() { return tManager; }
-
-    private MManager mManager;
-    public MManager getMManager() { return mManager; }
-
+    private final int BSTATS_RESOURCE_ID = 4925;
+    private static GMusicMain gMusicMain;
+    private VersionService versionService;
+    private ConfigService configService;
+    private MessageService messageService;
+    private UpdateService updateService;
+    private PermissionService permissionService;
+    private TaskService taskService;
+    private DataService dataService;
+    private SongService songService;
+    private PlaySongService playSongService;
+    private PlaySettingsService playSettingsService;
+    private BoxSongService boxSongService;
+    private JukeBoxService jukeBoxService;
+    private RadioService radioService;
+    private MidiService midiService;
+    private NBSService nbsService;
     private MusicUtil musicUtil;
+    private SteroNoteUtil steroNoteUtil;
+    private boolean supportsPaperFeature = false;
+    private boolean supportsTaskFeature = false;
+
+    public static GMusicMain getInstance() { return gMusicMain; }
+
+    public VersionService getVersionManager() { return versionService; }
+
+    public ConfigService getConfigService() { return configService; }
+
+    public MessageService getMessageService() { return messageService; }
+
+    public UpdateService getUpdateService() { return updateService; }
+
+    public PermissionService getPermissionService() { return permissionService; }
+
+    public TaskService getTaskService() { return taskService; }
+
+    public DataService getDataService() { return dataService; }
+
+    public SongService getSongService() { return songService; }
+
+    public PlaySongService getPlaySongService() { return playSongService; }
+
+    public PlaySettingsService getPlaySettingsService() { return playSettingsService; }
+
+    public BoxSongService getBoxSongService() { return boxSongService; }
+
+    public JukeBoxService getJukeBoxService() { return jukeBoxService; }
+
+    public RadioService getRadioService() { return radioService; }
+
+    public MidiService getMidiService() { return midiService; }
+
+    public NBSService getNBSService() { return nbsService; }
+
     public MusicUtil getMusicUtil() { return musicUtil; }
 
-    private boolean supportsPaperFeature = false;
+    public SteroNoteUtil getSteroNoteUtil() { return steroNoteUtil; }
+
     public boolean supportsPaperFeature() { return supportsPaperFeature; }
 
-    private boolean supportsTaskFeature = false;
     public boolean supportsTaskFeature() { return supportsTaskFeature; }
 
-    public final String NAME = "GMusic";
-
-    public final String RESOURCE = "84004";
-
-    private static GMusicMain GPM;
-
-    public static GMusicMain getInstance() { return GPM; }
-
-    private void loadSettings(CommandSender Sender) {
-
-        if(!connectDatabase(Sender)) return;
-
-        getPlaySettingsManager().createTable();
-
-        getSongManager().loadSongs();
-
-        if(getCManager().R_ACTIVE) getRadioManager().playRadio();
-    }
-
-    private void linkBStats() {
-
-        BStatsLink bstats = new BStatsLink(getInstance(), 4925);
-
-        bstats.addCustomChart(new BStatsLink.SimplePie("plugin_language", () -> getCManager().L_LANG));
-    }
-
     public void onLoad() {
+        gMusicMain = this;
 
-        GPM = this;
+        versionService = new VersionService(this);
+        configService = new ConfigService(this);
 
-        svManager = new SVManager(getInstance());
-        cManager = new CManager(getInstance());
-        dManager = new DManager(getInstance());
-        uManager = new UManager(getInstance());
-        pManager = new PManager(getInstance());
-        tManager = new TManager(getInstance());
-        midiManager = new MidiManager(getInstance());
-        nbsManager = new NBSManager(getInstance());
-        playSettingsManager = new PlaySettingsManager(getInstance());
-        songManager = new SongManager(getInstance());
-        playSongManager = new PlaySongManager(getInstance());
-        boxSongManager = new BoxSongManager(getInstance());
-        jukeBoxManager = new JukeBoxManager(getInstance());
-        radioManager = new RadioManager(getInstance());
+        updateService = new UpdateService(this);
+        permissionService = new PermissionService();
+        taskService = new TaskService(this);
+        dataService = new DataService(this);
+        songService = new SongService(this);
+        playSongService = new PlaySongService(this);
+        playSettingsService = new PlaySettingsService(this);
+        boxSongService = new BoxSongService(this);
+        jukeBoxService = new JukeBoxService(this);
+        radioService = new RadioService(this);
+        midiService = new MidiService(this);
+        nbsService = new NBSService(this);
 
         musicUtil = new MusicUtil();
+        steroNoteUtil = new SteroNoteUtil();
 
-        preloadPluginDependencies();
+        loadFeatures();
 
-        mManager = supportsPaperFeature() && getSVManager().isNewerOrVersion(18, 2) ? new MPaperManager(getInstance()) : new MSpigotManager(getInstance());
+        messageService = supportsPaperFeature && versionService.isNewerOrVersion(18, 2) ? new PaperMessageService(this) : new SpigotMessageService(this);
     }
 
     public void onEnable() {
-
         if(!versionCheck()) return;
 
+        loadPluginDependencies();
         loadSettings(Bukkit.getConsoleSender());
 
         setupCommands();
         setupEvents();
-        linkBStats();
+        setupBStatsMetric();
 
-        getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-enabled");
+        Bukkit.getPluginManager().callEvent(new GMusicLoadedEvent(this));
 
-        loadPluginDependencies(Bukkit.getConsoleSender());
-        GPM.getUManager().checkForUpdates();
+        messageService.sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-enabled");
+
+        printPluginLinks(Bukkit.getConsoleSender());
+        updateService.checkForUpdates();
     }
 
     public void onDisable() {
+        unload();
+        messageService.sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-disabled");
+    }
+
+    private void loadSettings(CommandSender sender) {
+        if(!connectDatabase(sender)) return;
+        playSettingsService.createTable();
+        songService.loadSongs();
+        if(configService.R_ACTIVE) radioService.startRadio();
+    }
+
+    public void reload(CommandSender sender) {
+        GMusicReloadEvent reloadEvent = new GMusicReloadEvent(this);
+        Bukkit.getPluginManager().callEvent(reloadEvent);
+        if(reloadEvent.isCancelled()) return;
 
         unload();
-        getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-disabled");
+        configService.reload();
+        messageService.loadMessages();
+        loadPluginDependencies();
+        loadSettings(sender);
+        printPluginLinks(sender);
+        updateService.checkForUpdates();
+
+        Bukkit.getPluginManager().callEvent(new GMusicLoadedEvent(this));
     }
 
     private void unload() {
-
-        GPM.getRadioManager().stopRadio();
-        GPM.getPlaySettingsManager().clearPlaySettingsCache();
+        dataService.close();
+        songService.unloadSongs();
+        radioService.stopRadio();
+        playSettingsService.clearPlaySettingsCache();
 
         for(Player player : Bukkit.getOnlinePlayers()) {
-            getPlaySettingsManager().setPlaySettings(player.getUniqueId(), getPlaySettingsManager().getPlaySettings(player.getUniqueId()));
-            getPlaySongManager().stopSong(player);
+            playSettingsService.setPlaySettings(player.getUniqueId(), playSettingsService.getPlaySettings(player.getUniqueId()));
+            playSongService.stopSong(player);
         }
-
-        getDManager().close();
     }
 
     private void setupCommands() {
-
-        getCommand("gmusic").setExecutor(new GMusicCommand(getInstance()));
-        getCommand("gmusic").setTabCompleter(new GMusicTabComplete(getInstance()));
-        getCommand("gmusic").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
-        getCommand("agmusic").setExecutor(new GAMusicCommand(getInstance()));
-        getCommand("agmusic").setTabCompleter(new AGMusicTabComplete(getInstance()));
-        getCommand("agmusic").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
-        getCommand("gmusicreload").setExecutor(new GMusicReloadCommand(getInstance()));
+        getCommand("gmusic").setExecutor(new GMusicCommand(this));
+        getCommand("gmusic").setTabCompleter(new GMusicTabComplete(this));
+        getCommand("gmusic").setPermissionMessage(messageService.getMessage("Messages.command-permission-error"));
+        getCommand("gamusic").setExecutor(new GAMusicCommand(this));
+        getCommand("gamusic").setTabCompleter(new GAMusicTabComplete(this));
+        getCommand("gamusic").setPermissionMessage(messageService.getMessage("Messages.command-permission-error"));
+        getCommand("gmusicreload").setExecutor(new GMusicReloadCommand(this));
         getCommand("gmusicreload").setTabCompleter(new EmptyTabComplete());
-        getCommand("gmusicreload").setPermissionMessage(getMManager().getMessage("Messages.command-permission-error"));
+        getCommand("gmusicreload").setPermissionMessage(messageService.getMessage("Messages.command-permission-error"));
     }
 
     private void setupEvents() {
-
-        getServer().getPluginManager().registerEvents(new PlayerEvents(getInstance()), getInstance());
-        getServer().getPluginManager().registerEvents(new JukeBoxEvents(getInstance()), getInstance());
+        getServer().getPluginManager().registerEvents(new PlayerEventHandler(this), this);
+        getServer().getPluginManager().registerEvents(new JukeBoxEventHandler(this), this);
     }
 
-    private void preloadPluginDependencies() {
+    private boolean versionCheck() {
+        if(versionService.isNewerOrVersion(18, 0) && !versionService.isAvailable()) {
+            messageService.sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-version", "%Version%", versionService.getServerVersion());
+            updateService.checkForUpdates();
+            Bukkit.getPluginManager().disablePlugin(this);
+            return false;
+        }
+        return true;
+    }
 
+    private boolean connectDatabase(CommandSender sender) {
+        boolean connected = dataService.connect();
+        if(connected) return true;
+        messageService.sendMessage(sender, "Plugin.plugin-data");
+        Bukkit.getPluginManager().disablePlugin(this);
+        return false;
+    }
+
+    private void loadFeatures() {
         try {
             Class.forName("io.papermc.paper.event.entity.EntityMoveEvent");
             supportsPaperFeature = true;
-        } catch (ClassNotFoundException ignored) { supportsPaperFeature = false; }
+        } catch(ClassNotFoundException e) { supportsPaperFeature = false; }
 
         try {
             Class.forName("io.papermc.paper.threadedregions.scheduler.GlobalRegionScheduler");
             supportsTaskFeature = true;
-        } catch (ClassNotFoundException ignored) { supportsTaskFeature = false; }
+        } catch(ClassNotFoundException e) { supportsTaskFeature = false; }
     }
 
-    private void loadPluginDependencies(CommandSender Sender) { }
+    private void loadPluginDependencies() { }
 
-    public void reload(CommandSender Sender) {
+    private void printPluginLinks(CommandSender sender) { }
 
-        Bukkit.getPluginManager().callEvent(new GMusicReloadEvent(getInstance()));
+    private void setupBStatsMetric() {
+        BStatsMetric bStatsMetric = new BStatsMetric(this, BSTATS_RESOURCE_ID);
 
-        getCManager().reload();
-        getMManager().loadMessages();
-
-        unload();
-
-        loadSettings(Sender);
-        loadPluginDependencies(Sender);
-        getUManager().checkForUpdates();
-    }
-
-    private boolean connectDatabase(CommandSender Sender) {
-
-        boolean connect = getDManager().connect();
-
-        if(connect) return true;
-
-        getMManager().sendMessage(Sender, "Plugin.plugin-data");
-
-        Bukkit.getPluginManager().disablePlugin(getInstance());
-
-        return false;
-    }
-
-    private boolean versionCheck() {
-
-        if(!getSVManager().isNewerOrVersion(17, 0)) {
-
-            getMManager().sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-version", "%Version%", getSVManager().getServerVersion());
-
-            getUManager().checkForUpdates();
-
-            Bukkit.getPluginManager().disablePlugin(getInstance());
-
-            return false;
-        }
-
-        return true;
+        bStatsMetric.addCustomChart(new BStatsMetric.SimplePie("plugin_language", () -> configService.L_LANG));
+        bStatsMetric.addCustomChart(new BStatsMetric.AdvancedPie("minecraft_version_player_amount", () -> Map.of(versionService.getServerVersion(), Bukkit.getOnlinePlayers().size())));
+        bStatsMetric.addCustomChart(new BStatsMetric.SingleLineChart("song_amount", () -> songService.getSongs().size()));
     }
 
 }
