@@ -6,8 +6,6 @@ Lang:
   # Send messages to clients in their own language, if available
   client-lang: true
 
-
-
 Options:
 
   # Plugin sends update notifications
@@ -18,7 +16,7 @@ Options:
 
   Sound:
 
-    # Defines whether the extened note range should be used for sounds (requires resource pack for players)
+    # Defines whether the extended note range should be used for sounds (requires resource pack for players)
     extened-range: true
 
     # Defines whether the resource pack should be automatically downloaded and applied to the user

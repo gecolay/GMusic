@@ -1,10 +1,10 @@
-name: ${project.parent.name}
-version: ${project.parent.version}
-description: ${project.description}
+name: ${name}
+version: ${version}
+description: ${description}
 authors: [Gecolay]
-website: https://www.spigotmc.org/resources/84004
-main: ${project.parent.groupId}.${project.parent.artifactId}Main
-api-version: 1.17
+website: https://www.spigotmc.org/resources/000000
+main: ${main}
+api-version: 1.18
 folia-supported: true
 
 commands:
@@ -29,8 +29,6 @@ commands:
     aliases: [gmusicrl]
     description: Plugin reload command
     permission: GMusic.Reload
-
-
 
 permissions:
 

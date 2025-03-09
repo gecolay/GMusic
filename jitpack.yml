@@ -1,7 +1,2 @@
-before_install:
-  - git config --global --unset core.autocrlf
-  - sdk install maven
-  - sdk install java 21.0.2-open
-  - JAVA_21=/home/jitpack/.sdkman/candidates/java/21.0.2-open/bin/java
-    (mkdir BuildTools_1.21 && cd BuildTools_1.21 && curl -k -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar && $JAVA_21 -jar BuildTools.jar --rev 1.21 --remapped > /dev/null)
-  - sdk use java 21.0.2-open
+jdk:
+  - openjdk21
