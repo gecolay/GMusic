@@ -8,7 +8,6 @@ import dev.geco.gmusic.object.GPlayState;
 import dev.geco.gmusic.object.GSong;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,7 +24,6 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 
 import dev.geco.gmusic.GMusicMain;
 import org.jetbrains.annotations.NotNull;
@@ -39,7 +37,7 @@ import java.util.logging.Level;
 public class GMusicGUI {
 
 	private final GMusicMain gMusicMain = GMusicMain.getInstance();
-	private final NamespacedKey songKey = new NamespacedKey(gMusicMain, GMusicMain.NAME + "_song");
+	private final HashMap<Integer, GSong> pageSongs = new HashMap<>();
 	private static final HashMap<UUID, GMusicGUI> musicGUIS = new HashMap<>();
 	private static final int VOLUME_STEPS = 10;
 	private static final int SHIFT_VOLUME_STEPS = 1;
@@ -206,17 +204,16 @@ public class GMusicGUI {
 					case 53 -> setPage(page + 1);
 					default -> {
 						if(slot < 0 || slot > 44) return;
-						String songId = itemMeta.getPersistentDataContainer().get(songKey, PersistentDataType.STRING);
+						GSong song = pageSongs.get(slot);
 						Player target = Bukkit.getPlayer(uuid);
-						if(target == null || songId == null) return;
-						GSong song = gMusicMain.getSongService().getSongById(songId);
+						if(target == null || song == null) return;
 						if(click == ClickType.MIDDLE) {
 							if(playSettings.getFavorites().contains(song)) playSettings.getFavorites().remove(song);
 							else playSettings.getFavorites().add(song);
 							setPage(page);
 							return;
 						}
-						gMusicMain.getPlayService().playSong(target, gMusicMain.getSongService().getSongById(songId));
+						gMusicMain.getPlayService().playSong(target, song);
 					}
 				}
 				setPauseResumeBar();
@@ -408,6 +405,8 @@ public class GMusicGUI {
 
 		for(int slot = 0; slot < 45; slot++) inventory.setItem(slot, null);
 
+		pageSongs.clear();
+
 		if(!songs.isEmpty()) {
 			for(int songPosition = (page - 1) * 45; songPosition < 45 * page && songPosition < songs.size(); songPosition++) {
 				GSong song = songs.get(songPosition);
@@ -423,7 +422,7 @@ public class GMusicGUI {
 				for(String descriptionRow : song.getDescription()) description.add(gMusicMain.getMessageService().toFormattedMessage("&6" + descriptionRow));
 				if(playSettings.getFavorites().contains(song)) description.add(gMusicMain.getMessageService().getMessage("MusicGUI.disc-favorite"));
 				itemMeta.setLore(description);
-				itemMeta.getPersistentDataContainer().set(songKey, PersistentDataType.STRING, song.getId());
+				pageSongs.put(songPosition % 45, song);
 				itemMeta.addItemFlags(ItemFlag.values());
 				itemStack.setItemMeta(itemMeta);
 				inventory.setItem(songPosition % 45, itemStack);

@@ -1,14 +1,10 @@
 package dev.geco.gmusic.cmd;
 
 import dev.geco.gmusic.GMusicMain;
-import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 public class GAMusicCommand implements CommandExecutor {
@@ -31,13 +27,7 @@ public class GAMusicCommand implements CommandExecutor {
             return true;
         }
 
-        ItemStack itemStack = new ItemStack(Material.JUKEBOX);
-        itemStack.setAmount(1);
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        itemMeta.getPersistentDataContainer().set(gMusicMain.getJukeBoxService().getJukeBoxKey(), PersistentDataType.BOOLEAN, true);
-        itemStack.setItemMeta(itemMeta);
-
-        player.getInventory().addItem(itemStack);
+        player.getInventory().addItem(gMusicMain.getJukeBoxService().createJukeBoxItem());
 
         return true;
     }

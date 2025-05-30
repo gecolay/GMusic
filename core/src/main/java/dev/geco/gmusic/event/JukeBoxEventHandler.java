@@ -2,7 +2,6 @@ package dev.geco.gmusic.event;
 
 import dev.geco.gmusic.object.gui.GMusicGUI;
 import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.*;
@@ -73,6 +72,8 @@ public class JukeBoxEventHandler implements Listener {
 		if(block.getType() != Material.JUKEBOX) return;
 		if(gMusicMain.getJukeBoxService().getJukeBoxId(block) == null) return;
 		gMusicMain.getJukeBoxService().removeJukebox(block);
+		block.setType(Material.AIR);
+		block.getWorld().dropItemNaturally(block.getLocation().add(0.5, 0, 0.5), gMusicMain.getJukeBoxService().createJukeBoxItem());
 	}
 
 }

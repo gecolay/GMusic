@@ -16,6 +16,9 @@ import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.sql.ResultSet;
 import java.util.HashMap;
@@ -45,6 +48,17 @@ public class JukeBoxService {
 	}
 
 	public NamespacedKey getJukeBoxKey() { return jukeBoxKey; }
+
+	public ItemStack createJukeBoxItem() {
+		ItemStack itemStack = new ItemStack(Material.JUKEBOX);
+		itemStack.setAmount(1);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("Items.jukebox-title"));
+		itemMeta.setLore(List.of(gMusicMain.getMessageService().getMessage("Items.jukebox-description")));
+		itemMeta.getPersistentDataContainer().set(jukeBoxKey, PersistentDataType.BOOLEAN, true);
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
 
 	public UUID getJukeBoxId(Block block) { return jukeBoxBlocks.get(block); }
 
