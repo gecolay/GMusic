@@ -10,7 +10,7 @@ public interface IGMusicInputGUI {
 
     void close(boolean force);
 
-    interface Callback { boolean call(String input); }
+    interface InputCallback { boolean call(String input); }
 
     interface ValidateCallback { String call(ItemMeta meta); }
 

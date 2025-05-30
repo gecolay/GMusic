@@ -95,7 +95,7 @@ public class NBSConverter {
 					// Combine the layer volume with the noteblock volume
 					// If the layer panning is not center, combine the layer & noteblock direction
 					v = (layerVolumes.get(currentLayer) * v) / 100;
-					if (layerDirections.get(currentLayer) != 100) {
+					if(layerDirections.get(currentLayer) != 100) {
 						p = (layerDirections.get(currentLayer) + p) / 2;
 					}
 

@@ -11,6 +11,7 @@ import dev.geco.gmusic.object.gui.GMusicGUI;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -27,12 +28,14 @@ import java.util.logging.Level;
 public class JukeBoxService {
 
 	private final GMusicMain gMusicMain;
+	private final NamespacedKey jukeBoxKey;
 	private HashMap<Block, UUID> jukeBoxBlocks = new HashMap<>();
 	private HashMap<Block, UUID> radioJukeBoxBlocks = new HashMap<>();
 	private final Random random = new Random();
 
 	public JukeBoxService(GMusicMain gMusicMain) {
 		this.gMusicMain = gMusicMain;
+		jukeBoxKey = new NamespacedKey(gMusicMain, GMusicMain.NAME + "_juke_box");
 	}
 
 	public void createTables() {
@@ -40,6 +43,8 @@ public class JukeBoxService {
 			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_juke_box (uuid TEXT, world TEXT, x INTEGER, y INTEGER, z INTEGER);");
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not create juke box database tables!", e); }
 	}
+
+	public NamespacedKey getJukeBoxKey() { return jukeBoxKey; }
 
 	public UUID getJukeBoxId(Block block) { return jukeBoxBlocks.get(block); }
 
@@ -75,6 +80,8 @@ public class JukeBoxService {
 								playBoxSong(uuid, song != null ? song : gMusicMain.getPlayService().getRandomSong(uuid));
 							}
 						}
+
+						new GMusicGUI(uuid, GMusicGUI.MenuType.JUKEBOX);
 					}
 				}
 			} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not load jukeboxes", e); }
@@ -84,15 +91,18 @@ public class JukeBoxService {
 	public void setJukebox(Block block) {
 		try {
 			UUID uuid = UUID.randomUUID();
-			gMusicMain.getDataService().execute("INSERT INTO gmusic_juke_box (uuid, x, y, z) VALUES (?, ?, ?, ?)",
+			gMusicMain.getDataService().execute("INSERT INTO gmusic_juke_box (uuid, world, x, y, z) VALUES (?, ?, ?, ?, ?)",
 					uuid.toString(),
+					block.getWorld().toString(),
 					block.getX(),
 					block.getY(),
 					block.getZ()
 			);
 			GPlaySettings playSettings = gMusicMain.getPlaySettingsService().getPlaySettings(uuid);
+			playSettings.setRange(gMusicMain.getConfigService().JUKEBOX_RANGE);
 			if(playSettings.getPlayListMode() == GPlayListMode.RADIO) radioJukeBoxBlocks.put(block, uuid);
 			jukeBoxBlocks.put(block, uuid);
+			new GMusicGUI(uuid, GMusicGUI.MenuType.JUKEBOX);
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not set jukebox", e); }
 	}
 
@@ -159,7 +169,7 @@ public class JukeBoxService {
 			if(playSettings != null) {
 				List<GNotePart> lnp = song.getContent().get(z);
 
-				HashMap<Player, Double> pl = new HashMap<>();// gMusicMain.getJukeBoxManager().getPlayersInRange(L, playSettings.getRange());
+				HashMap<Player, Double> pl = getPlayersInRange(boxLocation, playSettings.getRange());
 
 				if(lnp != null && playSettings.getVolume() > 0 && !pl.isEmpty()) {
 					if(playSettings.isShowingParticles()) {

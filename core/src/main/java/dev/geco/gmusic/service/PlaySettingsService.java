@@ -42,23 +42,23 @@ public class PlaySettingsService {
 				while (playSettingsFavoritesData.next()) {
 					favorites.add(gMusicMain.getSongService().getSongById(playSettingsFavoritesData.getString("songId")));
 				}
+			}
 
-				try(ResultSet playSettingsData = gMusicMain.getDataService().executeAndGet("SELECT * FROM gmusic_play_settings WHERE uuid = ?", uuid.toString())) {
-					if(playSettingsData.next()) {
-						playSettings = new GPlaySettings(
-								uuid,
-								GPlayListMode.byId(playSettingsData.getInt("playListMode")),
-								playSettingsData.getInt("volume"),
-								playSettingsData.getBoolean("playOnJoin"),
-								GPlayMode.byId(playSettingsData.getInt("playMode")),
-								playSettingsData.getBoolean("showParticles"),
-								playSettingsData.getBoolean("reverseMode"),
-								playSettingsData.getBoolean("toggleMode"),
-								playSettingsData.getLong("range"),
-								playSettingsData.getString("currentSong"),
-								favorites
-						);
-					}
+			try(ResultSet playSettingsData = gMusicMain.getDataService().executeAndGet("SELECT * FROM gmusic_play_settings WHERE uuid = ?", uuid.toString())) {
+				if(playSettingsData.next()) {
+					playSettings = new GPlaySettings(
+							uuid,
+							GPlayListMode.byId(playSettingsData.getInt("playListMode")),
+							playSettingsData.getInt("volume"),
+							playSettingsData.getBoolean("playOnJoin"),
+							GPlayMode.byId(playSettingsData.getInt("playMode")),
+							playSettingsData.getBoolean("showParticles"),
+							playSettingsData.getBoolean("reverseMode"),
+							playSettingsData.getBoolean("toggleMode"),
+							playSettingsData.getLong("range"),
+							playSettingsData.getString("currentSong"),
+							favorites
+					);
 				}
 			}
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not load play settings", e); }
@@ -102,10 +102,10 @@ public class PlaySettingsService {
 
 			gMusicMain.getDataService().execute("INSERT INTO gmusic_play_settings (uuid, playListMode, volume, playOnJoin, playMode, showParticles, reverseMode, toggleMode, range, currentSong) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
 					uuid.toString(),
-					playSettings.getPlayListMode(),
+					playSettings.getPlayListMode().getId(),
 					playSettings.getVolume(),
 					playSettings.isPlayOnJoin(),
-					playSettings.getPlayMode(),
+					playSettings.getPlayMode().getId(),
 					playSettings.isShowingParticles(),
 					playSettings.isReverseMode(),
 					playSettings.isToggleMode(),

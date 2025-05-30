@@ -58,11 +58,11 @@ public class GNotePart {
 			if(note > 24) return 2f;
 			return (float) Math.pow(2, ((float) (note - 12) / 12));
 		}
-		if (note < -24) {
+		if(note < -24) {
 			note = 36 + note;
-		} else if (note < 0) {
+		} else if(note < 0) {
 			note = 24 + note;
-		} else if (note < 48) {
+		} else if(note < 48) {
 			note = note % 24;
 		} else {
 			note = 12 + (note % 24);

@@ -21,11 +21,9 @@ import java.util.UUID;
 public class JukeBoxEventHandler implements Listener {
 
 	private final GMusicMain gMusicMain;
-	private final NamespacedKey jukeBoxKey;
 
 	public JukeBoxEventHandler(GMusicMain gMusicMain) {
 		this.gMusicMain = gMusicMain;
-		jukeBoxKey = new NamespacedKey(gMusicMain, GMusicMain.NAME + "_juke_box");
 	}
 
 	@EventHandler (priority = EventPriority.LOWEST, ignoreCancelled = true)
@@ -52,7 +50,7 @@ public class JukeBoxEventHandler implements Listener {
 		Block block = event.getBlock();
 		if(block.getType() != Material.JUKEBOX) return;
 		ItemStack itemStack = event.getItemInHand();
-		if(!itemStack.getItemMeta().getPersistentDataContainer().has(jukeBoxKey)) return;
+		if(!itemStack.getItemMeta().getPersistentDataContainer().has(gMusicMain.getJukeBoxService().getJukeBoxKey())) return;
 		gMusicMain.getJukeBoxService().setJukebox(block);
 	}
 

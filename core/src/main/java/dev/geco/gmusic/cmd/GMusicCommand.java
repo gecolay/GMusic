@@ -38,12 +38,12 @@ public class GMusicCommand implements CommandExecutor {
 
         switch (args[0].toLowerCase()) {
             case "play" -> {
-                if (args.length == 1) {
+                if(args.length == 1) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-use-error");
                     return true;
                 }
                 GSong song = gMusicMain.getSongService().getSongById(args[1]);
-                if (song == null) {
+                if(song == null) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-song-error", "%Song%", args[1]);
                     return true;
                 }
@@ -51,7 +51,7 @@ public class GMusicCommand implements CommandExecutor {
                 gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
             }
             case "playing" -> {
-                if (!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId()) || gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
+                if(!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId()) || gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing-error");
                     return true;
                 }
@@ -60,7 +60,7 @@ public class GMusicCommand implements CommandExecutor {
             }
             case "random" -> {
                 GSong song = gMusicMain.getPlayService().getRandomSong(player.getUniqueId());
-                if (song == null) {
+                if(song == null) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-no-song-error");
                     return true;
                 }
@@ -68,7 +68,7 @@ public class GMusicCommand implements CommandExecutor {
                 gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
             }
             case "stop" -> {
-                if (!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId())) {
+                if(!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId())) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing-error");
                     return true;
                 }
@@ -76,7 +76,7 @@ public class GMusicCommand implements CommandExecutor {
                 gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-stop");
             }
             case "pause" -> {
-                if (!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId()) || gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
+                if(!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId()) || gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing-error");
                     return true;
                 }
@@ -84,7 +84,7 @@ public class GMusicCommand implements CommandExecutor {
                 gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-pause");
             }
             case "resume" -> {
-                if (!gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
+                if(!gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-paused-error");
                     return true;
                 }
@@ -93,7 +93,7 @@ public class GMusicCommand implements CommandExecutor {
             }
             case "skip" -> {
                 GSong song = gMusicMain.getPlayService().getNextSong(player);
-                if (song == null) {
+                if(song == null) {
                     gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-no-song-error");
                     return true;
                 }

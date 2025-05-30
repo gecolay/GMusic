@@ -35,10 +35,7 @@ public class GMusicInputGUI implements IGMusicInputGUI {
     private final Listener listener;
     private String input;
 
-    public GMusicInputGUI(Callback Call) { this(Call, null); }
-
-    public GMusicInputGUI(Callback Call, ValidateCallback validateCall) {
-
+    public GMusicInputGUI(InputCallback call, ValidateCallback validateCall) {
         listener = new Listener() {
 
             @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
@@ -47,7 +44,7 @@ public class GMusicInputGUI implements IGMusicInputGUI {
                 event.setCancelled(true);
                 if(event.getRawSlot() != 2) return;
                 if(event.getCurrentItem() == null) return;
-                boolean success = Call.call(input);
+                boolean success = call.call(input);
                 if(!success) return;
                 close(true);
             }
@@ -113,13 +110,10 @@ public class GMusicInputGUI implements IGMusicInputGUI {
 
     @Override
     public void close(boolean force) {
-        if(inventory == null) {
-            HandlerList.unregisterAll(listener);
-            return;
-        }
+        HandlerList.unregisterAll(listener);
+        if(inventory == null) return;
         inventory.clear();
         if(force) for(HumanEntity entity : new ArrayList<>(inventory.getViewers())) entity.closeInventory();
-        HandlerList.unregisterAll(listener);
     }
 
 }
