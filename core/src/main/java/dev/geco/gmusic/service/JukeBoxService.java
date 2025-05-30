@@ -93,7 +93,7 @@ public class JukeBoxService {
 			UUID uuid = UUID.randomUUID();
 			gMusicMain.getDataService().execute("INSERT INTO gmusic_juke_box (uuid, world, x, y, z) VALUES (?, ?, ?, ?, ?)",
 					uuid.toString(),
-					block.getWorld().toString(),
+					block.getWorld().getName(),
 					block.getX(),
 					block.getY(),
 					block.getZ()

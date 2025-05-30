@@ -213,6 +213,7 @@ public class GMusicGUI {
 						if(click == ClickType.MIDDLE) {
 							if(playSettings.getFavorites().contains(song)) playSettings.getFavorites().remove(song);
 							else playSettings.getFavorites().add(song);
+							setPage(page);
 							return;
 						}
 						gMusicMain.getPlayService().playSong(target, gMusicMain.getSongService().getSongById(songId));
