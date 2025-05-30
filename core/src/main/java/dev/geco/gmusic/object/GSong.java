@@ -19,7 +19,7 @@ public class GSong {
 	private final String originalAuthor;
 	private final String author;
 	private final List<String> description;
-	private Material material;
+	private Material discMaterial;
 	private SoundCategory soundCategory;
 	private final HashMap<String, String> instruments = new HashMap<>();
 	private final HashMap<String, List<GNote>> parts = new HashMap<>();
@@ -37,11 +37,11 @@ public class GSong {
 		originalAuthor = config.getString("Song.OAuthor");
 		author = config.getString("Song.Author");
 		description = config.getStringList("Song.Description");
-		String songMaterial = config.getString("Song.Material");
-		if(songMaterial != null) {
-			try { material = Material.valueOf(songMaterial.toUpperCase()); } catch(IllegalArgumentException ignored) { }
+		String material = config.getString("Song.Material");
+		if(material != null) {
+			try { discMaterial = Material.valueOf(material.toUpperCase()); } catch(IllegalArgumentException ignored) { }
 		}
-		if(material == null) material = id == null ? DISCS.get(0) : DISCS.get(id.length() <= DISCS.size() - 1 ? id.length() : id.length() % (DISCS.size() - 1));
+		if(discMaterial == null) discMaterial = id == null ? DISCS.get(0) : DISCS.get(id.length() <= DISCS.size() - 1 ? id.length() : id.length() % (DISCS.size() - 1));
 		try { soundCategory = SoundCategory.valueOf(config.getString("Song.Category", "").toUpperCase()); } catch(IllegalArgumentException e) { soundCategory = SoundCategory.RECORDS; }
 
 		List<String> songInstruments = new ArrayList<>();
@@ -114,7 +114,7 @@ public class GSong {
 
 	public List<String> getDescription() { return description; }
 
-	public Material getMaterial() { return material; }
+	public Material getDiscMaterial() { return discMaterial; }
 
 	public SoundCategory getSoundCategory() { return soundCategory; }
 

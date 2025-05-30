@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MusicUtil {
+public class EnvironmentUtil {
 
     private final List<Material> WATER_MATERIALS = new ArrayList<>(); {
         WATER_MATERIALS.add(Material.KELP_PLANT);

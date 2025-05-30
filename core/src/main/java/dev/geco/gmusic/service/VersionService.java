@@ -3,13 +3,14 @@ package dev.geco.gmusic.service;
 import dev.geco.gmusic.GMusicMain;
 import org.bukkit.Bukkit;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.logging.Level;
 
 public class VersionService {
 
-    private final String LATEST_VERSION = "v1_21_4";
+    private final String LATEST_VERSION = "v1_21_5";
     private final HashMap<String, String> VERSION_MAPPING = new HashMap<>(); {
         VERSION_MAPPING.put("v1_18_1", "v1_18");
         VERSION_MAPPING.put("v1_19_2", "v1_19_1");
@@ -29,10 +30,10 @@ public class VersionService {
         String rawServerVersion = Bukkit.getServer().getBukkitVersion();
         serverVersion = rawServerVersion.substring(0, rawServerVersion.indexOf('-'));
         packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + getPackageVersion();
-        available = hasPackageClass("object.SearchGUI");
+        available = hasPackageClass("object.gui.GMusicInputGUI");
         if(available) return;
         packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + LATEST_VERSION;
-        available = hasPackageClass("object.SearchGUI");
+        available = hasPackageClass("object.gui.GMusicInputGUI");
     }
 
     public String getServerVersion() { return serverVersion; }
@@ -52,6 +53,15 @@ public class VersionService {
             Class<?>[] parameterTypes = Arrays.stream(parameters).map(Object::getClass).toArray(Class<?>[]::new);
             return mcvPackageClass.getConstructor(parameterTypes).newInstance(parameters);
         } catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not get package object with class name '" + className + "'!", e); }
+        return null;
+    }
+
+    public Object executeMethod(Object object, String methodName) {
+        try {
+            Method method = object.getClass().getMethod(methodName);
+            method.setAccessible(true);
+            return method.invoke(object);
+        } catch(Throwable ignored) { }
         return null;
     }
 

@@ -60,7 +60,7 @@ Options:
 
     Default:
 
-      playlist: 0
+      playlist-mode: 0
       volume: 70
       join: false
       play-mode: 0

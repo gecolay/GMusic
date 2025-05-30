@@ -11,16 +11,15 @@ import dev.geco.gmusic.cmd.tab.GMusicTabComplete;
 import dev.geco.gmusic.event.JukeBoxEventHandler;
 import dev.geco.gmusic.event.PlayerEventHandler;
 import dev.geco.gmusic.metric.BStatsMetric;
-import dev.geco.gmusic.service.BoxSongService;
 import dev.geco.gmusic.service.ConfigService;
 import dev.geco.gmusic.service.DataService;
 import dev.geco.gmusic.service.JukeBoxService;
 import dev.geco.gmusic.service.MessageService;
-import dev.geco.gmusic.service.MidiService;
-import dev.geco.gmusic.service.NBSService;
+import dev.geco.gmusic.service.converter.MidiConverter;
+import dev.geco.gmusic.service.converter.NBSConverter;
 import dev.geco.gmusic.service.PermissionService;
 import dev.geco.gmusic.service.PlaySettingsService;
-import dev.geco.gmusic.service.PlaySongService;
+import dev.geco.gmusic.service.PlayService;
 import dev.geco.gmusic.service.RadioService;
 import dev.geco.gmusic.service.SongService;
 import dev.geco.gmusic.service.TaskService;
@@ -28,11 +27,10 @@ import dev.geco.gmusic.service.UpdateService;
 import dev.geco.gmusic.service.VersionService;
 import dev.geco.gmusic.service.message.PaperMessageService;
 import dev.geco.gmusic.service.message.SpigotMessageService;
-import dev.geco.gmusic.util.MusicUtil;
+import dev.geco.gmusic.util.EnvironmentUtil;
 import dev.geco.gmusic.util.SteroNoteUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Map;
@@ -52,14 +50,13 @@ public class GMusicMain extends JavaPlugin {
     private TaskService taskService;
     private DataService dataService;
     private SongService songService;
-    private PlaySongService playSongService;
+    private PlayService playService;
     private PlaySettingsService playSettingsService;
-    private BoxSongService boxSongService;
     private JukeBoxService jukeBoxService;
     private RadioService radioService;
-    private MidiService midiService;
-    private NBSService nbsService;
-    private MusicUtil musicUtil;
+    private MidiConverter midiConverter;
+    private NBSConverter nbsConverter;
+    private EnvironmentUtil environmentUtil;
     private SteroNoteUtil steroNoteUtil;
     private boolean supportsPaperFeature = false;
     private boolean supportsTaskFeature = false;
@@ -82,21 +79,19 @@ public class GMusicMain extends JavaPlugin {
 
     public SongService getSongService() { return songService; }
 
-    public PlaySongService getPlaySongService() { return playSongService; }
+    public PlayService getPlayService() { return playService; }
 
     public PlaySettingsService getPlaySettingsService() { return playSettingsService; }
-
-    public BoxSongService getBoxSongService() { return boxSongService; }
 
     public JukeBoxService getJukeBoxService() { return jukeBoxService; }
 
     public RadioService getRadioService() { return radioService; }
 
-    public MidiService getMidiService() { return midiService; }
+    public MidiConverter getMidiConverter() { return midiConverter; }
 
-    public NBSService getNBSService() { return nbsService; }
+    public NBSConverter getNBSConverter() { return nbsConverter; }
 
-    public MusicUtil getMusicUtil() { return musicUtil; }
+    public EnvironmentUtil getEnvironmentUtil() { return environmentUtil; }
 
     public SteroNoteUtil getSteroNoteUtil() { return steroNoteUtil; }
 
@@ -115,15 +110,15 @@ public class GMusicMain extends JavaPlugin {
         taskService = new TaskService(this);
         dataService = new DataService(this);
         songService = new SongService(this);
-        playSongService = new PlaySongService(this);
+        playService = new PlayService(this);
         playSettingsService = new PlaySettingsService(this);
-        boxSongService = new BoxSongService(this);
         jukeBoxService = new JukeBoxService(this);
         radioService = new RadioService(this);
-        midiService = new MidiService(this);
-        nbsService = new NBSService(this);
 
-        musicUtil = new MusicUtil();
+        midiConverter = new MidiConverter(this);
+        nbsConverter = new NBSConverter(this);
+
+        environmentUtil = new EnvironmentUtil();
         steroNoteUtil = new SteroNoteUtil();
 
         loadFeatures();
@@ -156,8 +151,10 @@ public class GMusicMain extends JavaPlugin {
 
     private void loadSettings(CommandSender sender) {
         if(!connectDatabase(sender)) return;
-        playSettingsService.createTable();
         songService.loadSongs();
+        playSettingsService.createTables();
+        jukeBoxService.createTables();
+        jukeBoxService.loadJukeboxes(null);
         if(configService.R_ACTIVE) radioService.startRadio();
     }
 
@@ -179,14 +176,10 @@ public class GMusicMain extends JavaPlugin {
 
     private void unload() {
         dataService.close();
-        songService.unloadSongs();
+        playService.stopSongs();
         radioService.stopRadio();
-        playSettingsService.clearPlaySettingsCache();
-
-        for(Player player : Bukkit.getOnlinePlayers()) {
-            playSettingsService.setPlaySettings(player.getUniqueId(), playSettingsService.getPlaySettings(player.getUniqueId()));
-            playSongService.stopSong(player);
-        }
+        songService.unloadSongs();
+        playSettingsService.savePlaySettings();
     }
 
     private void setupCommands() {
@@ -207,13 +200,11 @@ public class GMusicMain extends JavaPlugin {
     }
 
     private boolean versionCheck() {
-        if(versionService.isNewerOrVersion(18, 0) && !versionService.isAvailable()) {
-            messageService.sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-version", "%Version%", versionService.getServerVersion());
-            updateService.checkForUpdates();
-            Bukkit.getPluginManager().disablePlugin(this);
-            return false;
-        }
-        return true;
+        if(versionService.isNewerOrVersion(18, 0) && versionService.isAvailable()) return true;
+        messageService.sendMessage(Bukkit.getConsoleSender(), "Plugin.plugin-version", "%Version%", versionService.getServerVersion());
+        updateService.checkForUpdates();
+        Bukkit.getPluginManager().disablePlugin(this);
+        return false;
     }
 
     private boolean connectDatabase(CommandSender sender) {

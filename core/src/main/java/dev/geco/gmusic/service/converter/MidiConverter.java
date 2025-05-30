@@ -1,4 +1,4 @@
-package dev.geco.gmusic.service;
+package dev.geco.gmusic.service.converter;
 
 import dev.geco.gmusic.GMusicMain;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -17,7 +17,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.logging.Level;
 
-public class MidiService {
+public class MidiConverter {
 
 	private final GMusicMain gMusicMain;
 	private final boolean version2 = true;
@@ -242,7 +242,7 @@ public class MidiService {
 		MIDI_DRUM.put(87, new MidiPair(2, 7));
 	}
 
-	public MidiService(GMusicMain gMusicMain) {
+	public MidiConverter(GMusicMain gMusicMain) {
 		this.gMusicMain = gMusicMain;
 	}
 

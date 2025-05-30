@@ -1,113 +1,110 @@
 package dev.geco.gmusic.cmd;
 
-import org.jetbrains.annotations.*;
-
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
-
 import dev.geco.gmusic.GMusicMain;
-import dev.geco.gmusic.object.*;
+import dev.geco.gmusic.object.gui.GMusicGUI;
+import dev.geco.gmusic.object.GPlaySettings;
+import dev.geco.gmusic.object.GSong;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class GMusicCommand implements CommandExecutor {
 
-    private final GMusicMain GPM;
+    private final GMusicMain gMusicMain;
 
-    public GMusicCommand(GMusicMain GPluginMain) { GPM = GPluginMain; }
+    public GMusicCommand(GMusicMain gMusicMain) {
+        this.gMusicMain = gMusicMain;
+    }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender Sender, @NotNull Command Command, @NotNull String Label, String[] Args) {
-
-        if(!(Sender instanceof Player)) {
-
-            GPM.getMManager().sendMessage(Sender, "Messages.command-sender-error");
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if(!(sender instanceof Player player)) {
+            gMusicMain.getMessageService().sendMessage(sender, "Messages.command-sender-error");
             return true;
         }
 
-        Player player = (Player) Sender;
-
-        if(!GPM.getPManager().hasPermission(Sender, "Music")) {
-
-            GPM.getMManager().sendMessage(Sender, "Messages.command-permission-error");
+        if(!gMusicMain.getPermissionService().hasPermission(sender, "Music")) {
+            gMusicMain.getMessageService().sendMessage(sender, "Messages.command-permission-error");
             return true;
         }
 
-        if(Args.length == 0) {
-
+        if(args.length == 0) {
             GMusicGUI musicGUI = new GMusicGUI(player.getUniqueId(), GMusicGUI.MenuType.DEFAULT);
             player.openInventory(musicGUI.getInventory());
             return true;
         }
 
-        GSong song;
-
-        switch (Args[0].toLowerCase()) {
-            case "play":
-                if(Args.length == 1) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-use-error");
+        switch (args[0].toLowerCase()) {
+            case "play" -> {
+                if (args.length == 1) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-use-error");
                     return true;
                 }
-                song = GPM.getSongManager().getSongById(Args[1]);
-                if(song == null) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-song-error", "%Song%", Args[1]);
+                GSong song = gMusicMain.getSongService().getSongById(args[1]);
+                if (song == null) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-song-error", "%Song%", args[1]);
                     return true;
                 }
-                GPM.getPlaySongManager().playSong(player, song);
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
-                break;
-            case "playing":
-                if(!GPM.getPlaySongManager().hasPlayingSong(player.getUniqueId()) || GPM.getPlaySongManager().hasPausedSong(player.getUniqueId())) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-playing-error");
+                gMusicMain.getPlayService().playSong(player, song);
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
+            }
+            case "playing" -> {
+                if (!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId()) || gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing-error");
                     return true;
                 }
-                song = GPM.getPlaySongManager().getPlayingSong(player.getUniqueId());
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-playing", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
-                break;
-            case "random":
-                song = GPM.getPlaySongManager().getRandomSong(player.getUniqueId());
-                if(song == null) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-no-song-error");
+                GSong song = gMusicMain.getPlayService().getPlayingSong(player.getUniqueId());
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
+            }
+            case "random" -> {
+                GSong song = gMusicMain.getPlayService().getRandomSong(player.getUniqueId());
+                if (song == null) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-no-song-error");
                     return true;
                 }
-                GPM.getPlaySongManager().playSong(player, song);
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
-                break;
-            case "stop":
-                if(!GPM.getPlaySongManager().hasPlayingSong(player.getUniqueId())) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-playing-error");
+                gMusicMain.getPlayService().playSong(player, song);
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
+            }
+            case "stop" -> {
+                if (!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId())) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing-error");
                     return true;
                 }
-                GPM.getPlaySongManager().stopSong(player);
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-stop");
-                break;
-            case "pause":
-                if(!GPM.getPlaySongManager().hasPlayingSong(player.getUniqueId()) || GPM.getPlaySongManager().hasPausedSong(player.getUniqueId())) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-playing-error");
+                gMusicMain.getPlayService().stopSong(player);
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-stop");
+            }
+            case "pause" -> {
+                if (!gMusicMain.getPlayService().hasPlayingSong(player.getUniqueId()) || gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-playing-error");
                     return true;
                 }
-                GPM.getPlaySongManager().pauseSong(player);
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-pause");
-                break;
-            case "resume":
-                if(!GPM.getPlaySongManager().hasPausedSong(player.getUniqueId())) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-paused-error");
+                gMusicMain.getPlayService().pauseSong(player);
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-pause");
+            }
+            case "resume" -> {
+                if (!gMusicMain.getPlayService().hasPausedSong(player.getUniqueId())) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-paused-error");
                     return true;
                 }
-                GPM.getPlaySongManager().resumeSong(player);
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-resume");
-                break;
-            case "skip":
-                song = GPM.getPlaySongManager().getNextSong(player);
-                if(song == null) {
-                    GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-no-song-error");
+                gMusicMain.getPlayService().resumeSong(player);
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-resume");
+            }
+            case "skip" -> {
+                GSong song = gMusicMain.getPlayService().getNextSong(player);
+                if (song == null) {
+                    gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-no-song-error");
                     return true;
                 }
-                GPM.getPlaySongManager().playSong(player, song);
-                GPM.getMManager().sendMessage(Sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
-                break;
-            case "toggle":
-                GPlaySettings playSettings = GPM.getPlaySettingsManager().getPlaySettings(player.getUniqueId());
+                gMusicMain.getPlayService().playSong(player, song);
+                gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-play", "%Song%", song.getId(), "%SongTitle%", song.getTitle());
+            }
+            case "toggle" -> {
+                GPlaySettings playSettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
                 playSettings.setToggleMode(!playSettings.isToggleMode());
-                break;
+            }
+            default -> gMusicMain.getMessageService().sendMessage(sender, "Messages.command-gmusic-use-error");
         }
 
         return true;

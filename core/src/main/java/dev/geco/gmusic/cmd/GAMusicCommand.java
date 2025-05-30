@@ -1,32 +1,29 @@
 package dev.geco.gmusic.cmd;
 
-import org.jetbrains.annotations.*;
-
-import org.bukkit.command.*;
-import org.bukkit.entity.*;
-
 import dev.geco.gmusic.GMusicMain;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 public class GAMusicCommand implements CommandExecutor {
 
-    private final GMusicMain GPM;
+    private final GMusicMain gMusicMain;
 
-    public GAMusicCommand(GMusicMain GPluginMain) { GPM = GPluginMain; }
+    public GAMusicCommand(GMusicMain gMusicMain) {
+        this.gMusicMain = gMusicMain;
+    }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender Sender, @NotNull Command Command, @NotNull String Label, String[] Args) {
-
-        if(!(Sender instanceof Player)) {
-
-            GPM.getMManager().sendMessage(Sender, "Messages.command-sender-error");
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        if(!(sender instanceof Player)) {
+            gMusicMain.getMessageService().sendMessage(sender, "Messages.command-sender-error");
             return true;
         }
 
-        Player player = (Player) Sender;
-
-        if(!GPM.getPManager().hasPermission(Sender, "AMusic")) {
-
-            GPM.getMManager().sendMessage(Sender, "Messages.command-permission-error");
+        if(!gMusicMain.getPermissionService().hasPermission(sender, "AMusic")) {
+            gMusicMain.getMessageService().sendMessage(sender, "Messages.command-permission-error");
             return true;
         }
 

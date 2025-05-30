@@ -52,35 +52,35 @@ public class GNotePart {
 		if(parts.length > 3) distance = ((Integer.parseInt(parts[3]) - 100) / 200f) * 2f;
 	}
 
-	private float getPitch(int Note) {
+	private float getPitch(int note) {
 		if(!GMusicMain.getInstance().getConfigService().S_EXTENDED_RANGE) {
-			if(Note < 0) return 0.5f;
-			if(Note > 24) return 2f;
-			return (float) Math.pow(2, ((float) (Note - 12) / 12));
+			if(note < 0) return 0.5f;
+			if(note > 24) return 2f;
+			return (float) Math.pow(2, ((float) (note - 12) / 12));
 		}
-		if (Note < -24) {
-			Note = 36 + Note;
-		} else if (Note < 0) {
-			Note = 24 + Note;
-		} else if (Note < 48) {
-			Note = Note % 24;
+		if (note < -24) {
+			note = 36 + note;
+		} else if (note < 0) {
+			note = 24 + note;
+		} else if (note < 48) {
+			note = note % 24;
 		} else {
-			Note = 12 + (Note % 24);
+			note = 12 + (note % 24);
 		}
-		return (float) Math.pow(2, ((float) (Note - 12) / 12));
+		return (float) Math.pow(2, ((float) (note - 12) / 12));
 	}
 
-	private int getOriginalPitch(int Note) {
+	private int getOriginalPitch(int note) {
 		if(!GMusicMain.getInstance().getConfigService().S_EXTENDED_RANGE) {
-			if(Note < 0) return 0;
-			return Math.min(Note, 24);
+			if(note < 0) return 0;
+			return Math.min(note, 24);
 		}
-		if(Note < 0) {
-			if(Note < -24) Note = -24;
-			return Note;
+		if(note < 0) {
+			if(note < -24) note = -24;
+			return note;
 		}
-		if(Note > 48) Note = 48;
-		return Note;
+		if(note > 48) note = 48;
+		return note;
 	}
 
 	public GNote getNote() { return note; }

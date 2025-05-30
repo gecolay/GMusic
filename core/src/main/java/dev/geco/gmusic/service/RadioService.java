@@ -3,8 +3,8 @@ package dev.geco.gmusic.service;
 import dev.geco.gmusic.GMusicMain;
 import dev.geco.gmusic.object.GNotePart;
 import dev.geco.gmusic.object.GPlaySettings;
-import dev.geco.gmusic.object.GSong;
 import dev.geco.gmusic.object.GPlayState;
+import dev.geco.gmusic.object.GSong;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
@@ -30,97 +30,103 @@ public class RadioService {
 
 	public void startRadio() {
 		GPlaySettings playSettings = gMusicMain.getPlaySettingsService().getPlaySettings(radioUUID);
-		gMusicMain.getPlaySettingsService().setPlaySettings(radioUUID, playSettings);
+		gMusicMain.getPlaySettingsService().savePlaySettings(radioUUID, playSettings);
 
-		playRadioSong(gMusicMain.getPlaySongService().getRandomSong(radioUUID), 0);
+		playRadioSong(gMusicMain.getPlayService().getRandomSong(radioUUID), 0);
 	}
 
 	public void playRadioSong(GSong song, long delay) {
 		if(song == null) return;
 
-		GPlayState oldSongSettings = gMusicMain.getPlaySongService().getPlayState(radioUUID);
-		if(oldSongSettings != null) oldSongSettings.getTimer().cancel();
-
 		GPlaySettings playSettings = gMusicMain.getPlaySettingsService().getPlaySettings(radioUUID);
 
+		GPlayState playState = gMusicMain.getPlayService().getPlayState(radioUUID);
+		if(playState != null) playState.getTimer().cancel();
+
 		Timer timer = new Timer();
-
-		GPlayState songSettings = new GPlayState(song, timer, playSettings.isReverseMode() ? song.getLength() + delay : -delay);
-
-		gMusicMain.getPlaySongService().putPlayState(radioUUID, songSettings);
+		playState = new GPlayState(song, timer, playSettings.isReverseMode() ? song.getLength() + delay : -delay);
+		gMusicMain.getPlayService().setPlayState(radioUUID, playState);
 
 		playSettings.setCurrentSong(song.getId());
 
 		if(gMusicMain.getConfigService().A_SHOW_MESSAGES) {
-			for(Player radioPlayer : radioPlayers) gMusicMain.getMessageService().sendActionBarMessage(radioPlayer, "Messages.actionbar-play", "%Title%", song.getTitle(), "%Author%", song.getAuthor().isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(), "%OAuthor%", song.getOriginalAuthor().isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor());
+			for(Player radioPlayer : radioPlayers) {
+				gMusicMain.getMessageService().sendActionBarMessage(
+						radioPlayer,
+						"Messages.actionbar-play",
+						"%Title%", song.getTitle(),
+						"%Author%", song.getAuthor().isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(),
+						"%OAuthor%", song.getOriginalAuthor().isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor()
+				);
+			}
 		}
-
-		for(UUID uuid : gMusicMain.getBoxSongService().getRadioJukeBoxes()) gMusicMain.getBoxSongService().playBoxSong(uuid, GSong);
 
 		playTimer(song, timer);
 	}
 
 	private void playTimer(GSong song, Timer timer) {
-		GPlayState songSettings = gMusicMain.getPlaySongService().getPlayState(radioUUID);
-
-		//TextComponent anp = new TextComponent(gMusicMain.getMManager().getMessage("Messages.actionbar-now-playing", "%Title%", S.getTitle(), "%Author%", S.getAuthor().equals("") ? gMusicMain.getMManager().getMessage("MusicGUI.disc-empty-author") : S.getAuthor(), "%OAuthor%", S.getOriginalAuthor().equals("") ? gMusicMain.getMManager().getMessage("MusicGUI.disc-empty-oauthor") : S.getOriginalAuthor()));
+		GPlayState playState = gMusicMain.getPlayService().getPlayState(radioUUID);
+		GPlaySettings playSettings = gMusicMain.getPlaySettingsService().getPlaySettings(radioUUID);
 
 		gMusicMain.getTaskService().runAtFixedRate(() -> {
-			long position = songSettings.getTickPosition();
+			long position = playState.getTickPosition();
 
-			GPlaySettings playSettings = gMusicMain.getPlaySettingsService().getPlaySettings(radioUUID);
+			List<GNotePart> noteParts = song.getContent().get(position);
 
-			if(playSettings != null) {
-				List<GNotePart> noteParts = song.getContent().get(position);
+			List<Player> players = new ArrayList<>(radioPlayers);
 
-                List<Player> players = new ArrayList<>(radioPlayers);
+			if(noteParts != null && playSettings.getVolume() > 0 && !players.isEmpty()) {
+				for(Player player : players) {
+					GPlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
+					if(playerPlaySettings.isShowingParticles()) player.spawnParticle(Particle.NOTE, player.getEyeLocation().clone().add(random.nextDouble() - 0.5, 0.3, random.nextDouble() - 0.5), 0, random.nextDouble(), random.nextDouble(), random.nextDouble(), 1);
+				}
 
-				if(noteParts != null && playSettings.getVolume() > 0 && !players.isEmpty()) {
-
+				for(GNotePart notePart : noteParts) {
 					for(Player player : players) {
-						GPlaySettings ps1 = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
-						if(ps1.isShowingParticles()) player.spawnParticle(Particle.NOTE, player.getEyeLocation().clone().add(random.nextDouble() - 0.5, 0.3, random.nextDouble() - 0.5), 0, random.nextDouble(), random.nextDouble(), random.nextDouble(), 1);
-					}
+						if(notePart.getSound() != null) {
+							GPlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
+							float volume = playerPlaySettings.getFixedVolume() * notePart.getVolume();
 
-					for(GNotePart np : noteParts) {
-						for(Player player : players) {
-							if(np.getSound() != null) {
-								GPlaySettings ps1 = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
+							Location location = notePart.getDistance() == 0 ? player.getLocation() : gMusicMain.getSteroNoteUtil().convertToStero(player.getLocation(), notePart.getDistance());
 
-								float volume = ps1.getFixedVolume() * np.getVolume();
-
-								Location location = np.getDistance() == 0 ? player.getLocation() : gMusicMain.getSteroNoteUtil().convertToStero(player.getLocation(), np.getDistance());
-
-								if(!gMusicMain.getConfigService().ENVIRONMENT_EFFECTS) player.playSound(location, np.getSound(), song.getSoundCategory(), volume, np.getPitch());
-								else {
-									if(gMusicMain.getMusicUtil().isPlayerSwimming(player)) player.playSound(location, np.getSound(), song.getSoundCategory(), volume > 0.4f ? volume - 0.3f : volume, np.getPitch() - 0.15f);
-									else player.playSound(location, np.getSound(), song.getSoundCategory(), volume, np.getPitch());
-								}
-							} else if(np.getStopSound() != null) player.stopSound(np.getStopSound(), song.getSoundCategory());
-						}
+							if(!gMusicMain.getConfigService().ENVIRONMENT_EFFECTS) player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
+							else {
+								if(gMusicMain.getEnvironmentUtil().isPlayerSwimming(player)) player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume > 0.4f ? volume - 0.3f : volume, notePart.getPitch() - 0.15f);
+								else player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
+							}
+						} else if(notePart.getStopSound() != null) player.stopSound(notePart.getStopSound(), song.getSoundCategory());
 					}
 				}
+			}
 
-				if(position == (playSettings.isReverseMode() ? 0 : song.getLength())) {
-					timer.cancel();
-					playRadioSong(gMusicMain.getPlaySongService().getShuffleSong(radioUUID, song), gMusicMain.getConfigService().PS_TIME_UNTIL_SHUFFLE);
-
-				} else {
-					songSettings.setTickPosition(playSettings.isReverseMode() ? position - 1 : position + 1);
-					//if(gMusicMain.getCManager().A_SHOW_ALWAYS_WHILE_PLAYING) for(Player P : pl) P.spigot().sendMessage(ChatMessageType.ACTION_BAR, anp);
+			if(position == (playSettings.isReverseMode() ? 0 : song.getLength())) {
+				timer.cancel();
+				playRadioSong(gMusicMain.getPlayService().getShuffleSong(radioUUID, song), gMusicMain.getConfigService().PS_TIME_UNTIL_SHUFFLE);
+			} else {
+				playState.setTickPosition(playSettings.isReverseMode() ? position - 1 : position + 1);
+				if(gMusicMain.getConfigService().A_SHOW_WHILE_PLAYING) {
+					for(Player radioPlayer : players) {
+						gMusicMain.getMessageService().sendActionBarMessage(
+								radioPlayer,
+								"Messages.actionbar-play",
+								"%Title%", song.getTitle(),
+								"%Author%", song.getAuthor().isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.disc-empty-author") : song.getAuthor(),
+								"%OAuthor%", song.getOriginalAuthor().isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.disc-empty-oauthor") : song.getOriginalAuthor()
+						);
+					}
 				}
-			} else timer.cancel();
+			}
 		}, 0, 1);
 	}
 
 	public void stopRadio() {
-		GPlayState songSettings = gMusicMain.getPlaySongService().getPlayState(radioUUID);
-		if(songSettings == null) return;
+		GPlayState playState = gMusicMain.getPlayService().getPlayState(radioUUID);
+		if(playState == null) return;
 
-		songSettings.getTimer().cancel();
+		playState.getTimer().cancel();
 
-		gMusicMain.getPlaySongService().removePlayState(radioUUID);
-		gMusicMain.getPlaySettingsService().setPlaySettings(radioUUID, null);
+		gMusicMain.getPlayService().removePlayState(radioUUID);
+		gMusicMain.getPlaySettingsService().savePlaySettings(radioUUID, null);
 	}
 
 	public void removeRadioPlayer(Player Player) { radioPlayers.remove(Player); }

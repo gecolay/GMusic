@@ -1,4 +1,4 @@
-package dev.geco.gmusic.service;
+package dev.geco.gmusic.service.converter;
 
 import dev.geco.gmusic.GMusicMain;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -12,11 +12,11 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.logging.Level;
 
-public class NBSService {
+public class NBSConverter {
 
 	private final GMusicMain gMusicMain;
 
-	public NBSService(GMusicMain gMusicMain) {
+	public NBSConverter(GMusicMain gMusicMain) {
 		this.gMusicMain = gMusicMain;
 	}
 

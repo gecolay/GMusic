@@ -1,8 +1,8 @@
 plugins {
     `java-library`
     `maven-publish`
-    id("com.gradleup.shadow") version "9.0.0-beta10"
-    id("io.papermc.paperweight.userdev") version "2.0.0-beta.14" apply false
+    id("com.gradleup.shadow") version "9.0.0-beta13"
+    id("io.papermc.paperweight.userdev") version "2.0.0-beta.17" apply false
 }
 
 allprojects {
@@ -12,7 +12,7 @@ allprojects {
         mavenLocal()
         mavenCentral()
 
-        maven(url = "https://repo.papermc.io/repository/maven-public/")
+        maven("https://repo.papermc.io/repository/maven-public/")
     }
 
     tasks.compileJava {
@@ -26,19 +26,20 @@ allprojects {
 
 dependencies {
     api(project(":core"))
-    api(project(":v1_18", configuration = "reobf"))
-    api(project(":v1_18_2", configuration = "reobf"))
-    api(project(":v1_19", configuration = "reobf"))
-    api(project(":v1_19_1", configuration = "reobf"))
-    api(project(":v1_19_3", configuration = "reobf"))
-    api(project(":v1_19_4", configuration = "reobf"))
-    api(project(":v1_20", configuration = "reobf"))
-    api(project(":v1_20_2", configuration = "reobf"))
-    api(project(":v1_20_3", configuration = "reobf"))
-    api(project(":v1_20_5", configuration = "reobf"))
-    api(project(":v1_21", configuration = "reobf"))
-    api(project(":v1_21_2", configuration = "reobf"))
-    api(project(":v1_21_4", configuration = "reobf"))
+    api(project(":v1_18", "reobf"))
+    api(project(":v1_18_2", "reobf"))
+    api(project(":v1_19", "reobf"))
+    api(project(":v1_19_1", "reobf"))
+    api(project(":v1_19_3", "reobf"))
+    api(project(":v1_19_4", "reobf"))
+    api(project(":v1_20", "reobf"))
+    api(project(":v1_20_2", "reobf"))
+    api(project(":v1_20_3", "reobf"))
+    api(project(":v1_20_5", "reobf"))
+    api(project(":v1_21", "reobf"))
+    api(project(":v1_21_2", "reobf"))
+    api(project(":v1_21_4", "reobf"))
+    api(project(":v1_21_5", "reobf"))
 }
 
 tasks {
@@ -59,7 +60,9 @@ tasks {
     }
 
     processResources {
-        from("resources")
+        from("resources") {
+            include("plugin.yml")
+        }
         expand(
             "name" to project.name,
             "version" to project.version,

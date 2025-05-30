@@ -6,10 +6,10 @@ import java.util.UUID;
 public class GPlaySettings {
 
 	private final UUID uuid;
-	private int playlist;
+	private GPlayListMode playlistMode;
 	private long volume;
 	private boolean playOnJoin;
-	private int playMode;
+	private GPlayMode playMode;
 	private boolean showParticles;
 	private boolean reverseMode;
 	private boolean toggleMode;
@@ -17,9 +17,21 @@ public class GPlaySettings {
 	private String currentSong;
 	private List<GSong> favorites;
 
-	public GPlaySettings(UUID uuid, int playlist, long volume, boolean playOnJoin, int playMode, boolean showParticles, boolean reverseMode, boolean toggleMode, long range, String currentSong, List<GSong> favorites) {
+	public GPlaySettings(
+			UUID uuid,
+			GPlayListMode playlistMode,
+			long volume,
+			boolean playOnJoin,
+			GPlayMode playMode,
+			boolean showParticles,
+			boolean reverseMode,
+			boolean toggleMode,
+			long range,
+			String currentSong,
+			List<GSong> favorites
+	) {
 		this.uuid = uuid;
-		this.playlist = playlist;
+		this.playlistMode = playlistMode;
 		this.volume = volume;
 		this.playOnJoin = playOnJoin;
 		this.playMode = playMode;
@@ -33,9 +45,9 @@ public class GPlaySettings {
 
 	public UUID getUUID() { return uuid; }
 
-	public int getPlayList() { return playlist; }
+	public GPlayListMode getPlayListMode() { return playlistMode; }
 
-	public void setPlayList(int playlist) { this.playlist = playlist; }
+	public void setPlayListMode(GPlayListMode playlistMode) { this.playlistMode = playlistMode; }
 
 	public long getVolume() { return volume; }
 
@@ -47,9 +59,9 @@ public class GPlaySettings {
 
 	public void setPlayOnJoin(boolean playOnJoin) { this.playOnJoin = playOnJoin; }
 
-	public int getPlayMode() { return playMode; }
+	public GPlayMode getPlayMode() { return playMode; }
 
-	public void setPlayMode(int playMode) { this.playMode = playMode; }
+	public void setPlayMode(GPlayMode playMode) { this.playMode = playMode; }
 
 	public boolean isShowingParticles() { return showParticles; }
 
