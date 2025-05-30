@@ -48,7 +48,7 @@ public class PlaySettingsService {
 						playSettings = new GPlaySettings(
 								uuid,
 								GPlayListMode.byId(playSettingsData.getInt("playListMode")),
-								playSettingsData.getLong("volume"),
+								playSettingsData.getInt("volume"),
 								playSettingsData.getBoolean("playOnJoin"),
 								GPlayMode.byId(playSettingsData.getInt("playMode")),
 								playSettingsData.getBoolean("showParticles"),

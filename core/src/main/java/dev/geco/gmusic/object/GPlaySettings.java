@@ -7,7 +7,7 @@ public class GPlaySettings {
 
 	private final UUID uuid;
 	private GPlayListMode playlistMode;
-	private long volume;
+	private int volume;
 	private boolean playOnJoin;
 	private GPlayMode playMode;
 	private boolean showParticles;
@@ -20,7 +20,7 @@ public class GPlaySettings {
 	public GPlaySettings(
 			UUID uuid,
 			GPlayListMode playlistMode,
-			long volume,
+			int volume,
 			boolean playOnJoin,
 			GPlayMode playMode,
 			boolean showParticles,
@@ -49,11 +49,11 @@ public class GPlaySettings {
 
 	public void setPlayListMode(GPlayListMode playlistMode) { this.playlistMode = playlistMode; }
 
-	public long getVolume() { return volume; }
+	public int getVolume() { return volume; }
 
 	public float getFixedVolume() { return (float) (volume * 2) / 100; }
 
-	public void setVolume(long volume) { this.volume = volume; }
+	public void setVolume(int volume) { this.volume = volume; }
 
 	public boolean isPlayOnJoin() { return playOnJoin; }
 

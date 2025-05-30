@@ -72,3 +72,4 @@ Options:
     disable-random-song: false
     disable-playlist: false
     disable-options: false
+    disable-search: false

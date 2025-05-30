@@ -59,6 +59,10 @@ public class UpdateService {
         LocalDate today = LocalDate.now();
         if(lastCheckDate != null && lastCheckDate.equals(today)) return;
         lastCheckDate = today;
+        if(GMusicMain.RESOURCE_ID.charAt(0) == '0') {
+            isLatestVersion = true;
+            return;
+        }
         try {
             getSpigotVersion(spigotVersion -> {
                 latestVersion = spigotVersion;

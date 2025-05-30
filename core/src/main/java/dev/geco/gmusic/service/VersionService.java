@@ -38,6 +38,8 @@ public class VersionService {
 
     public String getServerVersion() { return serverVersion; }
 
+    public String getPackagePath() { return packagePath; }
+
     public boolean isAvailable() { return available; }
 
     public boolean isNewerOrVersion(int version, int subVersion) {

@@ -25,6 +25,8 @@ public class SongService {
 
     public GSong getSongById(String song) { return songs.get(song.toLowerCase()); }
 
+    public List<GSong> filterSongsBySearch(List<GSong> songs, String search) { return songs.stream().filter(song -> song.getTitle().toLowerCase().contains(search.toLowerCase())).toList(); }
+
     public void loadSongs() {
         unloadSongs();
 
@@ -85,7 +87,7 @@ public class SongService {
             }
         }
 
-        File[] midiFiles = nbsDir.listFiles();
+        File[] midiFiles = midiDir.listFiles();
         if(midiFiles == null) return;
         for(File file : midiFiles) {
             File songFile = new File(songsDir.getAbsolutePath() + "/" + file.getName().replaceFirst("[.][^.]+$", "") + ".gnbs");

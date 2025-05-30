@@ -39,6 +39,7 @@ public class ConfigService {
     public boolean G_DISABLE_RANDOM_SONG;
     public boolean G_DISABLE_PLAYLIST;
     public boolean G_DISABLE_OPTIONS;
+    public boolean G_DISABLE_SEARCH;
 
     private final GMusicMain gMusicMain;
 
@@ -103,6 +104,7 @@ public class ConfigService {
         G_DISABLE_RANDOM_SONG = gMusicMain.getConfig().getBoolean("Options.GUI.disable-random-song", false);
         G_DISABLE_PLAYLIST = gMusicMain.getConfig().getBoolean("Options.GUI.disable-playlist", false);
         G_DISABLE_OPTIONS = gMusicMain.getConfig().getBoolean("Options.GUI.disable-options", false);
+        G_DISABLE_SEARCH = gMusicMain.getConfig().getBoolean("Options.GUI.disable-search", false);
     }
 
 }

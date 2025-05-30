@@ -61,14 +61,17 @@ tasks {
 
     processResources {
         from("resources") {
-            include("plugin.yml")
+            exclude("resource_pack", "plugin.yml")
         }
-        expand(
-            "name" to project.name,
-            "version" to project.version,
-            "description" to project.description,
-            "main" to "${project.group}.${project.name}Main"
-        )
+        from("resources") {
+            include("plugin.yml")
+            expand(
+                "name" to project.name,
+                "version" to project.version,
+                "description" to project.description,
+                "main" to "${project.group}.${project.name}Main"
+            )
+        }
     }
 }
 
