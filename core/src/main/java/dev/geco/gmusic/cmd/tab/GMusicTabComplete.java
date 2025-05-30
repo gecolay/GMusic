@@ -42,7 +42,7 @@ public class GMusicTabComplete implements TabCompleter {
         } else if(args.length == 2) {
             if(gMusicMain.getPermissionService().hasPermission(sender, "Music")) {
                 if(args[0].equalsIgnoreCase("play")) {
-                    for (GSong song : gMusicMain.getSongService().getSongs()) complete.add(song.getId());
+                    for(GSong song : gMusicMain.getSongService().getSongs()) complete.add(song.getId());
                 }
             }
             if(!args[args.length - 1].isEmpty()) {

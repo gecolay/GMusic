@@ -38,21 +38,20 @@ MusicGUI:
   music-pause: "&6Pause"
   music-resume: "&6Resume"
   music-stop: "&6Stop"
+  music-skip: "&6Skip Song"
   music-random: "&6Random Song"
   music-back: "&6Back"
 
-  music-playlist: "&cPlaylist"
-  music-playlist-skip: "&6Skip Song"
-  music-playlist-type-default: "&aMode:&6 Default"
-  music-playlist-type-favorites: "&aMode:&6 Favorites"
-  music-playlist-type-radio: "&aMode:&6 Radio"
+  music-playlist-mode-default: "&aMode:&6 Default"
+  music-playlist-mode-favorites: "&aMode:&6 Favorites"
+  music-playlist-mode-radio: "&aMode:&6 Radio"
 
   music-options: "&cOptions"
   music-options-volume: "&aVolume:&b %Volume%%"
-  music-options-join: "&aWelcomemusic:&6 %Join%"
-  music-options-playmode-once: "&aMode:&6 Once"
-  music-options-playmode-shuffle: "&aMode:&6 Shuffle"
-  music-options-playmode-repeat: "&aMode:&6 Repeat"
+  music-options-join: "&aWelcome music:&6 %Join%"
+  music-options-play-mode-once: "&aMode:&6 Once"
+  music-options-play-mode-shuffle: "&aMode:&6 Shuffle"
+  music-options-play-mode-repeat: "&aMode:&6 Repeat"
   music-options-particle: "&aParticle:&6 %Particle%"
   music-options-reverse: "&aReverse:&6 %Reverse%"
   music-options-range: "&aRange:&b %Range%"
@@ -76,6 +75,6 @@ MusicGUI:
 Items:
 
   jukebox-title: "&cJukeBox"
-  jukebox-description: "&aJukeBox, which allows\n&aplaying special Music!"
+  jukebox-description: "&aJukeBox, which plays special Music!"
 
   disc-title: "&b%Title%&7 -&6 %OAuthor%"

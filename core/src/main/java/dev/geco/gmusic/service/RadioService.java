@@ -60,6 +60,7 @@ public class RadioService {
 
 		if(gMusicMain.getConfigService().A_SHOW_MESSAGES) {
 			for(Player radioPlayer : radioPlayers) {
+				if(radioPlayer == null) continue;
 				gMusicMain.getMessageService().sendActionBarMessage(
 						radioPlayer,
 						"Messages.actionbar-play",
@@ -88,14 +89,16 @@ public class RadioService {
 				List<Player> players = new ArrayList<>(radioPlayers);
 
 				if(noteParts != null && playSettings.getVolume() > 0 && !players.isEmpty()) {
-					for (Player player : players) {
+					for(Player player : players) {
+						if(player == null) continue;
 						GPlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
-						if(playerPlaySettings.isShowingParticles())
-							player.spawnParticle(Particle.NOTE, player.getEyeLocation().clone().add(random.nextDouble() - 0.5, 0.3, random.nextDouble() - 0.5), 0, random.nextDouble(), random.nextDouble(), random.nextDouble(), 1);
+						if(!playerPlaySettings.isShowingParticles()) continue;
+						player.spawnParticle(Particle.NOTE, player.getEyeLocation().clone().add(random.nextDouble() - 0.5, 0.3, random.nextDouble() - 0.5), 0, random.nextDouble(), random.nextDouble(), random.nextDouble(), 1);
 					}
 
-					for (GNotePart notePart : noteParts) {
-						for (Player player : players) {
+					for(GNotePart notePart : noteParts) {
+						for(Player player : players) {
+							if(player == null) continue;
 							if(notePart.getSound() != null) {
 								GPlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId());
 								float volume = playerPlaySettings.getFixedVolume() * notePart.getVolume();
@@ -110,8 +113,7 @@ public class RadioService {
 									else
 										player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
 								}
-							} else if(notePart.getStopSound() != null)
-								player.stopSound(notePart.getStopSound(), song.getSoundCategory());
+							} else if(notePart.getStopSound() != null) player.stopSound(notePart.getStopSound(), song.getSoundCategory());
 						}
 					}
 				}
@@ -122,7 +124,8 @@ public class RadioService {
 				} else {
 					playState.setTickPosition(playSettings.isReverseMode() ? position - 1 : position + 1);
 					if(gMusicMain.getConfigService().A_SHOW_WHILE_PLAYING) {
-						for (Player radioPlayer : players) {
+						for(Player radioPlayer : players) {
+							if(radioPlayer == null) continue;
 							gMusicMain.getMessageService().sendActionBarMessage(
 									radioPlayer,
 									"Messages.actionbar-play",

@@ -29,8 +29,8 @@ public class JukeBoxService {
 
 	private final GMusicMain gMusicMain;
 	private final NamespacedKey jukeBoxKey;
-	private HashMap<Block, UUID> jukeBoxBlocks = new HashMap<>();
-	private HashMap<Block, UUID> radioJukeBoxBlocks = new HashMap<>();
+	private final HashMap<Block, UUID> jukeBoxBlocks = new HashMap<>();
+	private final HashMap<Block, UUID> radioJukeBoxBlocks = new HashMap<>();
 	private final Random random = new Random();
 
 	public JukeBoxService(GMusicMain gMusicMain) {
@@ -57,7 +57,7 @@ public class JukeBoxService {
 					while(jukeBoxData.next()) {
 						String worldName = jukeBoxData.getString("world");
 						World jukeBoxWorld = Bukkit.getWorld(worldName);
-						if(jukeBoxWorld == null || world.equals(jukeBoxWorld)) continue;
+						if(jukeBoxWorld == null || (world != null && world.equals(jukeBoxWorld))) continue;
 
 						Location location = new Location(jukeBoxWorld, jukeBoxData.getInt("x"), jukeBoxData.getInt("y"), jukeBoxData.getInt("z"));
 
