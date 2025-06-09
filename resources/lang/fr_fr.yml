@@ -56,8 +56,8 @@ MusicGUI:
   music-options-reverse: "&aReverse :&6 %Reverse%"
   music-options-range: "&aRange :&b %Range%"
 
-  music-options-true: "✔"
-  music-options-false: "❌"
+  music-options-true: "&a✔"
+  music-options-false: "&4❌"
 
   music-search-none: "&cRecherche"
   music-search: "&cRecherche :&6 %Search%"
