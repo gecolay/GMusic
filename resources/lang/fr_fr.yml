@@ -1,0 +1,78 @@
+Plugin:
+
+  plugin-enabled: "[P]&a Le plugin a bien été activé."
+  plugin-link: "[P]&a Lien avec&6 %Link%&a réussi !"
+  plugin-update: "[P]&a Nouvelle version disponible :&6 %NewVersion%&a!\n[P]&a Version actuelle :&6 %Version%&a!\n[P]&a Téléchargez la version à jour ici :\n[P]&6 %Path%"
+  plugin-data: "[P]&c Impossible d'accéder à la base de donnée, merci de vérifier la console serveur!"
+  plugin-version: "[P]&c Le plugin ne peut pas être utilisé sur cette version ! (&b%Version%&c)"
+  plugin-reload: "[P]&a Le plugin a bien été rechargé."
+  plugin-disabled: "[P]&a Le plugin a bien été désactivé."
+  plugin-prefix: "&7[&6GMusic&7]"
+
+Messages:
+
+  command-permission-error: "[P]&c Vous n'avez pas la permission d'utiliser cette commande !"
+  command-sender-error: "[P]&c Vous ne pouvez pas faire cette commande !"
+  command-version-error: "[P]&c Version du serveur obselète ! (&b%Version%&c)\n[P]&c Mettez à jour votre serveur afin d'utiliser cette fonctionnalité !"
+
+  command-gmusic-use-error: "[P]&c /music play|playing|random|stop|pause|resume|skip|toggle"
+  command-gmusic-song-error: "[P]&c La musique&6 %Song%&c n'existe pas."
+  command-gmusic-no-song-error: "[P]&c Il n'y a aucune musique !"
+  command-gmusic-play: "[P]&a Vous écoutez :&6 %SongTitle%"
+  command-gmusic-playing-error: "[P]&c Aucune musique n'est actuellement jouée."
+  command-gmusic-playing: "[P]&a Vous écoutez :&6 %SongTitle%"
+  command-gmusic-stop: "[P]&a Musique arrêtée."
+  command-gmusic-paused-error: "[P]&c Aucune musique n'est actuellement en pause!"
+  command-gmusic-pause: "[P]&a Vous avez mis en pause la musique."
+  command-gmusic-resume: "[P]&a Vous avez relancé la musique."
+  actionbar-play: "&aVous écoutez :&6 %SongTitle%"
+  actionbar-playing: "&aVous écoutez :&6 %SongTitle%"
+  actionbar-stop: "&aMusique arrêtée"
+  actionbar-pause: "&aMusique mise en pause"
+  actionbar-resume: "&aMusique relancée"
+
+MusicGUI:
+
+  title: "&cJukebox"
+
+  music-pause: "&6Pause"
+  music-resume: "&6Jouer"
+  music-stop: "&6Arrêter"
+  music-skip: "&6Passer cette musique"
+  music-random: "&6Musique aléatoire"
+  music-back: "&6Retour"
+
+  music-playlist-mode-default: "&aMode :&6 Par défaut"
+  music-playlist-mode-favorites: "&aMode :&6 Favoris"
+  music-playlist-mode-radio: "&aMode :&6 Radio"
+
+  music-options: "&cParamètres"
+  music-options-volume: "&aVolume :&b %Volume%%"
+  music-options-join: "&aMusique de bienvenue :&6 %Join%"
+  music-options-play-mode-once: "&aMode :&6 Unique"
+  music-options-play-mode-shuffle: "&aMode:&6 Mélangé"
+  music-options-play-mode-repeat: "&aMode:&6 Répétition"
+  music-options-particle: "&aParticle :&6 %Particle%"
+  music-options-reverse: "&aReverse :&6 %Reverse%"
+  music-options-range: "&aRange :&b %Range%"
+
+  music-options-true: "✔"
+  music-options-false: "❌"
+
+  music-search-none: "&cRecherche"
+  music-search: "&cRecherche :&6 %Search%"
+  music-search-menu-title: "&cChercher une musique"
+  music-search-menu-field: "Chercher"
+
+  last-page: "&6Page précédente"
+  next-page: "&6Page suivante"
+
+  disc-title: "&b%Title%&7 -&6 %OAuthor%"
+  disc-empty-author: "Inconnu"
+  disc-empty-oauthor: "Inconnu"
+  disc-favorite: "&cFavoris"
+
+Items:
+
+  jukebox-title: "&cJukeBox"
+  jukebox-description: "&aUn JukeBox, qui joue de la musique!"
