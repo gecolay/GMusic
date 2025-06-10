@@ -48,11 +48,11 @@ MusicGUI:
 
   music-options: "&cParamètres"
   music-options-volume: "&aVolume :&b %Volume%%"
-  music-options-join: "&aMusique de bienvenue :&6 %Join%"
+  music-options-join: "&aMusique à la connexion :&6 %Join%"
   music-options-play-mode-once: "&aMode :&6 Unique"
   music-options-play-mode-shuffle: "&aMode:&6 Aléatoire"
   music-options-play-mode-repeat: "&aMode:&6 Répétition"
-  music-options-particle: "&aParticle :&6 %Particle%"
+  music-options-particle: "&aParticules :&6 %Particle%"
   music-options-reverse: "&aReverse :&6 %Reverse%"
   music-options-range: "&aRange :&b %Range%"
 
@@ -75,4 +75,4 @@ MusicGUI:
 Items:
 
   jukebox-title: "&cJukeBox"
-  jukebox-description: "&aUn JukeBox, qui joue de la musique!"
+  jukebox-description: "&aUn JukeBox, qui joue de la musique !"
