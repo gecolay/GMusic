@@ -30,7 +30,7 @@ public class VersionService {
 
     public VersionService(GMusicMain gMusicMain) {
         this.gMusicMain = gMusicMain;
-        serverVersion = getMinecraftVersion();
+        serverVersion = extractServerVersion();
         serverVersionParts = Arrays.stream(serverVersion.split("\\.")).mapToInt(Integer::parseInt).toArray();
         String packageVersion = "v" + serverVersion.replace(".", "_");
         packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + VERSION_MAPPING.getOrDefault(packageVersion, packageVersion);
@@ -40,17 +40,15 @@ public class VersionService {
         available = hasPackageClass("model.gui.MusicInputGUI");
     }
 
-    private String getMinecraftVersion() {
+    private String extractServerVersion() {
         String rawServerVersion = Bukkit.getServer().getVersion();
         int mcIndexStart = rawServerVersion.indexOf("MC:");
         if(mcIndexStart != -1) {
-            mcIndexStart += 3;
+            mcIndexStart += 4;
             int mcIndexEnd = rawServerVersion.indexOf(')', mcIndexStart);
             if(mcIndexEnd != -1) rawServerVersion = rawServerVersion.substring(mcIndexStart, mcIndexEnd);
-            int mcDashIndex = rawServerVersion.indexOf('-', mcIndexStart);
-            if(mcDashIndex != -1) rawServerVersion = rawServerVersion.substring(mcIndexStart, mcDashIndex);
         }
-        return rawServerVersion.trim();
+        return rawServerVersion.split(" ")[0].trim();
     }
 
     public String getServerVersion() { return serverVersion; }
