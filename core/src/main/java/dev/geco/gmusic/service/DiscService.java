@@ -1,7 +1,10 @@
 package dev.geco.gmusic.service;
 
 import dev.geco.gmusic.GMusicMain;
+import dev.geco.gmusic.model.PlayMode;
+import dev.geco.gmusic.model.PlaySettings;
 import dev.geco.gmusic.model.Song;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -10,6 +13,7 @@ import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
+import java.util.UUID;
 
 public class DiscService {
 
@@ -45,6 +49,23 @@ public class DiscService {
 		itemMeta.addItemFlags(ItemFlag.values());
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;
+	}
+
+	public @NotNull ItemStack createDiscPlaceholderItem(@NotNull String songId, @NotNull UUID jukeboxUuid) {
+		ItemStack itemStack = new ItemStack(Material.STICK);
+		itemStack.setAmount(1);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(jukeboxUuid.toString());
+		itemMeta.getPersistentDataContainer().set(discKey, PersistentDataType.STRING, songId);
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
+
+	public void generateDiscPlaySettings(@NotNull UUID uuid) {
+		PlaySettings playSettings = gMusicMain.getPlaySettingsService().generateDefaultPlaySettings(uuid);
+		playSettings.setRange(gMusicMain.getConfigService().JUKEBOX_RANGE);
+		playSettings.setPlayMode(PlayMode.DEFAULT);
+		playSettings.setShowParticles(true);
 	}
 
 }
