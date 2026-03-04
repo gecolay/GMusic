@@ -6,7 +6,6 @@ import org.bukkit.Bukkit;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.logging.Level;
 
 public class VersionService {
 
@@ -33,7 +32,8 @@ public class VersionService {
         this.gMusicMain = gMusicMain;
         serverVersion = getMinecraftVersion();
         serverVersionParts = Arrays.stream(serverVersion.split("\\.")).mapToInt(Integer::parseInt).toArray();
-        packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + getPackageVersion();
+        String packageVersion = "v" + serverVersion.replace(".", "_");
+        packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + VERSION_MAPPING.getOrDefault(packageVersion, packageVersion);
         available = hasPackageClass("model.gui.MusicInputGUI");
         if(available) return;
         packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + LATEST_VERSION;
@@ -70,16 +70,6 @@ public class VersionService {
         return true;
     }
 
-    public Object getPackageObjectInstance(String className, Object... parameters) {
-        try {
-            Class<?> mcvPackageClass = Class.forName(packagePath + "." + className);
-            if(parameters.length == 0) return mcvPackageClass.getConstructor().newInstance();
-            Class<?>[] parameterTypes = Arrays.stream(parameters).map(Object::getClass).toArray(Class<?>[]::new);
-            return mcvPackageClass.getConstructor(parameterTypes).newInstance(parameters);
-        } catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not get package object with class name '" + className + "'!", e); }
-        return null;
-    }
-
     public Object executeMethod(Object object, String methodName) {
         try {
             Method method = object.getClass().getMethod(methodName);
@@ -97,9 +87,8 @@ public class VersionService {
         return false;
     }
 
-    private String getPackageVersion() {
-        String packageVersion = "v" + serverVersion.replace(".", "_");
-        return VERSION_MAPPING.getOrDefault(packageVersion, packageVersion);
+    public String getPackageVersion() {
+        return packagePath.substring(packagePath.lastIndexOf('.') + 1);
     }
 
 }
