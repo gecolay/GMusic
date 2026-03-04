@@ -32,6 +32,7 @@ public class VersionService {
         this.gMusicMain = gMusicMain;
         serverVersion = extractServerVersion();
         serverVersionParts = Arrays.stream(serverVersion.split("\\.")).mapToInt(Integer::parseInt).toArray();
+        if(!isNewerOrVersion(1, 18)) return;
         String packageVersion = "v" + serverVersion.replace(".", "_");
         packagePath = gMusicMain.getClass().getPackage().getName() + ".mcv." + VERSION_MAPPING.getOrDefault(packageVersion, packageVersion);
         available = hasPackageClass("model.gui.MusicInputGUI");
