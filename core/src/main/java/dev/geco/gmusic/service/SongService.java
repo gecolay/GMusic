@@ -16,9 +16,10 @@ import java.util.logging.Level;
 public class SongService {
 
     public static final String GNBS_EXTENSION = "gnbs";
-    public static final String NBS_EXTENSION = "nbs";
     public static final String MIDI_EXTENSION = "midi";
     public static final String MID_EXTENSION = "mid";
+    public static final String NBS_EXTENSION = "nbs";
+    public static final String WAV_EXTENSION = "wav";
     public static final String GNBS_FOLDER = "gnbs";
     public static final String CONVERT_FOLDER = "convert";
 
@@ -130,14 +131,18 @@ public class SongService {
 
         String extension = file.getName().substring(file.getName().lastIndexOf(".") + 1);
         switch(extension.toLowerCase()) {
-            case NBS_EXTENSION: {
-                if(gMusicMain.getNBSConverter().convertNBSFile(file)) return gnbsFile;
-                return null;
-            }
             case MID_EXTENSION:
             case MIDI_EXTENSION:
                 if(gMusicMain.getMidiConverter().convertMidiFile(file)) return gnbsFile;
                 return null;
+            case NBS_EXTENSION: {
+                if(gMusicMain.getNBSConverter().convertNBSFile(file)) return gnbsFile;
+                return null;
+            }
+            case WAV_EXTENSION: {
+                if(gMusicMain.getWavConverter().convertWavFile(file)) return gnbsFile;
+                return null;
+            }
             default:
                 gMusicMain.getLogger().warning("Invalid convert extension: " + extension);
         }

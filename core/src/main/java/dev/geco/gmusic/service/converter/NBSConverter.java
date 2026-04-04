@@ -156,7 +156,6 @@ public class NBSConverter {
 			for(int instrument = NoteInstrument.values().length; instrument < NoteInstrument.values().length + midiInstruments.size(); instrument++) gnbsStruct.set("Song.Content.Instruments." + instrument, midiInstruments.get(instrument - NoteInstrument.values().length));
 
 			gnbsStruct.set("Song.Content.Main", gnbsContent);
-
 			gnbsStruct.save(gnbsFile);
 
 			return true;

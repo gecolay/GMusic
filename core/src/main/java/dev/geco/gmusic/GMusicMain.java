@@ -31,6 +31,7 @@ import dev.geco.gmusic.service.SongService;
 import dev.geco.gmusic.service.TaskService;
 import dev.geco.gmusic.service.UpdateService;
 import dev.geco.gmusic.service.VersionService;
+import dev.geco.gmusic.service.converter.WavConverter;
 import dev.geco.gmusic.service.message.PaperMessageService;
 import dev.geco.gmusic.service.message.SpigotMessageService;
 import dev.geco.gmusic.util.EnvironmentUtil;
@@ -64,6 +65,7 @@ public class GMusicMain extends JavaPlugin {
     private RadioService radioService;
     private MidiConverter midiConverter;
     private NBSConverter nbsConverter;
+    private WavConverter wavConverter;
     private EnvironmentUtil environmentUtil;
     private SteroNoteUtil steroNoteUtil;
     private GriefPreventionLink griefPreventionLink;
@@ -107,6 +109,8 @@ public class GMusicMain extends JavaPlugin {
 
     public NBSConverter getNBSConverter() { return nbsConverter; }
 
+    public WavConverter getWavConverter() { return wavConverter; }
+
     public EnvironmentUtil getEnvironmentUtil() { return environmentUtil; }
 
     public SteroNoteUtil getSteroNoteUtil() { return steroNoteUtil; }
@@ -144,6 +148,7 @@ public class GMusicMain extends JavaPlugin {
 
         midiConverter = new MidiConverter(this);
         nbsConverter = new NBSConverter(this);
+        wavConverter = new WavConverter(this);
 
         environmentUtil = new EnvironmentUtil(this);
         steroNoteUtil = new SteroNoteUtil();

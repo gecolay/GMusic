@@ -290,7 +290,6 @@ public class MidiConverter {
 			for(NoteInstrument inst : NoteInstrument.values()) gnbsStruct.set("Song.Content.Instruments." + inst.getId(), inst.getId());
 
 			gnbsStruct.set("Song.Content.Main", gnbsContent);
-
 			gnbsStruct.save(gnbsFile);
 
 			return true;
