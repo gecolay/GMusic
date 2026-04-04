@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class VersionService {
 
-    private final String LATEST_VERSION = "v1_21_11";
+    private final String LATEST_VERSION = "v26_1";
     private final HashMap<String, String> VERSION_MAPPING = new HashMap<>(); {
         VERSION_MAPPING.put("v1_18_1", "v1_18");
         VERSION_MAPPING.put("v1_19_2", "v1_19_1");
@@ -21,6 +21,7 @@ public class VersionService {
         VERSION_MAPPING.put("v1_21_7", "v1_21_6");
         VERSION_MAPPING.put("v1_21_8", "v1_21_6");
         VERSION_MAPPING.put("v1_21_10", "v1_21_9");
+        VERSION_MAPPING.put("v26_1_1", "v26_1");
     }
     private final GMusicMain gMusicMain;
     private final String serverVersion;
@@ -63,8 +64,8 @@ public class VersionService {
         for(int i = 0; i < max; i++) {
             int sv = (i < serverVersionParts.length) ? serverVersionParts[i] : 0;
             int tv = (i < version.length) ? version[i] : 0;
-            if(sv > tv) return true;
-            if(sv < tv) return false;
+            if (sv > tv) return true;
+            if (sv < tv) return false;
         }
         return true;
     }
