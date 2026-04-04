@@ -17,7 +17,11 @@ public enum NoteInstrument {
 	INST_12(12, "block.note_block.didgeridoo"),
 	INST_13(13, "block.note_block.bit"),
 	INST_14(14, "block.note_block.banjo"),
-	INST_15(15, "block.note_block.pling");
+	INST_15(15, "block.note_block.pling"),
+    INST_16(16, "block.note_block.trumpet"),
+	INST_17(17, "block.note_block.trumpet_exposed"),
+	INST_18(18, "block.note_block.trumpet_weathered"),
+	INST_19(19, "block.note_block.trumpet_oxidized");
 
 	private final int instrument;
 	private final String sound;

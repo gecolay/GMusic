@@ -1,226 +1,543 @@
 {
+	"block.note_block.guitar": {
+		"sounds": [
+			"block/note_block/guitar"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.flute": {
+		"sounds": [
+			"block/note_block/flute"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bell": {
+		"sounds": [
+			"block/note_block/bell"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.chime": {
+		"sounds": [
+			"block/note_block/chime"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.xylophone": {
+		"sounds": [
+			"block/note_block/xylophone"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.iron_xylophone": {
+		"sounds": [
+			"block/note_block/iron_xylophone"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.cow_bell": {
+		"sounds": [
+			"block/note_block/cow_bell"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.didgeridoo": {
+		"sounds": [
+			"block/note_block/didgeridoo"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bit": {
+		"sounds": [
+			"block/note_block/bit"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.banjo": {
+		"sounds": [
+			"block/note_block/banjo"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.banjo_-2": {
+		"sounds": [
+			"block/note_block/banjo_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
 	"block.note_block.banjo_-1": {
 		"sounds": [
 			"block/note_block/banjo_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.banjo_1": {
 		"sounds": [
 			"block/note_block/banjo_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.banjo_2": {
+		"sounds": [
+			"block/note_block/banjo_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.basedrum_-2": {
+		"sounds": [
+			"block/note_block/basedrum_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.basedrum_-1": {
 		"sounds": [
-			"block/note_block/bd_-1"
+			"block/note_block/basedrum_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.basedrum_1": {
 		"sounds": [
-			"block/note_block/bd_1"
+			"block/note_block/basedrum_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.basedrum_2": {
+		"sounds": [
+			"block/note_block/basedrum_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bass_-2": {
+		"sounds": [
+			"block/note_block/bass_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bass_-1": {
+		"sounds": [
+			"block/note_block/bass_-1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bass_1": {
+		"sounds": [
+			"block/note_block/bass_1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bass_2": {
+		"sounds": [
+			"block/note_block/bass_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bell_-2": {
+		"sounds": [
+			"block/note_block/bell_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.bell_-1": {
 		"sounds": [
 			"block/note_block/bell_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
+
 	"block.note_block.bell_1": {
 		"sounds": [
 			"block/note_block/bell_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bell_2": {
+		"sounds": [
+			"block/note_block/bell_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.bit_-2": {
+		"sounds": [
+			"block/note_block/bit_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.bit_-1": {
 		"sounds": [
 			"block/note_block/bit_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.bit_1": {
 		"sounds": [
 			"block/note_block/bit_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
-	"block.note_block.hat_-1": {
+	"block.note_block.bit_2": {
 		"sounds": [
-			"block/note_block/hat_-1"
+			"block/note_block/bit_2"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
-	"block.note_block.hat_1": {
+	"block.note_block.cow_bell_2": {
 		"sounds": [
-			"block/note_block/hat_1"
+			"block/note_block/cow_bell_2"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
-	},
-	"block.note_block.cow_bell_-1": {
-		"sounds": [
-			"block/note_block/cow_bell_-1"
-		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.cow_bell_1": {
 		"sounds": [
 			"block/note_block/cow_bell_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
-	"block.note_block.bass_-1": {
+	"block.note_block.cow_bell_-1": {
 		"sounds": [
-			"block/note_block/bassattack_-1"
+			"block/note_block/cow_bell_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
-	"block.note_block.bass_1": {
+	"block.note_block.cow_bell_-2": {
 		"sounds": [
-			"block/note_block/bassattack_1"
+			"block/note_block/cow_bell_-2"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.didgeridoo_-2": {
+		"sounds": [
+			"block/note_block/didgeridoo_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.didgeridoo_-1": {
 		"sounds": [
 			"block/note_block/didgeridoo_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.didgeridoo_1": {
 		"sounds": [
 			"block/note_block/didgeridoo_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.didgeridoo_2": {
+		"sounds": [
+			"block/note_block/didgeridoo_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.flute_-2": {
+		"sounds": [
+			"block/note_block/flute_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.flute_-1": {
 		"sounds": [
 			"block/note_block/flute_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.flute_1": {
 		"sounds": [
 			"block/note_block/flute_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.flute_2": {
+		"sounds": [
+			"block/note_block/flute_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.guitar_-2": {
+		"sounds": [
+			"block/note_block/guitar_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.guitar_-1": {
 		"sounds": [
 			"block/note_block/guitar_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.guitar_1": {
 		"sounds": [
 			"block/note_block/guitar_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.guitar_2": {
+		"sounds": [
+			"block/note_block/guitar_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.harp_-2": {
+		"sounds": [
+			"block/note_block/harp_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.harp_-1": {
 		"sounds": [
 			"block/note_block/harp_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.harp_1": {
 		"sounds": [
 			"block/note_block/harp_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.harp_2": {
+		"sounds": [
+			"block/note_block/harp_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.chime_-2": {
+		"sounds": [
+			"block/note_block/chime_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.chime_-1": {
 		"sounds": [
-			"block/note_block/icechime_-1"
+			"block/note_block/chime_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.chime_1": {
 		"sounds": [
-			"block/note_block/icechime_1"
+			"block/note_block/chime_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.chime_2": {
+		"sounds": [
+			"block/note_block/chime_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.iron_xylophone_-2": {
+		"sounds": [
+			"block/note_block/iron_xylophone_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.iron_xylophone_-1": {
 		"sounds": [
 			"block/note_block/iron_xylophone_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.iron_xylophone_1": {
 		"sounds": [
 			"block/note_block/iron_xylophone_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.iron_xylophone_2": {
+		"sounds": [
+			"block/note_block/iron_xylophone_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.pling_-2": {
+		"sounds": [
+			"block/note_block/pling_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.pling_-1": {
 		"sounds": [
 			"block/note_block/pling_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.pling_1": {
 		"sounds": [
 			"block/note_block/pling_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.pling_2": {
+		"sounds": [
+			"block/note_block/pling_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.snare_-2": {
+		"sounds": [
+			"block/note_block/snare_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.snare_-1": {
 		"sounds": [
 			"block/note_block/snare_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.snare_1": {
 		"sounds": [
 			"block/note_block/snare_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.snare_2": {
+		"sounds": [
+			"block/note_block/snare_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.xylophone_-2": {
+		"sounds": [
+			"block/note_block/xylobone_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.xylophone_-1": {
 		"sounds": [
 			"block/note_block/xylobone_-1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
 	},
 	"block.note_block.xylophone_1": {
 		"sounds": [
 			"block/note_block/xylobone_1"
 		],
-		"subtitle": "subtitles.block.note_block.note",
-		"volume": 1.0
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.xylophone_2": {
+		"sounds": [
+			"block/note_block/xylobone_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_-2": {
+		"sounds": [
+			"block/note_block/trumpet_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_-1": {
+		"sounds": [
+			"block/note_block/trumpet_-1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet": {
+		"sounds": [
+			"block/note_block/trumpet"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_1": {
+		"sounds": [
+			"block/note_block/trumpet_1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_2": {
+		"sounds": [
+			"block/note_block/trumpet_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_exposed_-2": {
+		"sounds": [
+			"block/note_block/trumpet_exposed_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_exposed_-1": {
+		"sounds": [
+			"block/note_block/trumpet_exposed_-1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_exposed": {
+		"sounds": [
+			"block/note_block/trumpet_exposed"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_exposed_1": {
+		"sounds": [
+			"block/note_block/trumpet_exposed_1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_exposed_2": {
+		"sounds": [
+			"block/note_block/trumpet_exposed_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_oxidized_-2": {
+		"sounds": [
+			"block/note_block/trumpet_oxidized_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_oxidized_-1": {
+		"sounds": [
+			"block/note_block/trumpet_oxidized_-1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_oxidized": {
+		"sounds": [
+			"block/note_block/trumpet_oxidized"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_oxidized_1": {
+		"sounds": [
+			"block/note_block/trumpet_oxidized_1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_oxidized_2": {
+		"sounds": [
+			"block/note_block/trumpet_oxidized_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_weathered_-2": {
+		"sounds": [
+			"block/note_block/trumpet_weathered_-2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_weathered_-1": {
+		"sounds": [
+			"block/note_block/trumpet_weathered_-1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_weathered": {
+		"sounds": [
+			"block/note_block/trumpet_weathered"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_weathered_1": {
+		"sounds": [
+			"block/note_block/trumpet_weathered_1"
+		],
+		"subtitle": "subtitles.block.note_block.note"
+	},
+	"block.note_block.trumpet_weathered_2": {
+		"sounds": [
+			"block/note_block/trumpet_weathered_2"
+		],
+		"subtitle": "subtitles.block.note_block.note"
 	}
 }
