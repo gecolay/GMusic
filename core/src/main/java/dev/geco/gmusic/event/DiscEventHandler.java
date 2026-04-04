@@ -1,6 +1,7 @@
 package dev.geco.gmusic.event;
 
 import dev.geco.gmusic.GMusicMain;
+import dev.geco.gmusic.model.PlayState;
 import dev.geco.gmusic.model.Song;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -92,10 +93,16 @@ public class DiscEventHandler implements Listener {
 
 		InventoryHolder inventorySource = event.getSource().getHolder();
 		if(inventorySource instanceof Jukebox) {
-			stopDiscItemSong(item);
+			boolean cancel = stopDiscItemSong(item, true);
+			if(cancel) {
+				event.setCancelled(true);
+				return;
+			}
 
 			Song song = gMusicMain.getSongService().getSongById(songId);
 			if(song == null) return;
+
+			item.setAmount(item.getAmount() - 1);
 
 			event.setItem(gMusicMain.getDiscService().createDiscItem(song));
 			return;
@@ -113,7 +120,7 @@ public class DiscEventHandler implements Listener {
 			Song song = gMusicMain.getSongService().getSongById(songId);
 			if(song == null) return;
 
-			event.getSource().removeItem(item);
+			item.setAmount(item.getAmount() - 1);
 
 			UUID uuid = UUID.randomUUID();
 			gMusicMain.getDiscService().generateDiscPlaySettings(uuid);
@@ -121,8 +128,6 @@ public class DiscEventHandler implements Listener {
 			gMusicMain.getJukeBoxService().playBoxSong(uuid, song);
 
 			ItemStack placeholder = gMusicMain.getDiscService().createDiscPlaceholderItem(songId, uuid);
-			event.setItem(placeholder);
-
 			jukebox.setRecord(placeholder);
 			jukebox.update(false, false);
 		}
@@ -159,7 +164,7 @@ public class DiscEventHandler implements Listener {
 		String songId = record.getItemMeta().getPersistentDataContainer().get(gMusicMain.getDiscService().getDiscKey(), PersistentDataType.STRING);
 		if(songId == null) return;
 
-		stopDiscItemSong(record);
+		stopDiscItemSong(record, false);
 
 		jukebox.setRecord(null);
 		jukebox.update(false, false);
@@ -171,13 +176,18 @@ public class DiscEventHandler implements Listener {
 		jukebox.getWorld().dropItem(dropLocation, gMusicMain.getDiscService().createDiscItem(song));
 	}
 
-	private void stopDiscItemSong(ItemStack record) {
+	private boolean stopDiscItemSong(ItemStack record, boolean allowCancel) {
 		try {
 			UUID uuid = UUID.fromString(record.getItemMeta().getDisplayName());
+			if(allowCancel) {
+				PlayState playState = gMusicMain.getPlayService().getPlayState(uuid);
+				if(playState != null) return true;
+			}
 			gMusicMain.getJukeBoxService().removeTemporaryJukeBoxBlock(uuid);
 			gMusicMain.getJukeBoxService().stopBoxSong(uuid);
 			gMusicMain.getPlaySettingsService().removePlaySettingsCache(uuid);
 		} catch(IllegalArgumentException ignored) {}
+		return false;
 	}
 
 }
