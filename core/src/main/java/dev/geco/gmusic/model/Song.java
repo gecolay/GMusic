@@ -45,17 +45,17 @@ public class Song {
 		try { soundCategory = SoundCategory.valueOf(config.getString("Song.Category", "").toUpperCase()); } catch(IllegalArgumentException e) { soundCategory = SoundCategory.RECORDS; }
 
 		List<String> songInstruments = new ArrayList<>();
-		try { songInstruments.addAll(config.getConfigurationSection("Song.Content.Instruments").getKeys(false)); } catch (Throwable ignored) { }
+		try { songInstruments.addAll(config.getConfigurationSection("Song.Content.Instruments").getKeys(false)); } catch(Throwable ignored) { }
 		for(String songInstrument : songInstruments) {
 			try {
-				String noteInstrument = NoteInstrument.getInstrument(Integer.parseInt(config.getString("Song.Content.Instruments." + songInstrument, "0")));
+				String noteInstrument = NoteInstrument.getIdSound(Integer.parseInt(config.getString("Song.Content.Instruments." + songInstrument, "0")));
 				if(noteInstrument != null) instruments.put(songInstrument, noteInstrument);
 				else throw new IllegalArgumentException();
 			} catch(IllegalArgumentException e) { instruments.put(songInstrument, config.getString("Song.Content.Instruments." + songInstrument)); }
 		}
 
 		List<String> songParts = new ArrayList<>();
-		try { songParts.addAll(config.getConfigurationSection("Song.Content.Parts").getKeys(false)); } catch (Throwable ignored) { }
+		try { songParts.addAll(config.getConfigurationSection("Song.Content.Parts").getKeys(false)); } catch(Throwable ignored) { }
 
 		for(String songPart : songParts) {
 			List<Note> songNotes = new ArrayList<>();

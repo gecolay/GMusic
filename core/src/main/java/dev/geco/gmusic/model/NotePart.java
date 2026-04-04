@@ -37,8 +37,12 @@ public class NotePart {
 				pitch = getPitch(noteKey);
 				originalPitch = getOriginalPitch(noteKey);
 				if(GMusicMain.getInstance().getConfigService().S_EXTENDED_RANGE) {
-					if(originalPitch >= 24) {
+					if(originalPitch >= 48) {
+						sound += "_2";
+					} else if(originalPitch >= 24) {
 						sound += "_1";
+					} else if(originalPitch <= -24) {
+						sound += "_-2";
 					} else if(originalPitch < 0) {
 						sound += "_-1";
 					}
@@ -58,14 +62,18 @@ public class NotePart {
 			if(note > 24) return 2f;
 			return (float) Math.pow(2, ((float) (note - 12) / 12));
 		}
-		if(note < -24) {
+		if(note < -48) {
+			note = 60 + note;
+		} else if(note < -24) {
 			note = 36 + note;
 		} else if(note < 0) {
 			note = 24 + note;
 		} else if(note < 48) {
 			note = note % 24;
-		} else {
+		} else if(note < 72) {
 			note = 12 + (note % 24);
+		} else {
+			note = 24 + (note % 24);
 		}
 		return (float) Math.pow(2, ((float) (note - 12) / 12));
 	}
@@ -76,10 +84,10 @@ public class NotePart {
 			return Math.min(note, 24);
 		}
 		if(note < 0) {
-			if(note < -24) note = -24;
+			if(note < -48) note = -48;
 			return note;
 		}
-		if(note > 48) note = 48;
+		if(note > 72) note = 72;
 		return note;
 	}
 

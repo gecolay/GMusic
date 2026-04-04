@@ -1,39 +1,50 @@
 package dev.geco.gmusic.model;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public enum NoteInstrument {
 
-	INST_0(0, "block.note_block.harp"),
-	INST_1(1, "block.note_block.bass"),
-	INST_2(2, "block.note_block.basedrum"),
-	INST_3(3, "block.note_block.snare"),
-	INST_4(4, "block.note_block.hat"),
-	INST_5(5, "block.note_block.guitar"),
-	INST_6(6, "block.note_block.flute"),
-	INST_7(7, "block.note_block.bell"),
-	INST_8(8, "block.note_block.chime"),
-	INST_9(9, "block.note_block.xylophone"),
-	INST_10(10, "block.note_block.iron_xylophone"),
-	INST_11(11, "block.note_block.cow_bell"),
-	INST_12(12, "block.note_block.didgeridoo"),
-	INST_13(13, "block.note_block.bit"),
-	INST_14(14, "block.note_block.banjo"),
-	INST_15(15, "block.note_block.pling"),
-    INST_16(16, "block.note_block.trumpet"),
-	INST_17(17, "block.note_block.trumpet_exposed"),
-	INST_18(18, "block.note_block.trumpet_weathered"),
-	INST_19(19, "block.note_block.trumpet_oxidized");
+	HARP(0, "block.note_block.harp"),
+	BASS(1, "block.note_block.bass"),
+	BASEDRUM(2, "block.note_block.basedrum"),
+	SNARE(3, "block.note_block.snare"),
+	HAT(4, "block.note_block.hat"),
+	GUITAR(5, "block.note_block.guitar"),
+	FLUTE(6, "block.note_block.flute"),
+	BELL(7, "block.note_block.bell"),
+	CHIME(8, "block.note_block.chime"),
+	XYLOPHONE(9, "block.note_block.xylophone"),
+	IRON_XYLOPHONE(10, "block.note_block.iron_xylophone"),
+	COW_BELL(11, "block.note_block.cow_bell"),
+	DIDGERIDOO(12, "block.note_block.didgeridoo"),
+	BIT(13, "block.note_block.bit"),
+	BANJO(14, "block.note_block.banjo"),
+	PLING(15, "block.note_block.pling"),
+	TRUMPET(16, "block.note_block.trumpet"),
+	TRUMPET_EXPOSED(17, "block.note_block.trumpet_exposed"),
+	TRUMPET_WEATHERED(18, "block.note_block.trumpet_weathered"),
+	TRUMPET_OXIDIZED(19, "block.note_block.trumpet_oxidized");
 
-	private final int instrument;
+	private final int id;
 	private final String sound;
 
 	NoteInstrument(int instrument, String sound) {
-		this.instrument = instrument;
+		this.id = instrument;
 		this.sound = sound;
 	}
 
-	public static String getInstrument(int instrument) {
-		for(NoteInstrument noteInstrument : values()) if(noteInstrument.instrument == instrument) return noteInstrument.sound;
+	public static @Nullable String getIdSound(int id) {
+		for(NoteInstrument noteInstrument : values()) if(noteInstrument.id == id) return noteInstrument.sound;
 		return null;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public @NotNull String getSound() {
+		return sound;
 	}
 
 }

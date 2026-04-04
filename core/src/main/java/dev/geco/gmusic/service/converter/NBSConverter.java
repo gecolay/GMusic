@@ -1,6 +1,7 @@
 package dev.geco.gmusic.service.converter;
 
 import dev.geco.gmusic.GMusicMain;
+import dev.geco.gmusic.model.NoteInstrument;
 import dev.geco.gmusic.service.SongService;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -150,16 +151,16 @@ public class NBSConverter {
 			gnbsStruct.set("Song.Description", description.replace(" ", "").isEmpty() ? new ArrayList<>() : Arrays.asList(description.split("\n")));
 			gnbsStruct.set("Song.Category", "RECORDS");
 
-			for(byte instrument = 0; instrument < 16; instrument++) if(gnbsInstruments.contains(instrument)) gnbsStruct.set("Song.Content.Instruments." + instrument, instrument);
+			for(NoteInstrument inst : NoteInstrument.values()) if(gnbsInstruments.contains(inst.getId())) gnbsStruct.set("Song.Content.Instruments." + inst.getId(), inst.getId());
 
-			for(int instrument = 16; instrument < 16 + midiInstruments.size(); instrument++) gnbsStruct.set("Song.Content.Instruments." + instrument, midiInstruments.get(instrument - 16));
+			for(int instrument = NoteInstrument.values().length; instrument < NoteInstrument.values().length + midiInstruments.size(); instrument++) gnbsStruct.set("Song.Content.Instruments." + instrument, midiInstruments.get(instrument - NoteInstrument.values().length));
 
 			gnbsStruct.set("Song.Content.Main", gnbsContent);
 
 			gnbsStruct.save(gnbsFile);
 
 			return true;
-		} catch (Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not convert nbs file to " + SongService.GNBS_EXTENSION + " file!", e); }
+		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not convert nbs file to " + SongService.GNBS_EXTENSION + " file!", e); }
 
 		return false;
 	}
@@ -260,7 +261,7 @@ public class NBSConverter {
 				}
 				layerDirections.add(layerDirection);
 			}
-		} catch (Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not read nbs layer!", e); }
+		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not read nbs layer!", e); }
 	}
 
 }
