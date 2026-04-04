@@ -10,5 +10,10 @@ dependencies {
 paperweight.reobfArtifactConfiguration = io.papermc.paperweight.userdev.ReobfArtifactConfiguration.MOJANG_PRODUCTION
 
 java {
+    disableAutoTargetJvm()
     toolchain.languageVersion = JavaLanguageVersion.of(25)
+}
+
+tasks.compileJava {
+    options.release = 21
 }
