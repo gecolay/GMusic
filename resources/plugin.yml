@@ -2,10 +2,11 @@ name: ${name}
 version: ${version}
 description: ${description}
 authors: [Gecolay]
-website: https://www.spigotmc.org/resources/84004
+website: ${website}
 main: ${main}
 api-version: 1.13
 folia-supported: true
+source: ${source}
 softdepend: [GriefPrevention, PlaceholderAPI, PlotSquared, WorldGuard]
 
 commands:

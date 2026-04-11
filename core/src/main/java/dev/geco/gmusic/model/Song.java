@@ -48,10 +48,14 @@ public class Song {
 		try { songInstruments.addAll(config.getConfigurationSection("Song.Content.Instruments").getKeys(false)); } catch(Throwable ignored) { }
 		for(String songInstrument : songInstruments) {
 			try {
-				String noteInstrument = NoteInstrument.getIdSound(Integer.parseInt(config.getString("Song.Content.Instruments." + songInstrument, "0")));
+				String noteInstrument = NoteInstrument.getIdSound(Integer.parseInt(config.getString("Song.Content.Instruments." + songInstrument, "-1")));
 				if(noteInstrument != null) instruments.put(songInstrument, noteInstrument);
 				else throw new IllegalArgumentException();
 			} catch(IllegalArgumentException e) { instruments.put(songInstrument, config.getString("Song.Content.Instruments." + songInstrument)); }
+		}
+		for(NoteInstrument inst : NoteInstrument.values()) {
+			if(instruments.containsKey("" + inst.getId())) continue;
+			instruments.put("" + inst.getId(), inst.getSound());
 		}
 
 		List<String> songParts = new ArrayList<>();

@@ -59,7 +59,7 @@ public class NBSConverter {
 			}
 
 			List<String> gnbsContent = new ArrayList<>();
-			List<Byte> gnbsInstruments = new ArrayList<>();
+			List<Integer> gnbsInstruments = new ArrayList<>();
 
 			// Get the volume and direction of each layer in the song
 			List<Byte> layerVolumes = new ArrayList<>();
@@ -105,7 +105,7 @@ public class NBSConverter {
 
 					content.append(content.toString().endsWith("!") ? contentPart : "_" + contentPart);
 
-					if(!gnbsInstruments.contains(i)) gnbsInstruments.add(i);
+					if(!gnbsInstruments.contains((int) i)) gnbsInstruments.add((int) i);
 				}
 
 				// minify gnbsContent

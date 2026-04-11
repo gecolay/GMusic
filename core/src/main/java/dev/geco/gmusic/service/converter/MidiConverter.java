@@ -12,6 +12,7 @@ import javax.sound.midi.Sequence;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.Track;
 import java.io.File;
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -269,7 +270,7 @@ public class MidiConverter {
 
 	public boolean convertMidiFile(File midiFile) {
 		try {
-			List<String> gnbsContent = readMidiFile(midiFile);
+			Map.Entry<List<String>, List<Integer>> gnbsContent = readMidiFile(midiFile);
 
 			String gnbsFilename = midiFile.getName();
 			int extensionPos = gnbsFilename.lastIndexOf(".");
@@ -287,9 +288,9 @@ public class MidiConverter {
 			gnbsStruct.set("Song.Description", new ArrayList<>());
 			gnbsStruct.set("Song.Category", "RECORDS");
 
-			for(NoteInstrument inst : NoteInstrument.values()) gnbsStruct.set("Song.Content.Instruments." + inst.getId(), inst.getId());
+			for(NoteInstrument inst : NoteInstrument.values()) if(gnbsContent.getValue().contains(inst.getId())) gnbsStruct.set("Song.Content.Instruments." + inst.getId(), inst.getId());
 
-			gnbsStruct.set("Song.Content.Main", gnbsContent);
+			gnbsStruct.set("Song.Content.Main", gnbsContent.getKey());
 			gnbsStruct.save(gnbsFile);
 
 			return true;
@@ -298,9 +299,10 @@ public class MidiConverter {
 		return false;
 	}
 
-	private List<String> readMidiFile(File midiFile) {
+	private Map.Entry<List<String>, List<Integer>> readMidiFile(File midiFile) {
 		Map<Long, String> tickContent = new TreeMap<>();
 		List<String> rows = new ArrayList<>();
+		List<Integer> gnbsInstruments = new ArrayList<>();
 
 		try {
 			Sequence sequence = MidiSystem.getSequence(midiFile);
@@ -345,6 +347,7 @@ public class MidiConverter {
 					String contentPart = pair.instrument().getId() + "::#" + outputKey;
 					String existing = tickContent.get(tick);
 					tickContent.put(tick, existing == null ? contentPart : existing + "_" + contentPart);
+					if(!gnbsInstruments.contains(pair.instrument().getId())) gnbsInstruments.add(pair.instrument().getId());
 				}
 			}
 
@@ -356,7 +359,7 @@ public class MidiConverter {
 			}
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not read midi file!", e); }
 
-		return rows;
+		return new AbstractMap.SimpleEntry<>(rows, gnbsInstruments);
 	}
 
 	private MidiPair resolveMidiPair(int channel, int program, int key) {

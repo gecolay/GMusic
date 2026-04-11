@@ -22,6 +22,7 @@ public class VersionService {
         put("v1_21_8", "v1_21_6");
         put("v1_21_10", "v1_21_9");
         put("v26_1_1", "v26_1");
+        put("v26_1_2", "v26_1");
     }};
     private final GMusicMain gMusicMain;
     private final String serverVersion;
