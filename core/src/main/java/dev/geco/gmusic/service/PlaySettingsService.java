@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -30,7 +31,79 @@ public class PlaySettingsService {
 		try {
 			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting (uuid CHAR(36) PRIMARY KEY, play_type INTEGER, play_list_mode INTEGER, volume INTEGER, play_mode INTEGER, show_particles INTEGER, reverse_mode INTEGER, toggle_mode INTEGER, range INTEGER);");
 			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting_favorite (uuid CHAR(36), song_id TEXT, FOREIGN KEY (uuid) REFERENCES gmusic_play_setting(uuid) ON DELETE CASCADE ON UPDATE CASCADE);");
+			migrateTo_2_4_0();
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not create play settings database tables!", e); }
+	}
+
+	private void migrateTo_2_4_0() throws SQLException {
+		if(tableExists("gmusic_play_settings")) {
+			try(ResultSet oldSettings = gMusicMain.getDataService().executeAndGet("SELECT uuid, playListMode, volume, playMode, showParticles, reverseMode, toggleMode, range FROM gmusic_play_settings")) {
+				while(oldSettings.next()) {
+					String uuid = oldSettings.getString("uuid");
+					try(ResultSet rs = gMusicMain.getDataService().executeAndGet("SELECT 1 FROM gmusic_play_setting WHERE uuid = ? LIMIT 1", uuid)) {
+						if(rs.next()) continue;
+					}
+					gMusicMain.getDataService().execute(
+							"INSERT INTO gmusic_play_setting (uuid, play_type, play_list_mode, volume, play_mode, show_particles, reverse_mode, toggle_mode, range) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+							uuid,
+							PlayType.DEFAULT.getId(),
+							oldSettings.getInt("playListMode"),
+							oldSettings.getInt("volume"),
+							oldSettings.getInt("playMode"),
+							oldSettings.getInt("showParticles"),
+							oldSettings.getInt("reverseMode"),
+							oldSettings.getInt("toggleMode"),
+							oldSettings.getLong("range")
+					);
+				}
+			}
+
+			gMusicMain.getDataService().execute("DROP TABLE gmusic_play_settings");
+		}
+
+		if(tableExists("gmusic_play_settings_favorites")) {
+			Map<String, List<String>> favoritesByUuid = new HashMap<>();
+			try(ResultSet oldFavorites = gMusicMain.getDataService().executeAndGet("SELECT uuid, songId FROM gmusic_play_settings_favorites")) {
+				while(oldFavorites.next()) {
+					String uuid = oldFavorites.getString("uuid");
+					String songId = oldFavorites.getString("songId");
+
+					favoritesByUuid.computeIfAbsent(uuid, k -> new ArrayList<>()).add(songId);
+				}
+			}
+
+			for(Map.Entry<String, List<String>> entry : favoritesByUuid.entrySet()) {
+				String uuid = entry.getKey();
+				List<String> songIds = entry.getValue();
+
+				boolean uuidExistsInNewSettings;
+				try(ResultSet rs = gMusicMain.getDataService().executeAndGet("SELECT 1 FROM gmusic_play_setting WHERE uuid = ? LIMIT 1", uuid)) {
+					uuidExistsInNewSettings = rs.next();
+				}
+
+				if(!uuidExistsInNewSettings) {
+					for(String songId : songIds) {
+						gMusicMain.getDataService().execute(
+								"INSERT INTO gmusic_play_setting_favorite (uuid, song_id) VALUES (?, ?)",
+								uuid,
+								songId
+						);
+					}
+				}
+			}
+
+			gMusicMain.getDataService().execute("DROP TABLE gmusic_play_settings_favorites");
+		}
+	}
+
+	/**
+	 * @param tableName Unsafe for user input! Must be a <strong>constant</strong> table name
+	 * @return if the table exists
+	 */
+	private boolean tableExists(String tableName) {
+		try(ResultSet rs = gMusicMain.getDataService().executeAndGet("SELECT 1 FROM " + tableName + " LIMIT 1")) {
+			return rs.next();
+		} catch(Throwable ignored) { return false; }
 	}
 
 	public void loadPlaySettings() {
