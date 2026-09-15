@@ -135,22 +135,8 @@ public class RadioService {
 					for(NotePart notePart : noteParts) {
 						for(Player player : players) {
 							if(player == null) continue;
-							if(notePart.getSound() != null) {
-								PlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId(), PlayType.DEFAULT);
-								float volume = playerPlaySettings.getFixedVolume() * notePart.getVolume();
-
-								Location location = notePart.getDistance() == 0 ? player.getEyeLocation() : gMusicMain.getSteroNoteUtil().convertToStero(player.getEyeLocation(), notePart.getDistance());
-
-								if(!gMusicMain.getConfigService().ENVIRONMENT_EFFECTS)
-									player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
-								else {
-									if(gMusicMain.getEnvironmentUtil().isPlayerSwimming(player))
-										player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume > 0.4f ? volume - 0.3f : volume, notePart.getPitch() - 0.15f);
-									else
-										player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
-								}
-							} else if(notePart.getStopSound() != null)
-								player.stopSound(notePart.getStopSound(), song.getSoundCategory());
+							PlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId(), PlayType.DEFAULT);
+							gMusicMain.getMusicUtil().playAtPlayer(player, notePart, playerPlaySettings);
 						}
 
 						for(Map.Entry<UUID, Block> radioJukeBox : radioJukeBoxBlocks.entrySet()) {
@@ -158,17 +144,8 @@ public class RadioService {
 							Location boxLocation = radioJukeBox.getValue().getLocation().add(0.5, 0, 0.5);
 							HashMap<Player, Double> playersInRange = gMusicMain.getJukeBoxService().getPlayersInRange(boxLocation, jukeBoxPlaySettings.getRange());
 							for(Player player : playersInRange.keySet()) {
-								if(notePart.getSound() != null) {
-									float volume = (float) ((playersInRange.get(player) - jukeBoxPlaySettings.getRange()) * jukeBoxPlaySettings.getFixedVolume() / (double) -jukeBoxPlaySettings.getRange()) * notePart.getVolume();
-
-									Location location = gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS ? boxLocation :notePart.getDistance() == 0 ? player.getEyeLocation() : gMusicMain.getSteroNoteUtil().convertToStero(player.getEyeLocation(), notePart.getDistance());
-
-									if(!gMusicMain.getConfigService().ENVIRONMENT_EFFECTS) player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
-									else {
-										if(gMusicMain.getEnvironmentUtil().isPlayerSwimming(player)) player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume > 0.4f ? volume - 0.3f : volume, notePart.getPitch() - 0.15f);
-										else player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
-									}
-								} else if(notePart.getStopSound() != null) player.stopSound(notePart.getStopSound(), song.getSoundCategory());
+								if(gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) gMusicMain.getMusicUtil().playAtLocation(player, notePart, boxLocation, playSettings);
+								else gMusicMain.getMusicUtil().playAtPlayerWithDecay(player, notePart, playersInRange.get(player), playSettings);
 							}
 						}
 					}

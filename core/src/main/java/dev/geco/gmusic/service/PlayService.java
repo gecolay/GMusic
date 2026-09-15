@@ -10,7 +10,6 @@ import dev.geco.gmusic.model.PlaySettings;
 import dev.geco.gmusic.model.Song;
 import dev.geco.gmusic.model.PlayState;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -150,17 +149,7 @@ public class PlayService {
 					if(playSettings.isShowingParticles()) player.spawnParticle(Particle.NOTE, player.getEyeLocation().add(random.nextDouble() - 0.5, 0.3, random.nextDouble() - 0.5), 0, random.nextDouble(), random.nextDouble(), random.nextDouble(), 1);
 
 					for(NotePart notePart : noteParts) {
-						if(notePart.getSound() != null) {
-							float volume = playSettings.getFixedVolume() * notePart.getVolume();
-
-							Location location = notePart.getDistance() == 0 ? player.getEyeLocation() : gMusicMain.getSteroNoteUtil().convertToStero(player.getEyeLocation(), notePart.getDistance());
-
-							if(!gMusicMain.getConfigService().ENVIRONMENT_EFFECTS) player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
-							else {
-								if(gMusicMain.getEnvironmentUtil().isPlayerSwimming(player)) player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume > 0.4f ? volume - 0.3f : volume, notePart.getPitch() - 0.15f);
-								else player.playSound(location, notePart.getSound(), song.getSoundCategory(), volume, notePart.getPitch());
-							}
-						} else if(notePart.getStopSound() != null) player.stopSound(notePart.getStopSound(), song.getSoundCategory());
+						gMusicMain.getMusicUtil().playAtPlayer(player, notePart, playSettings);
 					}
 				}
 

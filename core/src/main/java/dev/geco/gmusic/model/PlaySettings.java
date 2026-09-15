@@ -16,6 +16,7 @@ public class PlaySettings {
 	private boolean reverseMode;
 	private boolean toggleMode;
 	private long range;
+	private boolean stereo;
 	private @NotNull List<Song> favorites;
 
 	public PlaySettings(
@@ -28,6 +29,7 @@ public class PlaySettings {
 			boolean reverseMode,
 			boolean toggleMode,
 			long range,
+			boolean stereo,
 			@NotNull List<Song> favorites
 	) {
 		this.uuid = uuid;
@@ -39,6 +41,7 @@ public class PlaySettings {
 		this.reverseMode = reverseMode;
 		this.toggleMode = toggleMode;
 		this.range = range;
+		this.stereo = stereo;
 		this.favorites = favorites;
 	}
 
@@ -75,6 +78,10 @@ public class PlaySettings {
 	public long getRange() { return range; }
 
 	public void setRange(long range) { this.range = range; }
+
+	public boolean isStereo() { return stereo; }
+
+	public void setStereo(boolean stereo) { this.stereo = stereo; }
 
 	public @NotNull List<Song> getFavorites() { return favorites; }
 

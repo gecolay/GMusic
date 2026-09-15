@@ -23,11 +23,18 @@ Options:
     # Defines whether a jukebox should play music at the jukebox's location
     locational-sounds: true
 
-    # Defines the range a player can hear the sound of a jukebox (Only locational-sounds: false)
+    # Defines whether to play sounds close to the player but still in the jukebox's direction (if locational-sounds true)
+    # Fixes issues with too loud or too soft instruments
+    locational-close-to-player: true
+
+    # Defines the range a player can hear the sound of a jukebox
     range: 50
 
-    # Defines the max range of a jukebox (Only locational-sounds: false)
+    # Defines the max range of a jukebox
     max-range: 500
+
+    # Defines the default volume of a jukebox
+    volume: 100
 
   ActionBar:
     # Defines whether there should be actionbar messages
@@ -69,6 +76,7 @@ Options:
     Default:
       playlist-mode: 0
       volume: 70
+      stereo: false
       play-mode: 0
       particles: true
       reverse: false

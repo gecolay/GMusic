@@ -31,11 +31,7 @@ import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Level;
 
 public class MusicGUI {
@@ -57,6 +53,7 @@ public class MusicGUI {
 	private boolean searchMode = false;
 	private String searchKey = null;
 	private final PlaySettings playSettings;
+	private final Map<Integer, ClickHandler> buttons = new HashMap<>();
 
 	public MusicGUI(@NotNull UUID uuid, @NotNull PlayType playType) {
 		this.uuid = uuid;
@@ -98,201 +95,38 @@ public class MusicGUI {
 				ItemMeta itemMeta = itemStack.getItemMeta();
 				HumanEntity clicker = event.getWhoClicked();
 				int slot = event.getRawSlot();
-				switch(slot) {
-					case 45 -> {
-						if(!optionState) {
-							PlayState songSettings = gMusicMain.getPlayService().getPlayState(uuid);
-							if(songSettings == null) return;
-							switch(playType) {
-								case DEFAULT -> {
-									Player target = Bukkit.getPlayer(uuid);
-									if(target == null) return;
-									if(songSettings.isPaused()) gMusicMain.getPlayService().resumeSong(target);
-									else gMusicMain.getPlayService().pauseSong(target);
-								}
-								case JUKEBOX -> {
-									if(songSettings.isPaused()) gMusicMain.getJukeBoxService().resumeBoxSong(uuid);
-									else gMusicMain.getJukeBoxService().pauseBoxSong(uuid);
-								}
-								case RADIO -> {
-									if(songSettings.isPaused()) gMusicMain.getRadioService().resumeSong();
-									else gMusicMain.getRadioService().pauseSong();
-								}
-							}
-						} else {
-							setDefaultBar();
-						}
+				if(slot < 0) {
+					return;
+				} else if(slot < 45) {
+					Song song = pageSongs.get(slot);
+					if(song == null) return;
+					if(click == ClickType.MIDDLE) {
+						if(playSettings.getFavorites().contains(song)) playSettings.getFavorites().remove(song);
+						else playSettings.getFavorites().add(song);
+						setPage(page);
+						return;
 					}
-					case 46 -> {
-						if(!optionState) {
-							switch(playType) {
-								case DEFAULT -> {
-									Player target = Bukkit.getPlayer(uuid);
-									if(target == null) return;
-									gMusicMain.getPlayService().stopSong(target);
-								}
-								case JUKEBOX -> {
-									gMusicMain.getJukeBoxService().stopBoxSong(uuid);
-								}
-								case RADIO -> {
-									gMusicMain.getRadioService().stopSong();
-								}
-							}
-						} else if(playType != PlayType.RADIO) {
-							int volumn = playSettings.getVolume();
-							int step = click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT ? SHIFT_VOLUME_STEPS : VOLUME_STEPS;
-							int newVolumn = click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_VOLUME : (click == ClickType.RIGHT ? Math.max(volumn - step, 0) : Math.min(volumn + step, 100));
-							playSettings.setVolume(newVolumn);
-							itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + newVolumn));
+					switch(playType) {
+						case DEFAULT -> {
+							Player target = Bukkit.getPlayer(uuid);
+							if(target == null) return;
+							gMusicMain.getPlayService().playSong(target, song);
 						}
+						case JUKEBOX -> gMusicMain.getJukeBoxService().playBoxSong(uuid, song);
+						case RADIO -> gMusicMain.getRadioService().playSong(song);
 					}
-					case 47 -> {
-						if(!optionState) {
-							switch(playType) {
-								case DEFAULT -> {
-									Player target = Bukkit.getPlayer(uuid);
-									if(target == null) return;
-									gMusicMain.getPlayService().playSong(target, gMusicMain.getPlayService().getNextSong(target));
-								}
-								case JUKEBOX -> {
-									gMusicMain.getJukeBoxService().playBoxSong(uuid, gMusicMain.getJukeBoxService().getNextSong(uuid));
-								}
-								case RADIO -> {
-									gMusicMain.getRadioService().playSong(gMusicMain.getRadioService().getNextSong());
-								}
-							}
-						} else if(playType != PlayType.RADIO) {
-							playSettings.setShowParticles(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_PARTICLES : !playSettings.isShowingParticles());
-							itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-particle", "%Particle%", gMusicMain.getMessageService().getMessage(playSettings.isShowingParticles() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
-						}
-					}
-					case 48 -> {
-						if(playSettings.getPlayListMode() == PlayListMode.RADIO) return;
-						if(!optionState) {
-							if(gMusicMain.getConfigService().G_DISABLE_RANDOM_SONG) return;
-							switch(playType) {
-								case DEFAULT -> {
-									Player target = Bukkit.getPlayer(uuid);
-									if(target == null) return;
-									gMusicMain.getPlayService().playSong(target, gMusicMain.getPlayService().getRandomSong(uuid, playType));
-								}
-								case JUKEBOX -> {
-									gMusicMain.getJukeBoxService().playBoxSong(uuid, gMusicMain.getPlayService().getRandomSong(uuid, playType));
-								}
-								case RADIO -> {
-									gMusicMain.getRadioService().playSong(gMusicMain.getPlayService().getRandomSong(uuid, playType));
-								}
-							}
-						} else {
-							int playModeId = playSettings.getPlayMode().getId();
-							PlayMode playMode = PlayMode.byId(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_PLAY_MODE : (click == ClickType.RIGHT ? (playModeId - 1 < 0 ? PlayMode.values().length - 1 : playModeId - 1) : (playModeId + 1 > PlayMode.values().length - 1 ? 0 : playModeId + 1)));
-							playSettings.setPlayMode(playMode);
-							itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage(playMode == PlayMode.DEFAULT ? "MusicGUI.music-options-play-mode-once" : playMode == PlayMode.SHUFFLE ? "MusicGUI.music-options-play-mode-shuffle" : "MusicGUI.music-options-play-mode-repeat"));
-						}
-					}
-					case 49 -> {
-						if(!optionState) {
-							if(playType == PlayType.RADIO) return;
-							int playListModeId = playSettings.getPlayListMode().getId();
-							PlayListMode playListMode = PlayListMode.byId(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_PLAYLIST_MODE : (click == ClickType.RIGHT ? (playListModeId - 1 < 0 ? PlayListMode.values().length - 1 : playListModeId - 1) : (playListModeId + 1 > PlayListMode.values().length - 1 ? 0 : playListModeId + 1)));
-							playSettings.setPlayListMode(playListMode);
-							switch(playType) {
-								case DEFAULT -> {
-									Player target = Bukkit.getPlayer(uuid);
-									if(playListMode.getId() != playListModeId && target != null) {
-										setPage(1);
-										gMusicMain.getPlayService().stopSong(target);
-									}
-									if(playListMode == PlayListMode.RADIO) {
-										gMusicMain.getRadioService().addRadioPlayer(target);
-									} else {
-										gMusicMain.getRadioService().removeRadioPlayer(target);
-									}
-								}
-								case JUKEBOX -> {
-									if(playListMode.getId() != playListModeId) {
-										setPage(1);
-										gMusicMain.getJukeBoxService().stopBoxSong(uuid);
-									}
-									if(playListMode == PlayListMode.RADIO) {
-										gMusicMain.getRadioService().addRadioJukeBox(uuid, gMusicMain.getJukeBoxService().getJukeBoxBlock(uuid));
-									} else {
-										gMusicMain.getRadioService().removeRadioJukeBox(uuid);
-									}
-								}
-							}
-							setDefaultBar();
-						} else {
-							if(playSettings.getPlayListMode() == PlayListMode.RADIO) return;
-							playSettings.setReverseMode(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_REVERSE : !playSettings.isReverseMode());
-							itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-reverse", "%Reverse%", gMusicMain.getMessageService().getMessage(playSettings.isReverseMode() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
-						}
-					}
-					case 50 -> {
-						if(!optionState) {
-							setOptionsBar();
-						} else {
-							if(playType != PlayType.JUKEBOX) return;
-							if(gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) return;
-							long range = playSettings.getRange();
-							long step = click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT ? SHIFT_RANGE_STEPS : RANGE_STEPS;
-							long newRange = click == ClickType.MIDDLE ? gMusicMain.getConfigService().J_RANGE : (click == ClickType.RIGHT ? Math.max(range - step, 0) : Math.min(range + step, gMusicMain.getConfigService().J_MAX_RANGE));
-							playSettings.setRange(newRange);
-							itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-range", "%Range%", "" + newRange));
-						}
-					}
-					case 51 -> {
-						if(!optionState) {
-							if(playSettings.getPlayListMode() == PlayListMode.RADIO) return;
-							if(!gMusicMain.getVersionService().isAvailable()) return;
-							if(click == ClickType.LEFT) {
-								MusicInputGUI inputGUI = getInputGUIInstance((input) -> {
-									searchKey = input;
-									setPage(1);
-									setDefaultBar();
-									clicker.openInventory(inventory);
-									searchMode = false;
-									return true;
-								}, ItemMeta::getDisplayName);
-								ItemStack nameItem = new ItemStack(Material.NAME_TAG);
-								ItemMeta nameItemMeta = nameItem.getItemMeta();
-								nameItemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-search-menu-field"));
-								nameItem.setItemMeta(nameItemMeta);
-								searchKey = null;
-								searchMode = true;
-								inputGUI.open(clicker, gMusicMain.getMessageService().getMessage("MusicGUI.music-search-menu-title"), nameItem);
-							} else if(searchKey != null) {
-								searchKey = null;
-								setPage(1);
-								setDefaultBar();
-							}
-						}
-					}
-					case 52 -> setPage(page - 1);
-					case 53 -> setPage(page + 1);
-					default -> {
-						if(slot < 0 || slot > 44) return;
-						Song song = pageSongs.get(slot);
-						if(song == null) return;
-						if(click == ClickType.MIDDLE) {
-							if(playSettings.getFavorites().contains(song)) playSettings.getFavorites().remove(song);
-							else playSettings.getFavorites().add(song);
-							setPage(page);
-							return;
-						}
-						switch(playType) {
-							case DEFAULT -> {
-								Player target = Bukkit.getPlayer(uuid);
-								if(target == null) return;
-								gMusicMain.getPlayService().playSong(target, song);
-							}
-							case JUKEBOX -> gMusicMain.getJukeBoxService().playBoxSong(uuid, song);
-							case RADIO -> gMusicMain.getRadioService().playSong(song);
-						}
-					}
+					setPauseResumeBar();
+				} else if(slot < 52) {
+					ClickHandler handler = buttons.get(slot);
+					if(handler != null) handler.onClick(itemMeta, click, clicker);
+					itemStack.setItemMeta(itemMeta);
+				} else if(slot == 52) {
+					setPage(page - 1);
+					setPauseResumeBar();
+				} else if(slot == 53) {
+					setPage(page + 1);
+					setPauseResumeBar();
 				}
-				setPauseResumeBar();
-				itemStack.setItemMeta(itemMeta);
 			}
 
 			@EventHandler (ignoreCancelled = true, priority = EventPriority.LOWEST)
@@ -335,15 +169,16 @@ public class MusicGUI {
 		return null;
 	}
 
-	private void clearBar() { for(int slot = 45; slot < 52; slot++) inventory.setItem(slot, null); }
+	private void clearBar() {
+		for(int slot = 45; slot < 52; slot++) setButton(slot, null);
+	}
 
 	public void setDefaultBar() {
 		optionState = false;
 
 		clearBar();
 
-		ItemStack itemStack;
-		ItemMeta itemMeta;
+		ItemStack item;
 
 		List<Song> songs = new ArrayList<>();
 		List<Song> filteredSongs = songs;
@@ -355,35 +190,92 @@ public class MusicGUI {
 		}
 
 		if(!gMusicMain.getConfigService().G_DISABLE_RANDOM_SONG && playSettings.getPlayListMode() != PlayListMode.RADIO && !filteredSongs.isEmpty()) {
-			itemStack = new ItemStack(Material.ENDER_PEARL);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-random"));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(48, itemStack);
+			item = makeItem(Material.ENDER_PEARL, gMusicMain.getMessageService().getMessage("MusicGUI.music-random"));
+			Button button = new Button(item, (itemMeta, click, clicker) -> {
+				switch(playType) {
+					case DEFAULT -> {
+						Player target = Bukkit.getPlayer(uuid);
+						if(target == null) return;
+						gMusicMain.getPlayService().playSong(target, gMusicMain.getPlayService().getRandomSong(uuid, playType));
+					}
+					case JUKEBOX -> {
+						gMusicMain.getJukeBoxService().playBoxSong(uuid, gMusicMain.getPlayService().getRandomSong(uuid, playType));
+					}
+					case RADIO -> {
+						gMusicMain.getRadioService().playSong(gMusicMain.getPlayService().getRandomSong(uuid, playType));
+					}
+				}
+			});
+			setButton(48, button);
 		}
 
 		if(!gMusicMain.getConfigService().G_DISABLE_PLAYLIST && playType != PlayType.RADIO) {
-			itemStack = new ItemStack(Material.NOTE_BLOCK);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage(playSettings.getPlayListMode() == PlayListMode.DEFAULT ? "MusicGUI.music-playlist-mode-default" : playSettings.getPlayListMode() == PlayListMode.FAVORITES ? "MusicGUI.music-playlist-mode-favorites" : "MusicGUI.music-playlist-mode-radio"));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(49, itemStack);
+			item = makeItem(Material.NOTE_BLOCK, gMusicMain.getMessageService().getMessage(playSettings.getPlayListMode() == PlayListMode.DEFAULT ? "MusicGUI.music-playlist-mode-default" : playSettings.getPlayListMode() == PlayListMode.FAVORITES ? "MusicGUI.music-playlist-mode-favorites" : "MusicGUI.music-playlist-mode-radio"));
+			Button button = new Button(item, (itemMeta, click, clicker) -> {
+				int playListModeId = playSettings.getPlayListMode().getId();
+				PlayListMode playListMode = PlayListMode.byId(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_PLAYLIST_MODE : (click == ClickType.RIGHT ? (playListModeId - 1 < 0 ? PlayListMode.values().length - 1 : playListModeId - 1) : (playListModeId + 1 > PlayListMode.values().length - 1 ? 0 : playListModeId + 1)));
+				playSettings.setPlayListMode(playListMode);
+				switch(playType) {
+					case DEFAULT -> {
+						Player target = Bukkit.getPlayer(uuid);
+						if(playListMode.getId() != playListModeId && target != null) {
+							setPage(1);
+							gMusicMain.getPlayService().stopSong(target);
+						}
+						if(playListMode == PlayListMode.RADIO) {
+							gMusicMain.getRadioService().addRadioPlayer(target);
+						} else {
+							gMusicMain.getRadioService().removeRadioPlayer(target);
+						}
+					}
+					case JUKEBOX -> {
+						if(playListMode.getId() != playListModeId) {
+							setPage(1);
+							gMusicMain.getJukeBoxService().stopBoxSong(uuid);
+						}
+						if(playListMode == PlayListMode.RADIO) {
+							gMusicMain.getRadioService().addRadioJukeBox(uuid, gMusicMain.getJukeBoxService().getJukeBoxBlock(uuid));
+						} else {
+							gMusicMain.getRadioService().removeRadioJukeBox(uuid);
+						}
+					}
+				}
+				setDefaultBar();
+			});
+			setButton(49, button);
 		}
 
 		if(!gMusicMain.getConfigService().G_DISABLE_OPTIONS) {
-			itemStack = new ItemStack(Material.HOPPER);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options"));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(50, itemStack);
+			item = makeItem(Material.HOPPER, gMusicMain.getMessageService().getMessage("MusicGUI.music-options"));
+			Button button = new Button(item, (itemMeta, click, clicker) -> {
+				setOptionsBar();
+			});
+			setButton(50, button);
 		}
 
 		if(!gMusicMain.getConfigService().G_DISABLE_SEARCH && playSettings.getPlayListMode() != PlayListMode.RADIO && !songs.isEmpty() && gMusicMain.getVersionService().isAvailable()) {
-			itemStack = new ItemStack(Material.OAK_SIGN);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(searchKey == null || searchKey.isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.music-search-none") : gMusicMain.getMessageService().getMessage("MusicGUI.music-search", "%Search%", searchKey));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(51, itemStack);
+			item = makeItem(Material.OAK_SIGN, searchKey == null || searchKey.isEmpty() ? gMusicMain.getMessageService().getMessage("MusicGUI.music-search-none") : gMusicMain.getMessageService().getMessage("MusicGUI.music-search", "%Search%", searchKey));
+			Button button = new Button(item, (itemMeta, click, clicker) -> {
+				if(click == ClickType.LEFT) {
+					MusicInputGUI inputGUI = getInputGUIInstance((input) -> {
+						searchKey = input;
+						setPage(1);
+						setDefaultBar();
+						clicker.openInventory(inventory);
+						searchMode = false;
+						return true;
+					}, ItemMeta::getDisplayName);
+					ItemStack nameItem = makeItem(Material.NAME_TAG, gMusicMain.getMessageService().getMessage("MusicGUI.music-search-menu-field"));
+					searchKey = null;
+					searchMode = true;
+					inputGUI.open(clicker, gMusicMain.getMessageService().getMessage("MusicGUI.music-search-menu-title"), nameItem);
+				} else if(searchKey != null) {
+					searchKey = null;
+					setPage(1);
+					setDefaultBar();
+				}
+			});
+			setButton(51, button);
 		}
 
 		setPauseResumeBar();
@@ -394,35 +286,74 @@ public class MusicGUI {
 
 		PlayState songSettings = gMusicMain.getPlayService().getPlayState(uuid);
 
+		ItemStack item;
+
 		if(songSettings != null) {
-			ItemStack itemStack = new ItemStack(Material.END_CRYSTAL);
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			if(songSettings.isPaused()) {
-				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-resume"));
-			} else {
-				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-pause"));
-			}
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(45, itemStack);
+			item = makeItem(Material.END_CRYSTAL, songSettings.isPaused() ? gMusicMain.getMessageService().getMessage("MusicGUI.music-resume") : gMusicMain.getMessageService().getMessage("MusicGUI.music-pause"));
+			Button button = new Button(item, (itemMeta, click, clicker) -> {
+				PlayState currentSongSettings = gMusicMain.getPlayService().getPlayState(uuid);
+				if(currentSongSettings == null) return;
+				switch(playType) {
+					case DEFAULT -> {
+						Player target = Bukkit.getPlayer(uuid);
+						if(target == null) return;
+						if(currentSongSettings.isPaused()) gMusicMain.getPlayService().resumeSong(target);
+						else gMusicMain.getPlayService().pauseSong(target);
+					}
+					case JUKEBOX -> {
+						if(currentSongSettings.isPaused()) gMusicMain.getJukeBoxService().resumeBoxSong(uuid);
+						else gMusicMain.getJukeBoxService().pauseBoxSong(uuid);
+					}
+					case RADIO -> {
+						if(currentSongSettings.isPaused()) gMusicMain.getRadioService().resumeSong();
+						else gMusicMain.getRadioService().pauseSong();
+					}
+				}
+			});
+			setButton(45, button);
 
-			itemStack = new ItemStack(Material.BARRIER);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-stop"));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(46, itemStack);
+			item = makeItem(Material.BARRIER, gMusicMain.getMessageService().getMessage("MusicGUI.music-stop"));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+				switch(playType) {
+					case DEFAULT -> {
+						Player target = Bukkit.getPlayer(uuid);
+						if(target == null) return;
+						gMusicMain.getPlayService().stopSong(target);
+					}
+					case JUKEBOX -> {
+						gMusicMain.getJukeBoxService().stopBoxSong(uuid);
+					}
+					case RADIO -> {
+						gMusicMain.getRadioService().stopSong();
+					}
+				}
+			});
+			setButton(46, button);
 
-			itemStack = new ItemStack(Material.FEATHER);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-skip"));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(47, itemStack);
+			item = makeItem(Material.FEATHER, gMusicMain.getMessageService().getMessage("MusicGUI.music-skip"));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+				switch(playType) {
+					case DEFAULT -> {
+						Player target = Bukkit.getPlayer(uuid);
+						if(target == null) return;
+						gMusicMain.getPlayService().playSong(target, gMusicMain.getPlayService().getNextSong(target));
+					}
+					case JUKEBOX -> {
+						gMusicMain.getJukeBoxService().playBoxSong(uuid, gMusicMain.getJukeBoxService().getNextSong(uuid));
+					}
+					case RADIO -> {
+						gMusicMain.getRadioService().playSong(gMusicMain.getRadioService().getNextSong());
+					}
+				}
+			});
+			setButton(47, button);
 
 			return;
 		}
 
-		inventory.setItem(45, null);
-		inventory.setItem(46, null);
-		inventory.setItem(47, null);
+		setButton(45, null);
+		setButton(46, null);
+		setButton(47, null);
 	}
 
 	public void setOptionsBar() {
@@ -430,44 +361,80 @@ public class MusicGUI {
 
 		clearBar();
 
-		ItemStack itemStack = new ItemStack(Material.CHEST);
-		ItemMeta itemMeta = itemStack.getItemMeta();
-		itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-back"));
-		itemStack.setItemMeta(itemMeta);
-		inventory.setItem(45, itemStack);
+		ItemStack item;
+		Button button;
+		List<Button> buttonsToAdd = new ArrayList<>();
+
+		item = makeItem(Material.CHEST, gMusicMain.getMessageService().getMessage("MusicGUI.music-back"));
+		button = new Button(item, (itemMeta, click, clicker) -> {
+			setDefaultBar();
+		});
+		buttonsToAdd.add(button);
+
 		if(playType != PlayType.RADIO) {
-			itemStack = new ItemStack(Material.MAGMA_CREAM);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + playSettings.getVolume()));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(46, itemStack);
-			itemStack = new ItemStack(Material.FIREWORK_ROCKET);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-particle", "%Particle%", gMusicMain.getMessageService().getMessage(playSettings.isShowingParticles() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
-			itemMeta.addItemFlags(ItemFlag.values());
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(47, itemStack);
+			item = makeItem(Material.MAGMA_CREAM, gMusicMain.getMessageService().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + playSettings.getVolume()));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+                int volumn = playSettings.getVolume();
+                int step = click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT ? SHIFT_VOLUME_STEPS : VOLUME_STEPS;
+				int newVolumn = click == ClickType.MIDDLE ? (playType == PlayType.JUKEBOX ? gMusicMain.getConfigService().J_VOLUME : gMusicMain.getConfigService().PS_D_VOLUME) : (click == ClickType.RIGHT ? Math.max(volumn - step, 0) : Math.min(volumn + step, 100));
+                playSettings.setVolume(newVolumn);
+                itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + newVolumn));
+            });
+			buttonsToAdd.add(button);
+
+			item = makeItem(Material.FIREWORK_ROCKET, gMusicMain.getMessageService().getMessage("MusicGUI.music-options-particle", "%Particle%", gMusicMain.getMessageService().getMessage(playSettings.isShowingParticles() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+                playSettings.setShowParticles(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_PARTICLES : !playSettings.isShowingParticles());
+                itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-particle", "%Particle%", gMusicMain.getMessageService().getMessage(playSettings.isShowingParticles() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
+            });
+			buttonsToAdd.add(button);
 		}
 
 		if(playSettings.getPlayListMode() != PlayListMode.RADIO) {
-			itemStack = new ItemStack(Material.BLAZE_POWDER);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage(playSettings.getPlayMode() == PlayMode.DEFAULT ? "MusicGUI.music-options-play-mode-once" : playSettings.getPlayMode() == PlayMode.SHUFFLE ? "MusicGUI.music-options-play-mode-shuffle" : "MusicGUI.music-options-play-mode-repeat"));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(48, itemStack);
-			itemStack = new ItemStack(Material.TOTEM_OF_UNDYING);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-reverse", "%Reverse%", gMusicMain.getMessageService().getMessage(playSettings.isReverseMode() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(49, itemStack);
+			item = makeItem(Material.BLAZE_POWDER, gMusicMain.getMessageService().getMessage(playSettings.getPlayMode() == PlayMode.DEFAULT ? "MusicGUI.music-options-play-mode-once" : playSettings.getPlayMode() == PlayMode.SHUFFLE ? "MusicGUI.music-options-play-mode-shuffle" : "MusicGUI.music-options-play-mode-repeat"));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+				int playModeId = playSettings.getPlayMode().getId();
+				PlayMode playMode = PlayMode.byId(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_PLAY_MODE : (click == ClickType.RIGHT ? (playModeId - 1 < 0 ? PlayMode.values().length - 1 : playModeId - 1) : (playModeId + 1 > PlayMode.values().length - 1 ? 0 : playModeId + 1)));
+				playSettings.setPlayMode(playMode);
+				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage(playMode == PlayMode.DEFAULT ? "MusicGUI.music-options-play-mode-once" : playMode == PlayMode.SHUFFLE ? "MusicGUI.music-options-play-mode-shuffle" : "MusicGUI.music-options-play-mode-repeat"));
+			});
+			buttonsToAdd.add(button);
+
+			item = makeItem(Material.TOTEM_OF_UNDYING, gMusicMain.getMessageService().getMessage("MusicGUI.music-options-reverse", "%Reverse%", gMusicMain.getMessageService().getMessage(playSettings.isReverseMode() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+				if(playSettings.getPlayListMode() == PlayListMode.RADIO) return;
+				playSettings.setReverseMode(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_REVERSE : !playSettings.isReverseMode());
+				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-reverse", "%Reverse%", gMusicMain.getMessageService().getMessage(playSettings.isReverseMode() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
+			});
+			buttonsToAdd.add(button);
 		}
 
-		if(playType == PlayType.JUKEBOX && !gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) {
-			itemStack = new ItemStack(Material.REDSTONE);
-			itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-range", "%Range%", "" + playSettings.getRange()));
-			itemStack.setItemMeta(itemMeta);
-			inventory.setItem(50, itemStack);
+		if(playType == PlayType.JUKEBOX) {
+			item = makeItem(Material.REDSTONE, gMusicMain.getMessageService().getMessage("MusicGUI.music-options-range", "%Range%", "" + playSettings.getRange()));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+				long range = playSettings.getRange();
+				long step = click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT ? SHIFT_RANGE_STEPS : RANGE_STEPS;
+				long newRange = click == ClickType.MIDDLE ? gMusicMain.getConfigService().J_RANGE : (click == ClickType.RIGHT ? Math.max(range - step, 0) : Math.min(range + step, gMusicMain.getConfigService().J_MAX_RANGE));
+				playSettings.setRange(newRange);
+				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-range", "%Range%", "" + newRange));
+			});
+			buttonsToAdd.add(button);
+		}
+
+		if(!(playType == PlayType.JUKEBOX && gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS)) {
+			item = makeItem(Material.EMERALD, gMusicMain.getMessageService().getMessage("MusicGUI.music-options-stereo", "%Stereo%", gMusicMain.getMessageService().getMessage(playSettings.isStereo() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
+			button = new Button(item, (itemMeta, click, clicker) -> {
+				playSettings.setStereo(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_STEREO : !playSettings.isStereo());
+				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-stereo", "%Stereo%", gMusicMain.getMessageService().getMessage(playSettings.isStereo() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
+			});
+			buttonsToAdd.add(button);
+		}
+
+		for(int i = 0; i < buttonsToAdd.size(); i++) {
+			int slot = 45 + i;
+			if(slot >= 52) break;
+			button = buttonsToAdd.get(i);
+			setButton(slot, button);
 		}
 	}
 
@@ -517,30 +484,18 @@ public class MusicGUI {
 		}
 
 		if(page > 1) {
-			ItemStack itemStack = new ItemStack(Material.ARROW);
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.last-page"));
-			itemStack.setItemMeta(itemMeta);
+			ItemStack itemStack = makeItem(Material.ARROW, gMusicMain.getMessageService().getMessage("MusicGUI.last-page"));
 			inventory.setItem(52, itemStack);
 		} else {
-			ItemStack itemStack = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(" ");
-			itemStack.setItemMeta(itemMeta);
+			ItemStack itemStack = makeItem(Material.BLACK_STAINED_GLASS_PANE, " ");
 			inventory.setItem(52, itemStack);
 		}
 
 		if(page < getMaxPageSize(songs.size())) {
-			ItemStack itemStack = new ItemStack(Material.ARROW);
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.next-page"));
-			itemStack.setItemMeta(itemMeta);
+			ItemStack itemStack = makeItem(Material.ARROW, gMusicMain.getMessageService().getMessage("MusicGUI.next-page"));
 			inventory.setItem(53, itemStack);
 		} else {
-			ItemStack itemStack = new ItemStack(Material.BLACK_STAINED_GLASS_PANE);
-			ItemMeta itemMeta = itemStack.getItemMeta();
-			itemMeta.setDisplayName(" ");
-			itemStack.setItemMeta(itemMeta);
+			ItemStack itemStack = makeItem(Material.BLACK_STAINED_GLASS_PANE, " ");
 			inventory.setItem(53, itemStack);
 		}
 	}
@@ -554,5 +509,30 @@ public class MusicGUI {
 	public @NotNull PlaySettings getPlaySettings() { return playSettings; }
 
 	public @NotNull Inventory getInventory() { return inventory; }
+
+	private static ItemStack makeItem(Material material, String displayName) {
+		ItemStack itemStack = new ItemStack(material);
+		ItemMeta itemMeta = itemStack.getItemMeta();
+		itemMeta.setDisplayName(displayName);
+		itemStack.setItemMeta(itemMeta);
+		return itemStack;
+	}
+
+	private record Button(ItemStack item, ClickHandler handler) {}
+
+	@FunctionalInterface
+	private interface ClickHandler {
+		void onClick(ItemMeta itemMeta, ClickType click, HumanEntity clicker);
+	}
+
+	private void setButton(int slot, @Nullable Button button) {
+		if(button == null) {
+			inventory.setItem(slot, makeItem(Material.BLACK_STAINED_GLASS_PANE, " "));
+			buttons.remove(slot);
+		} else {
+			inventory.setItem(slot, button.item);
+			buttons.put(slot, button.handler);
+		}
+	}
 
 }

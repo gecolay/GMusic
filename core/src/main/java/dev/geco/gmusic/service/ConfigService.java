@@ -21,8 +21,10 @@ public class ConfigService {
     public boolean S_EXTENDED_RANGE;
     public boolean S_FORCE_RESOURCES;
     public boolean J_LOCATIONAL_SOUNDS;
+    public boolean J_LOCATIONAL_CLOSE_TO_PLAYER;
     public int J_RANGE;
     public int J_MAX_RANGE;
+    public int J_VOLUME;
     public boolean A_SHOW_MESSAGES;
     public boolean A_SHOW_WHILE_PLAYING;
     public boolean R_ACTIVE;
@@ -36,6 +38,7 @@ public class ConfigService {
     public boolean PS_SAVE_ON_QUIT;
     public int PS_D_PLAYLIST_MODE;
     public int PS_D_VOLUME;
+    public boolean PS_D_STEREO;
     public int PS_D_PLAY_MODE;
     public boolean PS_D_PARTICLES;
     public boolean PS_D_REVERSE;
@@ -84,8 +87,10 @@ public class ConfigService {
         S_FORCE_RESOURCES = gMusicMain.getConfig().getBoolean("Options.Sound.force-resources", true);
 
         J_LOCATIONAL_SOUNDS = gMusicMain.getConfig().getBoolean("Options.JukeBox.locational-sounds", true);
+        J_LOCATIONAL_CLOSE_TO_PLAYER = gMusicMain.getConfig().getBoolean("Options.JukeBox.locational-close-to-player", true);
         J_RANGE = gMusicMain.getConfig().getInt("Options.JukeBox.range", 50);
         J_MAX_RANGE = gMusicMain.getConfig().getInt("Options.JukeBox.max-range", 500);
+        J_VOLUME = gMusicMain.getConfig().getInt("Options.JukeBox.volume", 100);
 
         A_SHOW_MESSAGES = gMusicMain.getConfig().getBoolean("Options.ActionBar.show-messages", true);
         A_SHOW_WHILE_PLAYING = gMusicMain.getConfig().getBoolean("Options.ActionBar.show-while-playing", true);
@@ -103,6 +108,7 @@ public class ConfigService {
         PS_SAVE_ON_QUIT = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.save-on-quit", true);
         PS_D_PLAYLIST_MODE = gMusicMain.getConfig().getInt("Options.PlayerSettings.Default.playlist-mode", 0);
         PS_D_VOLUME = gMusicMain.getConfig().getInt("Options.PlayerSettings.Default.volume", 70);
+        PS_D_STEREO = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.stereo", true);
         PS_D_PLAY_MODE = gMusicMain.getConfig().getInt("Options.PlayerSettings.Default.play-mode", 0);
         PS_D_PARTICLES = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.particles", false);
         PS_D_REVERSE = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.reverse", false);
