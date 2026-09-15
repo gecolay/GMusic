@@ -17,6 +17,7 @@ public class ConfigService {
     public String L_LANG;
     public boolean L_CLIENT_LANG;
     public boolean CHECK_FOR_UPDATE;
+    public boolean DOWNLOAD_SOUND_EVENTS;
     public boolean S_EXTENDED_RANGE;
     public boolean S_FORCE_RESOURCES;
     public boolean J_LOCATIONAL_SOUNDS;
@@ -77,6 +78,7 @@ public class ConfigService {
         L_CLIENT_LANG = gMusicMain.getConfig().getBoolean("Lang.client-lang", true);
 
         CHECK_FOR_UPDATE = gMusicMain.getConfig().getBoolean("Options.check-for-update", true);
+        DOWNLOAD_SOUND_EVENTS = gMusicMain.getConfig().getBoolean("Options.download-sound-events", true);
 
         S_EXTENDED_RANGE = gMusicMain.getConfig().getBoolean("Options.Sound.extened-range", true);
         S_FORCE_RESOURCES = gMusicMain.getConfig().getBoolean("Options.Sound.force-resources", true);

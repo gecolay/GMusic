@@ -16,21 +16,9 @@ import dev.geco.gmusic.link.PlaceholderAPILink;
 import dev.geco.gmusic.link.PlotSquaredLink;
 import dev.geco.gmusic.link.WorldGuardLink;
 import dev.geco.gmusic.metric.BStatsMetric;
-import dev.geco.gmusic.service.ConfigService;
-import dev.geco.gmusic.service.DataService;
-import dev.geco.gmusic.service.DiscService;
-import dev.geco.gmusic.service.JukeBoxService;
-import dev.geco.gmusic.service.MessageService;
+import dev.geco.gmusic.service.*;
 import dev.geco.gmusic.service.converter.MidiConverter;
 import dev.geco.gmusic.service.converter.NBSConverter;
-import dev.geco.gmusic.service.PermissionService;
-import dev.geco.gmusic.service.PlaySettingsService;
-import dev.geco.gmusic.service.PlayService;
-import dev.geco.gmusic.service.RadioService;
-import dev.geco.gmusic.service.SongService;
-import dev.geco.gmusic.service.TaskService;
-import dev.geco.gmusic.service.UpdateService;
-import dev.geco.gmusic.service.VersionService;
 import dev.geco.gmusic.service.converter.WavConverter;
 import dev.geco.gmusic.service.message.PaperMessageService;
 import dev.geco.gmusic.service.message.SpigotMessageService;
@@ -57,6 +45,7 @@ public class GMusicMain extends JavaPlugin {
     private PermissionService permissionService;
     private TaskService taskService;
     private DataService dataService;
+    private SoundEventService soundEventService;
     private SongService songService;
     private PlayService playService;
     private PlaySettingsService playSettingsService;
@@ -92,6 +81,8 @@ public class GMusicMain extends JavaPlugin {
     public TaskService getTaskService() { return taskService; }
 
     public DataService getDataService() { return dataService; }
+
+    public SoundEventService getSoundEventService() { return soundEventService; }
 
     public SongService getSongService() { return songService; }
 
@@ -184,6 +175,7 @@ public class GMusicMain extends JavaPlugin {
 
     private void loadSettings(CommandSender sender) {
         if(!connectDatabase(sender)) return;
+        soundEventService.loadSoundEvents();
         songService.loadSongs();
         playService.createDataTables();
         playSettingsService.createDataTables();

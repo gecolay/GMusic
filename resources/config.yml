@@ -9,6 +9,9 @@ Options:
   # Plugin sends update notifications
   check-for-update: true
 
+  # Downloads a list of all sounds if not already downloaded
+  download-sound-events: true
+
   Sound:
     # Defines whether the extended note range should be used for sounds (requires resource pack for players)
     extened-range: true

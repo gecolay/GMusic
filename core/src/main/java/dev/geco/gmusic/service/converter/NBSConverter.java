@@ -162,10 +162,7 @@ public class NBSConverter {
 				String sound = customInstrument.getSound();
 				gnbsStruct.set("Song.Content.Instruments." + instrument, sound);
 				gnbsStruct.set("Song.Content.InstrumentKeys." + instrument, customInstrument.getInstrumentKey());
-				String trimmedSound = sound;
-				int idx = trimmedSound.lastIndexOf('/');
-				if(idx >= 0) trimmedSound = trimmedSound.substring(idx + 1);
-				if(!trimmedSound.contains(".")) gMusicMain.getLogger().warning("Possibly unknown custom instrument '" + sound + "' in song '" + id + "'");
+				if(gMusicMain.getSoundEventService().areSoundEventsLoaded() && !customInstrument.isKnownSoundEvent() && !sound.isBlank()) gMusicMain.getLogger().warning("Unknown custom instrument '" + sound + "' in song '" + id + "'");
 			}
 
 			gnbsStruct.set("Song.Content.Main", gnbsContent);
