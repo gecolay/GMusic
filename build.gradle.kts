@@ -73,7 +73,7 @@ tasks {
 
         from(sourceSets.main.get().output)
         from("resources") {
-            exclude("plugin.yml")
+            exclude("resource_pack/**", "plugin.yml")
         }
 
         configurations = listOf(project.configurations.runtimeClasspath.get())
@@ -91,6 +91,9 @@ tasks {
 
     val resourceTasks = sources.mapValues { (sourceName, sourceProps) ->
         register<ProcessResources>("processResources${sourceName.replaceFirstChar { it.uppercase() }}") {
+            from("resources") {
+                include("plugin.yml")
+            }
             into(layout.buildDirectory.dir("generated/resources/$sourceName"))
 
             val baseProps = mapOf(
@@ -104,16 +107,9 @@ tasks {
             )
 
             inputs.property("source", sourceName)
-            inputs.properties(sourceProps)
+            inputs.properties(props)
 
-            from("resources") {
-                exclude("resource_pack/**", "plugin.yml")
-            }
-
-            from("resources") {
-                include("plugin.yml")
-                expand(props)
-            }
+            expand(props)
         }
     }
 
@@ -126,7 +122,7 @@ tasks {
             dependsOn(shadowJar, resourceTask)
 
             archiveClassifier.set("")
-            destinationDirectory.set(layout.buildDirectory.dir(if (sourceName == "dev") "libs" else "libs/$sourceName"))
+            destinationDirectory.set(layout.buildDirectory.dir(if(sourceName == "dev") "libs" else "libs/$sourceName"))
 
             from(zipTree(shadowJar.get().archiveFile)) {
                 exclude("META-INF/MANIFEST.MF")
@@ -150,7 +146,7 @@ publishing {
             groupId = project.group.toString()
             artifactId = project.name
             version = project.version.toString()
-            from(project.components["java"])
+            artifact(tasks.named("shadowJarDev"))
         }
     }
 }
