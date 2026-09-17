@@ -29,7 +29,7 @@ public class PlaySettingsService {
 
 	public void createDataTables() {
 		try {
-			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting (uuid CHAR(36) PRIMARY KEY, play_type INTEGER, play_list_mode INTEGER, volume INTEGER, play_mode INTEGER, show_particles INTEGER, reverse_mode INTEGER, toggle_mode INTEGER, range INTEGER, stereo INTEGER);");
+			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting (uuid CHAR(36) PRIMARY KEY, play_type INTEGER, play_list_mode INTEGER, volume INTEGER, play_mode INTEGER, show_particles INTEGER, reverse_mode INTEGER, toggle_mode INTEGER, `range` INTEGER, stereo INTEGER);");
 			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting_favorite (uuid CHAR(36), song_id TEXT, FOREIGN KEY (uuid) REFERENCES gmusic_play_setting(uuid) ON DELETE CASCADE ON UPDATE CASCADE);");
 			migrateTo_2_4_0();
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not create play settings database tables!", e); }
@@ -37,14 +37,14 @@ public class PlaySettingsService {
 
 	private void migrateTo_2_4_0() throws SQLException {
 		if(tableExists("gmusic_play_settings")) {
-			try(ResultSet oldSettings = gMusicMain.getDataService().executeAndGet("SELECT uuid, playListMode, volume, playMode, showParticles, reverseMode, toggleMode, range FROM gmusic_play_settings")) {
+			try(ResultSet oldSettings = gMusicMain.getDataService().executeAndGet("SELECT uuid, playListMode, volume, playMode, showParticles, reverseMode, toggleMode, `range` FROM gmusic_play_settings")) {
 				while(oldSettings.next()) {
 					String uuid = oldSettings.getString("uuid");
 					try(ResultSet rs = gMusicMain.getDataService().executeAndGet("SELECT 1 FROM gmusic_play_setting WHERE uuid = ? LIMIT 1", uuid)) {
 						if(rs.next()) continue;
 					}
 					gMusicMain.getDataService().execute(
-							"INSERT INTO gmusic_play_setting (uuid, play_type, play_list_mode, volume, play_mode, show_particles, reverse_mode, toggle_mode, range) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+							"INSERT INTO gmusic_play_setting (uuid, play_type, play_list_mode, volume, play_mode, show_particles, reverse_mode, toggle_mode, `range`) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
 							uuid,
 							PlayType.DEFAULT.getId(),
 							oldSettings.getInt("playListMode"),
@@ -222,7 +222,7 @@ public class PlaySettingsService {
 					show_particles,
 					reverse_mode,
 					toggle_mode,
-					range,
+					`range`,
 					stereo
 				)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -234,7 +234,7 @@ public class PlaySettingsService {
 					show_particles = excluded.show_particles,
 					reverse_mode   = excluded.reverse_mode,
 					toggle_mode    = excluded.toggle_mode,
-					range          = excluded.range,
+					`range`        = excluded.`range`,
 					stereo         = excluded.stereo
 				""";
 
@@ -248,7 +248,7 @@ public class PlaySettingsService {
 					show_particles,
 					reverse_mode,
 					toggle_mode,
-					range,
+					`range`,
 					stereo
 				)
 				VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?) AS new
@@ -260,7 +260,7 @@ public class PlaySettingsService {
 					show_particles = new.show_particles,
 					reverse_mode   = new.reverse_mode,
 					toggle_mode    = new.toggle_mode,
-					range          = new.range,
+					`range`        = new.`range`,
 					stereo         = new.stereo,
 				""";
 			};
