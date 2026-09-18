@@ -1,11 +1,11 @@
 package dev.geco.gmusic.service;
 
 import dev.geco.gmusic.GMusicMain;
+import dev.geco.gmusic.model.PlayListMode;
+import dev.geco.gmusic.model.PlayMode;
 import dev.geco.gmusic.model.PlaySettings;
 import dev.geco.gmusic.model.PlayType;
 import dev.geco.gmusic.model.Song;
-import dev.geco.gmusic.model.PlayListMode;
-import dev.geco.gmusic.model.PlayMode;
 import org.bukkit.Bukkit;
 import org.jetbrains.annotations.NotNull;
 

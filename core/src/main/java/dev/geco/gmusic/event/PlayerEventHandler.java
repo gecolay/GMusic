@@ -1,9 +1,9 @@
 package dev.geco.gmusic.event;
 
 import dev.geco.gmusic.GMusicMain;
+import dev.geco.gmusic.model.PlayListMode;
 import dev.geco.gmusic.model.PlaySettings;
 import dev.geco.gmusic.model.PlayState;
-import dev.geco.gmusic.model.PlayListMode;
 import dev.geco.gmusic.model.PlayType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

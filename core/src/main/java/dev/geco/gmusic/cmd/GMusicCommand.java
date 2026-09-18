@@ -1,10 +1,10 @@
 package dev.geco.gmusic.cmd;
 
 import dev.geco.gmusic.GMusicMain;
-import dev.geco.gmusic.model.PlayType;
-import dev.geco.gmusic.model.gui.MusicGUI;
 import dev.geco.gmusic.model.PlaySettings;
+import dev.geco.gmusic.model.PlayType;
 import dev.geco.gmusic.model.Song;
+import dev.geco.gmusic.model.gui.MusicGUI;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;

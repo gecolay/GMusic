@@ -1,13 +1,14 @@
 package dev.geco.gmusic.event;
 
+import dev.geco.gmusic.GMusicMain;
 import dev.geco.gmusic.model.gui.MusicGUI;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.*;
-
-import dev.geco.gmusic.GMusicMain;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
@@ -26,7 +27,7 @@ public class JukeBoxEventHandler implements Listener {
 		this.gMusicMain = gMusicMain;
 	}
 
-	@EventHandler (priority = EventPriority.HIGH, ignoreCancelled = true)
+	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
 	public void playerInteractEvent(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 
@@ -49,7 +50,7 @@ public class JukeBoxEventHandler implements Listener {
 		if(!player.isSneaking()) player.openInventory(MusicGUI.getMusicGUI(uuid).getInventory());
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void blockPlaceEvent(BlockPlaceEvent event) {
 		Block block = event.getBlock();
 		if(block.getType() != Material.JUKEBOX) return;
@@ -58,17 +59,17 @@ public class JukeBoxEventHandler implements Listener {
 		gMusicMain.getJukeBoxService().setJukebox(block);
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void blockBreakEvent(BlockBreakEvent event) {
 		handleBlockBreak(event.getBlock(), event.getPlayer().getGameMode() != GameMode.CREATIVE);
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void blockExplodeEvent(BlockExplodeEvent event) {
 		for(Block block : event.blockList()) handleBlockBreak(block, true);
 	}
 
-	@EventHandler (ignoreCancelled = true, priority = EventPriority.HIGHEST)
+	@EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
 	public void entityExplodeEvent(EntityExplodeEvent event) {
 		for(Block block : event.blockList()) handleBlockBreak(block, true);
 	}

@@ -1,5 +1,6 @@
 package dev.geco.gmusic.model.gui;
 
+import dev.geco.gmusic.GMusicMain;
 import dev.geco.gmusic.api.event.GMusicReloadEvent;
 import dev.geco.gmusic.model.PlayListMode;
 import dev.geco.gmusic.model.PlayMode;
@@ -25,13 +26,16 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
-import dev.geco.gmusic.GMusicMain;
 import org.bukkit.util.ChatPaginator;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.logging.Level;
 
 public class MusicGUI {

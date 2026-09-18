@@ -1,12 +1,19 @@
 package dev.geco.gmusic.service;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParseException;
 import com.google.gson.reflect.TypeToken;
 import dev.geco.gmusic.GMusicMain;
 import io.papermc.paper.ServerBuildInfo;
 import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Writer;
 import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URI;
@@ -154,8 +161,7 @@ public class SoundEventService {
     // A sound can either be:
     private static class SoundDeserializer implements JsonDeserializer<Sound> {
         @Override
-        public Sound deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context)
-                throws JsonParseException {
+        public Sound deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
             // An object: {"name": "minecraft:sound_id"}
             if(json.isJsonObject()) return new Sound(json.getAsJsonObject().get("name").getAsString());
             // A string: "minecraft:sound_id"
