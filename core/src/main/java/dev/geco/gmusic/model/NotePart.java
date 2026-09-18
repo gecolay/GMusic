@@ -26,8 +26,6 @@ public class NotePart {
 			instrument = this.note.getSong().getInstruments().get(parts[0]);
 			if(instrument == null) return;
 			sound = instrument.getSound();
-			int idx = sound.lastIndexOf('/');
-			if(idx >= 0) sound = sound.substring(idx + 1);
 		} else {
 			instrument = this.note.getSong().getInstruments().get(parts[0].replace(STOP, ""));
 			if(instrument == null) return;

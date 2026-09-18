@@ -136,7 +136,7 @@ public class RadioService {
 						for(Player player : players) {
 							if(player == null) continue;
 							PlaySettings playerPlaySettings = gMusicMain.getPlaySettingsService().getPlaySettings(player.getUniqueId(), PlayType.DEFAULT);
-							gMusicMain.getMusicUtil().playAtPlayer(player, notePart, playerPlaySettings);
+							gMusicMain.getMusicUtil().playAtPlayer(player, notePart, playerPlaySettings, playerPlaySettings.getFixedVolume());
 						}
 
 						for(Map.Entry<UUID, Block> radioJukeBox : radioJukeBoxBlocks.entrySet()) {
@@ -144,7 +144,7 @@ public class RadioService {
 							Location boxLocation = radioJukeBox.getValue().getLocation().add(0.5, 0, 0.5);
 							HashMap<Player, Double> playersInRange = gMusicMain.getJukeBoxService().getPlayersInRange(boxLocation, jukeBoxPlaySettings.getRange());
 							for(Player player : playersInRange.keySet()) {
-								if(gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) gMusicMain.getMusicUtil().playAtLocation(player, notePart, boxLocation, playSettings);
+								if(gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) gMusicMain.getMusicUtil().playAtLocation(player, notePart, boxLocation, playSettings, jukeBoxPlaySettings.getFixedVolume());
 								else gMusicMain.getMusicUtil().playAtPlayerWithDecay(player, notePart, playersInRange.get(player), playSettings, jukeBoxPlaySettings.getFixedVolume());
 							}
 						}

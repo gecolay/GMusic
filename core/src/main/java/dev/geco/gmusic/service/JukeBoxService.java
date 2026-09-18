@@ -241,7 +241,7 @@ public class JukeBoxService {
 
 					for(NotePart notePart : noteParts) {
 						for(Player player : playersInRange.keySet()) {
-							if(gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) gMusicMain.getMusicUtil().playAtLocation(player, notePart, boxLocation, playSettings);
+							if(gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) gMusicMain.getMusicUtil().playAtLocation(player, notePart, boxLocation, playSettings, playSettings.getFixedVolume());
 							else gMusicMain.getMusicUtil().playAtPlayerWithDecay(player, notePart, playersInRange.get(player), playSettings, playSettings.getFixedVolume());
 						}
 					}

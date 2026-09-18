@@ -426,7 +426,7 @@ public class MusicGUI {
 			buttonsToAdd.add(button);
 		}
 
-		if(!(playType == PlayType.JUKEBOX && gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS)) {
+		if(!(playType == PlayType.JUKEBOX && gMusicMain.getConfigService().J_LOCATIONAL_SOUNDS) && playType != PlayType.RADIO) {
 			item = makeItem(Material.EMERALD, gMusicMain.getMessageService().getMessage("MusicGUI.music-options-stereo", "%Stereo%", gMusicMain.getMessageService().getMessage(playSettings.isStereo() ? "MusicGUI.music-options-true" : "MusicGUI.music-options-false")));
 			button = new Button(item, (itemMeta, click, clicker) -> {
 				playSettings.setStereo(click == ClickType.MIDDLE ? gMusicMain.getConfigService().PS_D_STEREO : !playSettings.isStereo());

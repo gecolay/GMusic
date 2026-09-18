@@ -149,7 +149,7 @@ public class PlayService {
 					if(playSettings.isShowingParticles()) player.spawnParticle(Particle.NOTE, player.getEyeLocation().add(random.nextDouble() - 0.5, 0.3, random.nextDouble() - 0.5), 0, random.nextDouble(), random.nextDouble(), random.nextDouble(), 1);
 
 					for(NotePart notePart : noteParts) {
-						gMusicMain.getMusicUtil().playAtPlayer(player, notePart, playSettings);
+						gMusicMain.getMusicUtil().playAtPlayer(player, notePart, playSettings, playSettings.getFixedVolume());
 					}
 				}
 

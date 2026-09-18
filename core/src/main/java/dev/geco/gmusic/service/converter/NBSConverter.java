@@ -159,10 +159,9 @@ public class NBSConverter {
 
 			for(int instrument = defaultInstruments; instrument < defaultInstruments + midiInstruments.size(); instrument++) {
 				CustomInstrument customInstrument = midiInstruments.get(instrument - defaultInstruments);
-				String sound = customInstrument.getSound();
+				String sound = customInstrument.getSound().toLowerCase().replace("custom/", "").replace("minecraft/", "");
 				gnbsStruct.set("Song.Content.Instruments." + instrument, sound);
 				gnbsStruct.set("Song.Content.InstrumentKeys." + instrument, customInstrument.getInstrumentKey());
-				if(gMusicMain.getSoundEventService().areSoundEventsLoaded() && !customInstrument.isKnownSoundEvent() && !sound.isBlank()) gMusicMain.getLogger().warning("Unknown custom instrument '" + sound + "' in song '" + id + "'");
 			}
 
 			gnbsStruct.set("Song.Content.Main", gnbsContent);

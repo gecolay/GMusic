@@ -23,16 +23,16 @@ public class MusicUtil {
         this.gMusicMain = gMusicMain;
     }
 
-    public void playAtPlayer(@NotNull Player player, @NotNull NotePart notePart, @NotNull PlaySettings playSettings) {
-        play(player, notePart, null, playSettings.getFixedVolume(), playSettings.isStereo());
+    public void playAtPlayer(@NotNull Player player, @NotNull NotePart notePart, @NotNull PlaySettings playSettings, float fixedVolume) {
+        play(player, notePart, null, fixedVolume, playSettings.isStereo());
     }
 
-    public void playAtLocation(@NotNull Player player, @NotNull NotePart notePart, @NotNull Location origin, @NotNull PlaySettings playSettings) {
+    public void playAtLocation(@NotNull Player player, @NotNull NotePart notePart, @NotNull Location origin, @NotNull PlaySettings playSettings, float fixedVolume) {
         if(gMusicMain.getConfigService().J_LOCATIONAL_CLOSE_TO_PLAYER) {
             Location playAt = moveTowardsOrigin(player.getEyeLocation(), origin);
-            play(player, notePart, playAt, playSettings.getFixedVolume(), false);
+            play(player, notePart, playAt, fixedVolume, false);
         } else {
-            float volume = rangeToVolume(playSettings.getRange()) * playSettings.getFixedVolume();
+            float volume = rangeToVolume(playSettings.getRange()) * fixedVolume;
             play(player, notePart, origin, volume, false);
         }
     }
@@ -45,14 +45,31 @@ public class MusicUtil {
     private void play(@NotNull Player player, @NotNull NotePart notePart, @Nullable Location origin, float fixedVolume, boolean stereo) {
         Song song = notePart.getNote().getSong();
         if(notePart.getSound() != null) {
-            Sound sound = getSound(player, notePart, fixedVolume);
-            if(stereo) {
-                Location originLocation = origin == null ? player.getEyeLocation() : origin;
-                Location stereoLocation = notePart.getDistance() == 0 ? originLocation : gMusicMain.getSteroNoteUtil().convertToStero(originLocation, notePart.getDistance());
-                player.playSound(stereoLocation, notePart.getSound(), song.getSoundCategory(), sound.volume(), sound.pitch());
-            } else {
-                if(origin == null) player.playSound(sound, Sound.Emitter.self());
-                else player.playSound(origin, notePart.getSound(), song.getSoundCategory(), sound.volume(), sound.pitch());
+            try {
+                Sound sound = getSound(player, notePart, fixedVolume);
+                if(stereo) {
+                    Location originLocation = origin == null ? player.getEyeLocation() : origin;
+                    Location stereoLocation = notePart.getDistance() == 0 ? originLocation : gMusicMain.getSteroNoteUtil().convertToStero(originLocation, notePart.getDistance());
+                    player.playSound(stereoLocation, notePart.getSound(), song.getSoundCategory(), sound.volume(), sound.pitch());
+                } else {
+                    if(origin == null) player.playSound(sound, Sound.Emitter.self());
+                    else player.playSound(origin, notePart.getSound(), song.getSoundCategory(), sound.volume(), sound.pitch());
+                }
+            } catch(Throwable t) {
+                float volume = fixedVolume * notePart.getVolume();
+                float pitch = notePart.getPitch();
+                if(gMusicMain.getConfigService().ENVIRONMENT_EFFECTS && gMusicMain.getEnvironmentUtil().isPlayerSwimming(player)) {
+                    volume = volume > 0.4f ? volume - 0.3f : volume;
+                    pitch -= 0.15f;
+                }
+                if(stereo) {
+                    Location originLocation = origin == null ? player.getEyeLocation() : origin;
+                    Location stereoLocation = notePart.getDistance() == 0 ? originLocation : gMusicMain.getSteroNoteUtil().convertToStero(originLocation, notePart.getDistance());
+                    player.playSound(stereoLocation, notePart.getSound(), song.getSoundCategory(), volume, pitch);
+                } else {
+                    if(origin == null) player.playSound(player, notePart.getSound(), song.getSoundCategory(), volume, pitch);
+                    else player.playSound(origin, notePart.getSound(), song.getSoundCategory(), volume, pitch);
+                }
             }
         } else if(notePart.getStopSound() != null) player.stopSound(notePart.getStopSound(), song.getSoundCategory());
     }
@@ -61,10 +78,9 @@ public class MusicUtil {
         Key sound = Key.key(notePart.getSound());
         SoundCategory category = notePart.getNote().getSong().getSoundCategory();
         float volume = fixedVolume * notePart.getVolume();
-        if(gMusicMain.getConfigService().ENVIRONMENT_EFFECTS && gMusicMain.getEnvironmentUtil().isPlayerSwimming(player))
+        if(gMusicMain.getConfigService().ENVIRONMENT_EFFECTS && gMusicMain.getEnvironmentUtil().isPlayerSwimming(player)) {
             return Sound.sound(sound, category, volume > 0.4f ? volume - 0.3f : volume, notePart.getPitch() - 0.15f);
-        else
-            return Sound.sound(sound, category, volume, notePart.getPitch());
+        } else return Sound.sound(sound, category, volume, notePart.getPitch());
     }
 
     private Location moveTowardsOrigin(Location listener, Location origin) {
