@@ -76,7 +76,7 @@ Options:
     Default:
       playlist-mode: 0
       volume: 70
-      stereo: false
+      stereo: true
       play-mode: 0
       particles: true
       reverse: false

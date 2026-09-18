@@ -26,6 +26,7 @@ public class MusicUtil {
     public void playAtPlayer(@NotNull Player player, @NotNull NotePart notePart, @NotNull PlaySettings playSettings) {
         play(player, notePart, null, playSettings.getFixedVolume(), playSettings.isStereo());
     }
+
     public void playAtLocation(@NotNull Player player, @NotNull NotePart notePart, @NotNull Location origin, @NotNull PlaySettings playSettings) {
         if(gMusicMain.getConfigService().J_LOCATIONAL_CLOSE_TO_PLAYER) {
             Location playAt = moveTowardsOrigin(player.getEyeLocation(), origin);
@@ -35,8 +36,9 @@ public class MusicUtil {
             play(player, notePart, origin, volume, false);
         }
     }
-    public void playAtPlayerWithDecay(@NotNull Player player, @NotNull NotePart notePart, double distanceToOrigin, @NotNull PlaySettings playSettings) {
-        float volume = simulateVolumeDecay(distanceToOrigin, playSettings.getRange()) * playSettings.getFixedVolume();
+
+    public void playAtPlayerWithDecay(@NotNull Player player, @NotNull NotePart notePart, double distanceToOrigin, @NotNull PlaySettings playSettings, float fixedVolume) {
+        float volume = simulateVolumeDecay(distanceToOrigin, playSettings.getRange()) * fixedVolume;
         play(player, notePart, null, volume, playSettings.isStereo());
     }
 
@@ -71,9 +73,11 @@ public class MusicUtil {
         if(lengthSqr <= SIMULATED_RANGE_CAP * SIMULATED_RANGE_CAP) return origin;
         return listener.clone().add(listenerToOrigin.normalize().multiply(SIMULATED_RANGE_CAP));
     }
+
     private float rangeToVolume(double range) {
         return (float) (1.0 + (range - 16) * 0.06);
     }
+
     private float simulateVolumeDecay(double playerDistance, double range) {
         return (float) ((range - playerDistance) / range);
     }

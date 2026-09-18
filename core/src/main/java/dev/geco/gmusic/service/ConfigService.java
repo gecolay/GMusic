@@ -110,7 +110,7 @@ public class ConfigService {
         PS_D_VOLUME = gMusicMain.getConfig().getInt("Options.PlayerSettings.Default.volume", 70);
         PS_D_STEREO = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.stereo", true);
         PS_D_PLAY_MODE = gMusicMain.getConfig().getInt("Options.PlayerSettings.Default.play-mode", 0);
-        PS_D_PARTICLES = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.particles", false);
+        PS_D_PARTICLES = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.particles", true);
         PS_D_REVERSE = gMusicMain.getConfig().getBoolean("Options.PlayerSettings.Default.reverse", false);
 
         G_DISABLE_RANDOM_SONG = gMusicMain.getConfig().getBoolean("Options.GUI.disable-random-song", false);

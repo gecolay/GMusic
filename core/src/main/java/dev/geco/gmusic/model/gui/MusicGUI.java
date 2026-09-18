@@ -124,6 +124,7 @@ public class MusicGUI {
 					ClickHandler handler = buttons.get(slot);
 					if(handler != null) handler.onClick(itemMeta, click, clicker);
 					itemStack.setItemMeta(itemMeta);
+					setPauseResumeBar();
 				} else if(slot == 52) {
 					setPage(page - 1);
 					setPauseResumeBar();
@@ -380,7 +381,7 @@ public class MusicGUI {
 			button = new Button(item, (itemMeta, click, clicker) -> {
                 int volumn = playSettings.getVolume();
                 int step = click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT ? SHIFT_VOLUME_STEPS : VOLUME_STEPS;
-				int newVolumn = click == ClickType.MIDDLE ? (playType == PlayType.JUKEBOX ? gMusicMain.getConfigService().J_VOLUME : gMusicMain.getConfigService().PS_D_VOLUME) : (click == ClickType.RIGHT ? Math.max(volumn - step, 0) : Math.min(volumn + step, 100));
+				int newVolumn = click == ClickType.MIDDLE ? (playType == PlayType.JUKEBOX ? gMusicMain.getConfigService().J_VOLUME : gMusicMain.getConfigService().PS_D_VOLUME) : (click == ClickType.RIGHT || click == ClickType.SHIFT_RIGHT ? Math.max(volumn - step, 0) : Math.min(volumn + step, 100));
                 playSettings.setVolume(newVolumn);
                 itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-volume", "%Volume%", "" + newVolumn));
             });
@@ -418,7 +419,7 @@ public class MusicGUI {
 			button = new Button(item, (itemMeta, click, clicker) -> {
 				long range = playSettings.getRange();
 				long step = click == ClickType.SHIFT_LEFT || click == ClickType.SHIFT_RIGHT ? SHIFT_RANGE_STEPS : RANGE_STEPS;
-				long newRange = click == ClickType.MIDDLE ? gMusicMain.getConfigService().J_RANGE : (click == ClickType.RIGHT ? Math.max(range - step, 0) : Math.min(range + step, gMusicMain.getConfigService().J_MAX_RANGE));
+				long newRange = click == ClickType.MIDDLE ? gMusicMain.getConfigService().J_RANGE : (click == ClickType.RIGHT || click == ClickType.SHIFT_RIGHT ? Math.max(range - step, 0) : Math.min(range + step, gMusicMain.getConfigService().J_MAX_RANGE));
 				playSettings.setRange(newRange);
 				itemMeta.setDisplayName(gMusicMain.getMessageService().getMessage("MusicGUI.music-options-range", "%Range%", "" + newRange));
 			});
@@ -518,6 +519,7 @@ public class MusicGUI {
 		ItemStack itemStack = new ItemStack(material);
 		ItemMeta itemMeta = itemStack.getItemMeta();
 		itemMeta.setDisplayName(displayName);
+		itemMeta.addItemFlags(ItemFlag.values());
 		itemStack.setItemMeta(itemMeta);
 		return itemStack;
 	}

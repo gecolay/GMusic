@@ -43,7 +43,7 @@ public class SoundEventService {
 
     public void loadSoundEvents() {
         if(gMusicMain.getConfigService().DOWNLOAD_SOUND_EVENTS) {
-            Path cachePath = gMusicMain.getDataPath().resolve("sound_cache.json");
+            Path cachePath = gMusicMain.getDataPath().resolve("data/sound_cache.json");
             SoundEventCache cached = readCache(cachePath);
 
             String currentVersion = ServerBuildInfo.buildInfo().minecraftVersionId();
@@ -72,6 +72,7 @@ public class SoundEventService {
             return null;
         }
     }
+
     private void writeCache(Path path, SoundEventCache soundEventCache) {
         try {
             write(path, soundEventCache);
@@ -86,8 +87,6 @@ public class SoundEventService {
     ) {}
 
     private Map<String, String> fetchSoundMapping(String version) throws IOException {
-        gMusicMain.getLogger().info("Downloading sound events...");
-
         VersionManifest versionManifest = fetch(VERSION_MANIFEST_URL, VersionManifest.class);
         URL clientJsonUrl = versionManifest.versions.stream()
                 .filter(v -> version.equals(v.id))
@@ -109,7 +108,6 @@ public class SoundEventService {
             SoundEvent soundEvent = entry.getValue();
             for(Sound sound : soundEvent.sounds) soundNameToEvent.put(sound.name, eventId);
         }
-        gMusicMain.getLogger().info("Sound events downloaded");
         return soundNameToEvent;
     }
 
@@ -158,7 +156,6 @@ public class SoundEventService {
             String name
     ) {}
 
-    // A sound can either be:
     private static class SoundDeserializer implements JsonDeserializer<Sound> {
         @Override
         public Sound deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
@@ -182,6 +179,7 @@ public class SoundEventService {
             throw new AssertionError(e);
         }
     }
+
     private static URI uri(String uri) {
         try {
             return new URI(uri);
