@@ -32,6 +32,7 @@ public class PlaySettingsService {
 			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting (uuid CHAR(36) PRIMARY KEY, play_type INTEGER, play_list_mode INTEGER, volume INTEGER, play_mode INTEGER, show_particles INTEGER, reverse_mode INTEGER, toggle_mode INTEGER, `range` INTEGER, stereo INTEGER);");
 			gMusicMain.getDataService().execute("CREATE TABLE IF NOT EXISTS gmusic_play_setting_favorite (uuid CHAR(36), song_id TEXT, FOREIGN KEY (uuid) REFERENCES gmusic_play_setting(uuid) ON DELETE CASCADE ON UPDATE CASCADE);");
 			migrateTo_2_4_0();
+			migrateTo_2_5_0();
 		} catch(Throwable e) { gMusicMain.getLogger().log(Level.SEVERE, "Could not create play settings database tables!", e); }
 	}
 
@@ -96,14 +97,24 @@ public class PlaySettingsService {
 		}
 	}
 
-	/**
-	 * @param tableName Unsafe for user input! Must be a <strong>constant</strong> table name
-	 * @return if the table exists
-	 */
+	private void migrateTo_2_5_0() throws SQLException {
+		if(!columnExists("gmusic_play_setting", "stereo")) {
+			gMusicMain.getDataService().execute("ALTER TABLE gmusic_play_setting ADD COLUMN stereo INTEGER NOT NULL DEFAULT 0");
+		}
+	}
+
 	private boolean tableExists(String tableName) {
 		try(ResultSet rs = gMusicMain.getDataService().executeAndGet("SELECT 1 FROM " + tableName + " LIMIT 1")) {
 			return rs.next();
 		} catch(Throwable ignored) { return false; }
+	}
+
+	private boolean columnExists(String tableName, String columnName) {
+		try(ResultSet rs = gMusicMain.getDataService().executeAndGet("SELECT " + columnName + " FROM " + tableName + " LIMIT 1")) {
+			return true;
+		} catch(Throwable ignored) {
+			return false;
+		}
 	}
 
 	public void loadPlaySettings() {
